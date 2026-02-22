@@ -14,18 +14,25 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
+set(SOURCES
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_compile_options(${PROJECT_NAME} PRIVATE -Werror -std=c++20)
 
 enable_testing()
-
 add_executable(
     ${PROJECT_NAME}-ut
-    ${CMAKE_SOURCE_DIR}/src/tests.cpp
+    ${SOURCES}
+    src/tests.cpp
 )
+target_include_directories(${PROJECT_NAME}-ut PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(
     ${PROJECT_NAME}-ut
     GTest::gtest_main
 )
+target_compile_options(${PROJECT_NAME}-ut PRIVATE -Werror -std=c++20)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}-ut)
