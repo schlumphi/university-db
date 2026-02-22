@@ -15,3 +15,17 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+enable_testing()
+
+add_executable(
+    ${PROJECT_NAME}-ut
+    ${CMAKE_SOURCE_DIR}/src/tests.cpp
+)
+target_link_libraries(
+    ${PROJECT_NAME}-ut
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME}-ut)
