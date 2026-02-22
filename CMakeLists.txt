@@ -30,6 +30,7 @@ add_executable(
 target_include_directories(${PROJECT_NAME}-ut PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(
     ${PROJECT_NAME}-ut
+    GTest::gtest
     GTest::gtest_main
 )
 target_compile_options(${PROJECT_NAME}-ut PRIVATE -Werror -std=c++20)
