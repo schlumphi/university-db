@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+#include "core/database.hpp"
+#include "core/student.hpp"
+
 TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     Student abacki{
         "Adam",
@@ -24,4 +27,22 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_EQ(abacki.index_num(), 42ULL);
     EXPECT_STREQ(abacki.pesel().value(), "99123101234");
     EXPECT_EQ(abacki.gender(), Gender::Male);
+}
+
+TEST(Database, NewStudentAdding) {
+    Student abacki{
+        "Adam",
+        "Abacki",
+        Address{
+            "ul. Warszawska",
+            "42",
+            "2",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        42ULL,
+        Pesel{"99123101234"},
+        Gender::Male};
+
+    Database db;
+    EXPECT_TRUE(db.add(abacki));
 }

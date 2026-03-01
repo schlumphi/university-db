@@ -15,6 +15,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 set(SOURCES
+    src/core/student.cpp
+    src/core/database.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)
