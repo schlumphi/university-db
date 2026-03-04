@@ -16,8 +16,8 @@ auto parse_student_error_code(Student::ErrorCode error) -> std::string_view {
 }
 
 Student::Student(
-    const std::string& first_name,
-    const std::string& last_name,
+    std::string_view first_name,
+    std::string_view last_name,
     const Address& address,
     const Pesel& pesel,
     const uint64_t index_num,

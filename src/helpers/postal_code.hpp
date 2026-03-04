@@ -1,9 +1,9 @@
 #pragma once
-#include <string>
+#include <string_view>
 
 class PostalCode {
 public:
-    PostalCode(const std::string& code);
+    PostalCode(std::string_view code);
 
     auto value() const noexcept -> const std::string& { return m_code; }
 

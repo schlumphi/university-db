@@ -18,8 +18,8 @@ public:
     };
 
     Student(
-        const std::string& first_name,
-        const std::string& last_name,
+        std::string_view first_name,
+        std::string_view last_name,
         const Address& address,
         const Pesel& pesel,
         const uint64_t index_num,
