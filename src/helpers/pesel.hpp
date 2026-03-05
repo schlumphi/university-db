@@ -3,7 +3,7 @@
 
 class Pesel {
 public:
-    Pesel(std::string_view number);
+    Pesel(const std::string& number);
 
     auto value() const noexcept -> const std::string& { return m_number; }
 

@@ -3,9 +3,8 @@
 #include <array>
 #include <cctype>
 #include <iostream>
-#include <ranges>
 
-PostalCode::PostalCode(std::string_view code) : m_code(code) {
+PostalCode::PostalCode(const std::string& code) : m_code(code) {
     if (code.length() != 6) {
         throw std::invalid_argument("PostalCode::PostalCode: expected 'code' to be 6 characters len.");
     }
@@ -13,7 +12,7 @@ PostalCode::PostalCode(std::string_view code) : m_code(code) {
         throw std::invalid_argument("PostalCode::PostalCode: expected 'code' format: XX-XXX.");
     }
 
-    auto digits = std::ranges::join_view(std::array{code.substr(0, 2), code.substr(3, 3)});
+    auto digits = code.substr(0, 2) + code.substr(3, 3);
     if (std::any_of(digits.begin(), digits.end(), [](char c) { return !std::isdigit(c); })) {
         throw std::invalid_argument("PostalCode::PostalCode: expected 'code' format: XX-XXX.");
     }

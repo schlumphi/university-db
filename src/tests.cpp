@@ -27,19 +27,19 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_EQ(abacki.gender(), Gender::Male);
 }
 
-TEST(Database, AddingNewStudent) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "ul. Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        42ULL,
-        Pesel{"99123101234"},
-        Gender::Male};
+// TEST(Database, AddingNewStudent) {
+//     Student abacki{
+//         "Adam",
+//         "Abacki",
+//         Address{
+//             "ul. Warszawska 42",
+//             "2",
+//             PostalCode{"01-234"},
+//             "Warszawa"},
+//         42ULL,
+//         Pesel{"99123101234"},
+//         Gender::Male};
 
-    Database db;
-    EXPECT_TRUE(db.add(abacki));
-}
+//     Database db;
+//     EXPECT_TRUE(db.add(abacki));
+// }

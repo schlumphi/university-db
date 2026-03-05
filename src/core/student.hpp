@@ -1,12 +1,9 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include <string_view>
 #include "helpers/address.hpp"
 #include "helpers/gender.hpp"
 #include "helpers/pesel.hpp"
-
-auto parse_student_error_code(Student::ErrorCode error) -> std::string_view;
 
 class Student {
 public:
@@ -18,11 +15,11 @@ public:
     };
 
     Student(
-        std::string_view first_name,
-        std::string_view last_name,
+        const std::string& first_name,
+        const std::string& last_name,
         const Address& address,
-        const Pesel& pesel,
         const uint64_t index_num,
+        const Pesel& pesel,
         const Gender gender);
 
     auto first_name() const noexcept -> const std::string& { return m_first_name; }
@@ -42,3 +39,5 @@ private:
 
     static auto validate_first_name(const std::string& first_name) noexcept -> ErrorCode;
 };
+
+auto parse_student_error_code(Student::ErrorCode error) -> std::string_view;
