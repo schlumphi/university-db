@@ -1,9 +1,18 @@
 #pragma once
+#include <optional>
 #include <string>
 #include "postal_code.hpp"
 
 class Address {
 public:
+    enum class ErrorCode {
+        StreetNameEmpty,
+        ApartmentInvalidCharacters,
+        CityNameTooShort,
+        CityNameDoesntStartWithCapitalLetter,
+        CityNameInvalidCharacters
+    };
+
     Address(
         const std::string& street,
         const std::string& apartment,
@@ -21,7 +30,9 @@ private:
     const PostalCode m_postal_code;
     const std::string m_city;
 
-    auto validate_street(const std::string& street) const noexcept -> bool;
-    auto validate_apartment(const std::string& apartment) const noexcept -> bool;
-    auto validate_city(const std::string& city) const noexcept -> bool;
+    static auto validate_street(const std::string& code) noexcept -> std::optional<ErrorCode>;
+    static auto validate_apartment(const std::string& apartment) noexcept -> std::optional<ErrorCode>;
+    static auto validate_city(const std::string& city) noexcept -> std::optional<ErrorCode>;
 };
+
+auto parse_address_error_code(Address::ErrorCode error) -> std::string_view;
