@@ -17,6 +17,9 @@ FetchContent_MakeAvailable(googletest)
 set(SOURCES
     src/core/student.cpp
     src/core/database.cpp
+    src/helpers/address.cpp
+    src/helpers/pesel.cpp
+    src/helpers/postal_code.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)
