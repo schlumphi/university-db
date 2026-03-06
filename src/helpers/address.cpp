@@ -12,6 +12,14 @@ Address::Address(
     if (auto error = validate_street(street)) {
         throw std::invalid_argument(std::string{parse_address_error_code(*error)});
     }
+
+    if (auto error = validate_apartment(apartment)) {
+        throw std::invalid_argument(std::string{parse_address_error_code(*error)});
+    }
+
+    if (auto error = validate_city(city)) {
+        throw std::invalid_argument(std::string{parse_address_error_code(*error)});
+    }
 }
 
 auto Address::validate_street(const std::string& code) noexcept -> std::optional<Address::ErrorCode> {
