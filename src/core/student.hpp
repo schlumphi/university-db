@@ -22,6 +22,13 @@ public:
         const Pesel& pesel,
         const Gender gender);
 
+    auto operator==(const Student& other) -> bool {
+        if (other.pesel().value() == m_pesel.value()) {
+            return true;
+        }
+        return false;
+    }
+
     auto first_name() const noexcept -> const std::string& { return m_first_name; }
     auto last_name() const noexcept -> const std::string& { return m_last_name; }
     auto address() const noexcept -> const Address& { return m_address; }
