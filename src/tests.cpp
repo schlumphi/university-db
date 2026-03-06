@@ -62,3 +62,14 @@ TEST(PostalCode, ConstructorWithInvalidDataThrowsError) {
     EXPECT_THROW(PostalCode{"00000"}, std::invalid_argument);
     EXPECT_THROW(PostalCode{"000000"}, std::invalid_argument);
 }
+
+TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
+    auto invalid_street = std::string{""};
+    auto apartment = std::string{""};
+    auto postal_code = PostalCode{"01-234"};
+    auto city = std::string{"Warsaw"};
+
+    EXPECT_THROW(
+        Address(invalid_street, apartment, postal_code, city),
+        std::invalid_argument);
+}
