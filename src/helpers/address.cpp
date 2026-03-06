@@ -48,7 +48,7 @@ auto Address::validate_city(const std::string& city) noexcept -> std::optional<A
     if (std::any_of(
             city.begin(),
             city.end(),
-            [](char c) { !std::isalpha(c); })) {
+            [](char c) { return !std::isalpha(c); })) {
         return ErrorCode::CityNameInvalidCharacters;
     }
     if (!std::isupper(city.front())) {
