@@ -7,6 +7,8 @@ class Address {
 public:
     enum class ErrorCode {
         StreetNameEmpty,
+        StreetNameInvalidFormat,
+        StreetDoesntContainNumber,
         ApartmentInvalidCharacters,
         CityNameTooShort,
         CityNameDoesntStartWithCapitalLetter,
