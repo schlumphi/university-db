@@ -8,7 +8,8 @@ public:
     enum class ErrorCode {
         StreetNameEmpty,
         StreetNameInvalidFormat,
-        StreetDoesntContainNumber,
+        StreetNameInvalidNameFormat,
+        StreetInvalidNumberFormat,
         ApartmentInvalidCharacters,
         CityNameTooShort,
         CityNameDoesntStartWithCapitalLetter,

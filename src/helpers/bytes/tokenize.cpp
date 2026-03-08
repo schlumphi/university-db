@@ -1,5 +1,6 @@
 #include "tokenize.hpp"
 
+namespace bytes {
 auto tokenize(const std::string& data, const char delim) -> std::vector<std::string> {
     std::vector<std::string> tokens;
     std::string buffer;
@@ -17,3 +18,4 @@ auto tokenize(const std::string& data, const char delim) -> std::vector<std::str
 
     return tokens;
 }
+}  // namespace bytes
