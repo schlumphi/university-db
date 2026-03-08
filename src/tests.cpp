@@ -8,7 +8,7 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
         "Adam",
         "Abacki",
         Address{
-            "ul. Warszawska 42",
+            "Warszawska 42",
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
@@ -18,7 +18,7 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
 
     EXPECT_EQ(abacki.first_name(), "Adam");
     EXPECT_EQ(abacki.last_name(), "Abacki");
-    EXPECT_EQ(abacki.address().street(), "ul. Warszawska 42");
+    EXPECT_EQ(abacki.address().street(), "Warszawska 42");
     EXPECT_EQ(abacki.address().apartment(), "2");
     EXPECT_EQ(abacki.address().postal_code().value(), "01-234");
     EXPECT_EQ(abacki.address().city(), "Warszawa");
@@ -32,7 +32,7 @@ TEST(Database, AddingNewStudent) {
         "Adam",
         "Abacki",
         Address{
-            "ul. Warszawska 42",
+            "Warszawska 42",
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
@@ -68,13 +68,28 @@ TEST(Address, ConstructorWithValidDataCreatesValidObject) {
 }
 
 TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
-    const auto invalid_street = std::string{""};
     const auto apartment = std::string{""};
     const auto postal_code = PostalCode{"01-234"};
     const auto city = std::string{"Warsaw"};
 
     EXPECT_THROW(
-        Address(invalid_street, apartment, postal_code, city),
+        Address("", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska F", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska F2", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska 2F2", apartment, postal_code, city),
         std::invalid_argument);
 }
 
