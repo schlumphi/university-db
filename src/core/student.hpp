@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <optional>
 #include <string>
 #include "helpers/address.hpp"
 #include "helpers/gender.hpp"
@@ -8,7 +9,6 @@
 class Student {
 public:
     enum class ErrorCode {
-        Ok,
         EmptyFirstName,
         EmptyLastName,
         NameDoesntBeginWithUppercase
@@ -44,7 +44,7 @@ private:
     const uint64_t m_index_num;
     const Gender m_gender;
 
-    static auto validate_first_name(const std::string& first_name) noexcept -> ErrorCode;
+    static auto validate_first_name(const std::string& first_name) noexcept -> std::optional<ErrorCode>;
 };
 
 auto parse_student_error_code(Student::ErrorCode error) -> std::string_view;
