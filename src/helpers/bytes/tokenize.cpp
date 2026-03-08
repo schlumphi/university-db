@@ -7,7 +7,7 @@ auto tokenize(const std::string& data, const char delim) -> std::vector<std::str
         if (c == delim && !buffer.empty()) {
             tokens.push_back(buffer);
             buffer.clear();
-        } else if (c != delm) {
+        } else if (c != delim) {
             buffer.push_back(c);
         }
     }
