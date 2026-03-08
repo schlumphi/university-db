@@ -1,10 +1,10 @@
 #pragma once
+#include <optional>
 #include <string>
 
 class PostalCode {
 public:
     enum class ErrorCode {
-        Ok,
         InvalidCodeLen,
         InvalidCodeFormat
     };
@@ -13,7 +13,7 @@ public:
     auto value() const noexcept -> const std::string& { return m_code; }
 
 private:
-    static auto validate_code(const std::string& code) noexcept -> ErrorCode;
+    static auto validate_code(const std::string& code) noexcept -> std::optional<ErrorCode>;
 
     const std::string m_code;
 };

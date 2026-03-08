@@ -20,6 +20,7 @@ set(SOURCES
     src/helpers/address.cpp
     src/helpers/pesel.cpp
     src/helpers/postal_code.cpp
+    src/helpers/bytes/tokenize.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)

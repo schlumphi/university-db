@@ -5,13 +5,12 @@
 #include <iostream>
 
 PostalCode::PostalCode(const std::string& code) : m_code(code) {
-    auto error = validate_code(code);
-    if (error != ErrorCode::Ok) {
-        throw std::invalid_argument(std::string(parse_postal_code_error_code(error)));
+    if (auto error = validate_code(code)) {
+        throw std::invalid_argument(std::string(parse_postal_code_error_code(*error)));
     }
 }
 
-auto PostalCode::validate_code(const std::string& code) noexcept -> ErrorCode {
+auto PostalCode::validate_code(const std::string& code) noexcept -> std::optional<ErrorCode> {
     if (code.length() != 6) {
         return ErrorCode::InvalidCodeLen;
     }
@@ -23,7 +22,7 @@ auto PostalCode::validate_code(const std::string& code) noexcept -> ErrorCode {
     if (std::any_of(digits.begin(), digits.end(), [](char c) { return !std::isdigit(c); })) {
         return ErrorCode::InvalidCodeFormat;
     }
-    return ErrorCode::Ok;
+    return std::nullopt;
 }
 
 auto parse_postal_code_error_code(PostalCode::ErrorCode error) -> std::string_view {

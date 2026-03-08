@@ -4,11 +4,11 @@
 #include "core/student.hpp"
 
 TEST(Student, ConstructorWithValidDataCreatesValidObject) {
-    Student abacki{
+    const Student abacki{
         "Adam",
         "Abacki",
         Address{
-            "ul. Warszawska 42",
+            "Warszawska 42",
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
@@ -18,7 +18,7 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
 
     EXPECT_EQ(abacki.first_name(), "Adam");
     EXPECT_EQ(abacki.last_name(), "Abacki");
-    EXPECT_EQ(abacki.address().street(), "ul. Warszawska 42");
+    EXPECT_EQ(abacki.address().street(), "Warszawska 42");
     EXPECT_EQ(abacki.address().apartment(), "2");
     EXPECT_EQ(abacki.address().postal_code().value(), "01-234");
     EXPECT_EQ(abacki.address().city(), "Warszawa");
@@ -28,11 +28,11 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
 }
 
 TEST(Database, AddingNewStudent) {
-    Student abacki{
+    const Student abacki{
         "Adam",
         "Abacki",
         Address{
-            "ul. Warszawska 42",
+            "Warszawska 42",
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
@@ -61,4 +61,78 @@ TEST(PostalCode, ConstructorWithInvalidDataThrowsError) {
     EXPECT_THROW(PostalCode{"0-000"}, std::invalid_argument);
     EXPECT_THROW(PostalCode{"00000"}, std::invalid_argument);
     EXPECT_THROW(PostalCode{"000000"}, std::invalid_argument);
+}
+
+TEST(Address, ConstructorWithValidDataCreatesValidObject) {
+    EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Warsaw"));
+}
+
+TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
+    const auto apartment = std::string{""};
+    const auto postal_code = PostalCode{"01-234"};
+    const auto city = std::string{"Warsaw"};
+
+    EXPECT_THROW(
+        Address("", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska F", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska F2", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address("Warszawska 2F2", apartment, postal_code, city),
+        std::invalid_argument);
+}
+
+TEST(Address, ConstructorWithInvalidApartmentThrowsError) {
+    const auto street = std::string{"Sezamkowa"};
+    const auto postal_code = PostalCode{"01-234"};
+    const auto city = std::string{"Warsaw"};
+
+    EXPECT_THROW(
+        Address(street, "/", postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, "2/", postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, "/2", postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, "2F#", postal_code, city),
+        std::invalid_argument);
+}
+
+TEST(Address, ConstructorWithInvalidCityNameThrowsError) {
+    const auto street = std::string{"Sezamkowa"};
+    const auto apartment = std::string{"42"};
+    const auto postal_code = PostalCode{"01-234"};
+
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, ""),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "A"),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "a"),
+        std::invalid_argument);
+
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "oŚ"),
+        std::invalid_argument);
 }
