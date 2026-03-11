@@ -27,15 +27,15 @@ public:
     auto postal_code() const noexcept -> const PostalCode& { return m_postal_code; }
     auto city() const noexcept -> const std::string& { return m_city; }
 
+    static auto validate_street(const std::string& code) noexcept -> std::optional<ErrorCode>;
+    static auto validate_apartment(const std::string& apartment) noexcept -> std::optional<ErrorCode>;
+    static auto validate_city(const std::string& city) noexcept -> std::optional<ErrorCode>;
+
 private:
     const std::string m_street;
     const std::string m_apartment;
     const PostalCode m_postal_code;
     const std::string m_city;
-
-    static auto validate_street(const std::string& code) noexcept -> std::optional<ErrorCode>;
-    static auto validate_apartment(const std::string& apartment) noexcept -> std::optional<ErrorCode>;
-    static auto validate_city(const std::string& city) noexcept -> std::optional<ErrorCode>;
 };
 
 auto parse_address_error_code(Address::ErrorCode error) -> std::string_view;

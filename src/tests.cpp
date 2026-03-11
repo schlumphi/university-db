@@ -136,3 +136,8 @@ TEST(Address, ConstructorWithInvalidCityNameThrowsError) {
         Address(street, apartment, postal_code, "oŚ"),
         std::invalid_argument);
 }
+
+TEST(Pesel, ConstructorWithInvalidValidFormatThrowsError) {
+    EXPECT_THROW(Pesel("9876543210"), std::invalid_argument);
+    EXPECT_EQ(Pesel::validate_format("9876543210"), Pesel::ErrorCode::InvalidPeselFormat);
+}
