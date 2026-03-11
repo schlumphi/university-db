@@ -72,22 +72,32 @@ TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
     const auto postal_code = PostalCode{"01-234"};
     const auto city = std::string{"Warsaw"};
 
+    EXPECT_EQ(Address::validate_street(""), Address::ErrorCode::StreetNameEmpty);
     EXPECT_THROW(
         Address("", apartment, postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_street("Warszawska"), Address::ErrorCode::StreetNameInvalidFormat);
     EXPECT_THROW(
         Address("Warszawska", apartment, postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_street("Wars#zawska 2"), Address::ErrorCode::StreetNameInvalidNameFormat);
+    EXPECT_THROW(
+        Address("Wars#zawska 2", apartment, postal_code, city),
+        std::invalid_argument);
+
+    EXPECT_EQ(Address::validate_street("Warszawska F"), Address::ErrorCode::StreetInvalidNumberFormat);
     EXPECT_THROW(
         Address("Warszawska F", apartment, postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_street("Warszawska F2"), Address::ErrorCode::StreetInvalidNumberFormat);
     EXPECT_THROW(
         Address("Warszawska F2", apartment, postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_street("Warszawska 2F2"), Address::ErrorCode::StreetInvalidNumberFormat);
     EXPECT_THROW(
         Address("Warszawska 2F2", apartment, postal_code, city),
         std::invalid_argument);
