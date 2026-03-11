@@ -98,18 +98,22 @@ TEST(Address, ConstructorWithInvalidApartmentThrowsError) {
     const auto postal_code = PostalCode{"01-234"};
     const auto city = std::string{"Warsaw"};
 
+    EXPECT_EQ(Address::validate_apartment("/"), Address::ErrorCode::ApartmentInvalidCharacters);
     EXPECT_THROW(
         Address(street, "/", postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_apartment("2/"), Address::ErrorCode::ApartmentInvalidCharacters);
     EXPECT_THROW(
         Address(street, "2/", postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_apartment("/2"), Address::ErrorCode::ApartmentInvalidCharacters);
     EXPECT_THROW(
         Address(street, "/2", postal_code, city),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_apartment("2F#"), Address::ErrorCode::ApartmentInvalidCharacters);
     EXPECT_THROW(
         Address(street, "2F#", postal_code, city),
         std::invalid_argument);
