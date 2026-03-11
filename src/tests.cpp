@@ -120,24 +120,36 @@ TEST(Address, ConstructorWithInvalidCityNameThrowsError) {
     const auto apartment = std::string{"42"};
     const auto postal_code = PostalCode{"01-234"};
 
+    EXPECT_EQ(Address::validate_city(""), Address::ErrorCode::CityNameTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, ""),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_city("A"), Address::ErrorCode::CityNameTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "A"),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_city("a"), Address::ErrorCode::CityNameTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "a"),
         std::invalid_argument);
 
+    EXPECT_EQ(Address::validate_city("a42"), Address::ErrorCode::CityNameInvalidCharacters);
     EXPECT_THROW(
-        Address(street, apartment, postal_code, "oŚ"),
+        Address(street, apartment, postal_code, "a42"),
+        std::invalid_argument);
+
+    EXPECT_EQ(Address::validate_city("oS"), Address::ErrorCode::CityNameDoesntStartWithCapitalLetter);
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "oS"),
         std::invalid_argument);
 }
 
 TEST(Pesel, ConstructorWithInvalidValidFormatThrowsError) {
-    EXPECT_THROW(Pesel("9876543210"), std::invalid_argument);
     EXPECT_EQ(Pesel::validate_format("9876543210"), Pesel::ErrorCode::InvalidPeselFormat);
+    EXPECT_THROW(Pesel("9876543210"), std::invalid_argument);
+
+    EXPECT_EQ(Pesel::validate_format("9876543210c"), Pesel::ErrorCode::InvalidPeselFormat);
+    EXPECT_THROW(Pesel("9876543210c"), std::invalid_argument);
 }
