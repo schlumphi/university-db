@@ -3,6 +3,27 @@
 #include "core/database.hpp"
 #include "core/student.hpp"
 
+TEST(Database, DisplayDatabase) {
+    const Student abacki{
+        "Adam",
+        "Abacki",
+        Address{
+            "Warszawska 42",
+            "2",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        42ULL,
+        Pesel{"55030101193"},
+        Gender::Male};
+
+    Database db;
+    db.add(abacki);
+
+    const std::string ref_db_display = "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\nAdam|Abacki|Warszawska 42|2|01-234|Warszawa|42|55030101193|male\n";
+
+    EXPECT_EQ(db.display(), ref_db_display);
+}
+
 TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
     auto valid_last_name = "Abacki";
     auto valid_address = Address{
