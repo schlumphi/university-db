@@ -8,3 +8,12 @@ auto Database::add(const Student& student) -> bool {
     m_state.emplace_back(student);
     return true;
 }
+
+auto parse_database_error_code(Database::ErrorCode error) -> std::string_view {
+    switch (error) {
+    case Database::ErrorCode::StudentAlreadyExistsInDb:
+        return "student already exists in database";
+    default:
+        return "ok";
+    }
+}
