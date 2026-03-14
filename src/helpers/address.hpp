@@ -27,6 +27,7 @@ public:
     auto postal_code() const noexcept -> const PostalCode& { return m_postal_code; }
     auto city() const noexcept -> const std::string& { return m_city; }
 
+    // FIXME: validate positively names with polish letters like ą, ę...
     static auto validate_street(const std::string& code) noexcept -> std::optional<ErrorCode>;
     static auto validate_apartment(const std::string& apartment) noexcept -> std::optional<ErrorCode>;
     static auto validate_city(const std::string& city) noexcept -> std::optional<ErrorCode>;

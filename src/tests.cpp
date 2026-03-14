@@ -13,7 +13,7 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
             PostalCode{"01-234"},
             "Warszawa"},
         42ULL,
-        Pesel{"99123101234"},
+        Pesel{"55030101193"},
         Gender::Male};
 
     EXPECT_EQ(abacki.first_name(), "Adam");
@@ -23,7 +23,7 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_EQ(abacki.address().postal_code().value(), "01-234");
     EXPECT_EQ(abacki.address().city(), "Warszawa");
     EXPECT_EQ(abacki.index_num(), 42ULL);
-    EXPECT_EQ(abacki.pesel().value(), "99123101234");
+    EXPECT_EQ(abacki.pesel().value(), "55030101193");
     EXPECT_EQ(abacki.gender(), Gender::Male);
 }
 
@@ -37,7 +37,7 @@ TEST(Database, AddingNewStudent) {
             PostalCode{"01-234"},
             "Warszawa"},
         42ULL,
-        Pesel{"99123101234"},
+        Pesel{"55030101193"},
         Gender::Male};
 
     Database db;

@@ -1,4 +1,6 @@
 #pragma once
+#include <array>
+#include <cstdint>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -7,7 +9,8 @@
 class Pesel {
 public:
     enum class ErrorCode {
-        InvalidPeselFormat
+        InvalidPeselFormat,
+        InvalidPeselChecksum
     };
     Pesel(const std::string& number);
 
@@ -16,6 +19,8 @@ public:
 
     static auto validate_format(const std::string& number) noexcept -> std::optional<ErrorCode>;
     static auto validate_correctness(const std::string& number) noexcept -> std::optional<ErrorCode>;
+
+    static constexpr std::array<uint8_t, 11> weights{1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1};
 
 private:
     const std::string m_number;
