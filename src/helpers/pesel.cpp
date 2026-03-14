@@ -25,7 +25,9 @@ auto Pesel::validate_correctness(const std::string& number) noexcept -> std::opt
     auto sum = std::inner_product(
         number.begin(), number.end(), weights.begin(),
         0ULL, std::plus<>(),
-        [](char c, uint8_t w) { return static_cast<uint8_t>(c) * w; });
+        [](char c, uint8_t w) { return (static_cast<uint8_t>(c) - 48) * w; });
+
+    std::cout << sum << "\n";
 
     if (sum % 10 != 0) {
         return Pesel::ErrorCode::InvalidPeselChecksum;
