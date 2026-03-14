@@ -145,8 +145,8 @@ TEST(Database, AddingNewStudent) {
         Gender::Male};
 
     Database db;
-    EXPECT_TRUE(db.add(abacki));
-    EXPECT_FALSE(db.add(abacki));
+    EXPECT_EQ(db.add(abacki), std::nullopt);
+    EXPECT_EQ(db.add(abacki), Database::ErrorCode::StudentAlreadyExistsInDb);
 }
 
 TEST(PostalCode, ConstructorWithValidDataCreatesValidObject) {
