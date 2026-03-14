@@ -27,12 +27,11 @@ auto Pesel::validate_correctness(const std::string& number) noexcept -> std::opt
         0ULL, std::plus<>(),
         [](char c, uint8_t w) { return (static_cast<uint8_t>(c) - 48) * w; });
 
-    std::cout << sum << "\n";
-
     if (sum % 10 != 0) {
         return Pesel::ErrorCode::InvalidPeselChecksum;
+    } else {
+        return std::nullopt;
     }
-    return std::nullopt;
 }
 
 auto Pesel::gender() const noexcept -> const Gender {
