@@ -9,9 +9,10 @@
 class Student {
 public:
     enum class ErrorCode {
-        EmptyFirstName,
-        EmptyLastName,
-        NameDoesntBeginWithUppercase
+        EmptyName,
+        NameDoesntBeginWithUppercase,
+        NameContainsUppercaseCharacters,
+        NameContainsInvalidCharacters,
     };
 
     Student(
@@ -36,7 +37,7 @@ public:
     auto index_num() const noexcept -> const uint64_t { return m_index_num; }
     auto gender() const noexcept -> const Gender { return m_gender; }
 
-    static auto validate_first_name(const std::string& first_name) noexcept -> std::optional<ErrorCode>;
+    static auto validate_name(const std::string& name) noexcept -> std::optional<ErrorCode>;
 
 private:
     const std::string m_first_name;
