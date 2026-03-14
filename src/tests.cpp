@@ -3,6 +3,58 @@
 #include "core/database.hpp"
 #include "core/student.hpp"
 
+TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
+    auto valid_last_name = "Abacki";
+    auto valid_address = Address{
+        "Warszawska 42",
+        "2",
+        PostalCode{"01-234"},
+        "Warszawa"};
+    auto valid_index = 0ULL;
+    auto valid_pesel = Pesel{"55030101193"};
+    auto valid_gender = Gender::Male;
+
+    EXPECT_EQ(Student::validate_name(""), Student::ErrorCode::EmptyName);
+    EXPECT_THROW(Student(
+                     "",
+                     valid_last_name,
+                     valid_address,
+                     valid_index,
+                     valid_pesel,
+                     valid_gender),
+                 std::invalid_argument);
+
+    EXPECT_EQ(Student::validate_name("adam"), Student::ErrorCode::NameDoesntBeginWithUppercase);
+    EXPECT_THROW(Student(
+                     "adam",
+                     valid_last_name,
+                     valid_address,
+                     valid_index,
+                     valid_pesel,
+                     valid_gender),
+                 std::invalid_argument);
+
+    EXPECT_EQ(Student::validate_name("ADam"), Student::ErrorCode::NameContainsUppercaseCharacters);
+    EXPECT_THROW(Student(
+                     "ADam",
+                     valid_last_name,
+                     valid_address,
+                     valid_index,
+                     valid_pesel,
+                     valid_gender),
+                 std::invalid_argument);
+
+    EXPECT_EQ(Student::validate_name("Ada#m"), Student::ErrorCode::NameContainsInvalidCharacters);
+    EXPECT_THROW(Student(
+                     "Ada#m",
+                     valid_last_name,
+                     valid_address,
+                     valid_index,
+                     valid_pesel,
+                     valid_gender),
+                 std::invalid_argument);
+}
+
 TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     const Student abacki{
         "Adam",
