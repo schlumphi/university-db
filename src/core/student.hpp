@@ -36,6 +36,8 @@ public:
     auto index_num() const noexcept -> const uint64_t { return m_index_num; }
     auto gender() const noexcept -> const Gender { return m_gender; }
 
+    static auto validate_first_name(const std::string& first_name) noexcept -> std::optional<ErrorCode>;
+
 private:
     const std::string m_first_name;
     const std::string m_last_name;
@@ -43,8 +45,6 @@ private:
     const Pesel m_pesel;
     const uint64_t m_index_num;
     const Gender m_gender;
-
-    static auto validate_first_name(const std::string& first_name) noexcept -> std::optional<ErrorCode>;
 };
 
 auto parse_student_error_code(Student::ErrorCode error) -> std::string_view;
