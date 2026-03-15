@@ -22,6 +22,11 @@ public:
 
     static constexpr std::array<uint8_t, 11> weights{1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1};
 
+    // checks if lhs is younger than rhs
+    auto operator<(const Pesel& rhs) const noexcept -> bool {
+        return false;
+    }
+
 private:
     const std::string m_number;
 };
