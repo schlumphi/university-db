@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <cstdint>
 #include <list>
 #include <optional>
 #include <string_view>
@@ -11,7 +12,7 @@ public:
         StudentAlreadyExistsInDb
     };
 
-    auto add(const Student& student) noexcept -> std::optional<ErrorCode>;
+    auto add(Student& student) noexcept -> std::optional<ErrorCode>;
     auto display(const char sep = '|') const noexcept -> std::string;
 
     static auto parse_student(const Student& student) noexcept -> std::array<std::string, 9>;
@@ -21,6 +22,7 @@ public:
 
 private:
     std::list<Student> m_state;
+    uint64_t m_curr_index = 1ULL;
 };
 
 auto parse_database_error_code(Database::ErrorCode error) noexcept -> std::string_view;

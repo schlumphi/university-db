@@ -4,7 +4,7 @@
 #include "core/student.hpp"
 
 TEST(Database, DisplayDatabase) {
-    const Student abacki{
+    Student abacki{
         "Adam",
         "Abacki",
         Address{
@@ -12,35 +12,32 @@ TEST(Database, DisplayDatabase) {
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
-        42ULL,
         Pesel{"55030101193"},
         Gender::Male};
 
     Database db;
     db.add(abacki);
 
-    const std::string ref_db_display = "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\nAdam|Abacki|Warszawska 42|2|01-234|Warszawa|42|55030101193|male\n";
+    const std::string ref_db_display = "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\nAdam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n";
 
     EXPECT_EQ(db.display(), ref_db_display);
 }
 
 TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
-    auto valid_last_name = "Abacki";
-    auto valid_address = Address{
+    const auto valid_last_name = "Abacki";
+    const auto valid_address = Address{
         "Warszawska 42",
         "2",
         PostalCode{"01-234"},
         "Warszawa"};
-    auto valid_index = 0ULL;
-    auto valid_pesel = Pesel{"55030101193"};
-    auto valid_gender = Gender::Male;
+    const auto valid_pesel = Pesel{"55030101193"};
+    const auto valid_gender = Gender::Male;
 
     EXPECT_EQ(Student::validate_name(""), Student::ErrorCode::EmptyName);
     EXPECT_THROW(Student(
                      "",
                      valid_last_name,
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -50,7 +47,6 @@ TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
                      "adam",
                      valid_last_name,
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -60,7 +56,6 @@ TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
                      "ADam",
                      valid_last_name,
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -70,29 +65,26 @@ TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
                      "Ada#m",
                      valid_last_name,
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
 }
 
 TEST(Student, ConstructorWithInvalidLastNameThrowsError) {
-    auto valid_first_name = "Adam";
-    auto valid_address = Address{
+    const auto valid_first_name = "Adam";
+    const auto valid_address = Address{
         "Warszawska 42",
         "2",
         PostalCode{"01-234"},
         "Warszawa"};
-    auto valid_index = 0ULL;
-    auto valid_pesel = Pesel{"55030101193"};
-    auto valid_gender = Gender::Male;
+    const auto valid_pesel = Pesel{"55030101193"};
+    const auto valid_gender = Gender::Male;
 
     EXPECT_EQ(Student::validate_name(""), Student::ErrorCode::EmptyName);
     EXPECT_THROW(Student(
                      valid_first_name,
                      "",
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -102,7 +94,6 @@ TEST(Student, ConstructorWithInvalidLastNameThrowsError) {
                      valid_first_name,
                      "abacki",
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -112,7 +103,6 @@ TEST(Student, ConstructorWithInvalidLastNameThrowsError) {
                      valid_first_name,
                      "ABacki",
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -122,7 +112,6 @@ TEST(Student, ConstructorWithInvalidLastNameThrowsError) {
                      valid_first_name,
                      "Abac#ki",
                      valid_address,
-                     valid_index,
                      valid_pesel,
                      valid_gender),
                  std::invalid_argument);
@@ -137,7 +126,6 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
-        42ULL,
         Pesel{"55030101193"},
         Gender::Male};
 
@@ -147,13 +135,13 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_EQ(abacki.address().apartment(), "2");
     EXPECT_EQ(abacki.address().postal_code().value(), "01-234");
     EXPECT_EQ(abacki.address().city(), "Warszawa");
-    EXPECT_EQ(abacki.index_num(), 42ULL);
+    EXPECT_EQ(abacki.index_num(), 0ULL);
     EXPECT_EQ(abacki.pesel().value(), "55030101193");
     EXPECT_EQ(abacki.gender(), Gender::Male);
 }
 
 TEST(Database, AddingNewStudent) {
-    const Student abacki{
+    Student abacki{
         "Adam",
         "Abacki",
         Address{
@@ -161,12 +149,13 @@ TEST(Database, AddingNewStudent) {
             "2",
             PostalCode{"01-234"},
             "Warszawa"},
-        42ULL,
         Pesel{"55030101193"},
         Gender::Male};
 
     Database db;
+    EXPECT_EQ(abacki.index_num(), 0ULL);
     EXPECT_EQ(db.add(abacki), std::nullopt);
+    EXPECT_EQ(abacki.index_num(), 1ULL);
     EXPECT_EQ(db.add(abacki), Database::ErrorCode::StudentAlreadyExistsInDb);
 }
 
