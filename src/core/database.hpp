@@ -15,6 +15,7 @@ public:
     auto add(Student& student) noexcept -> std::optional<ErrorCode>;
     auto display(const char sep = '|') const noexcept -> std::string;
     auto search_by_last_name(const std::string& name) const noexcept -> std::list<Student>;
+    auto search_by_pesel(const Pesel& pesel) const noexcept -> std::list<Student>;
 
     static auto parse_student(const Student& student) noexcept -> std::array<std::string, 9>;
 

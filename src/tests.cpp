@@ -35,6 +35,39 @@ TEST(Database, SearchByLastName) {
     EXPECT_EQ(matches, ref_matches);
 }
 
+TEST(Database, SearchByPesel) {
+    Student abacki{
+        "Adam",
+        "Abacki",
+        Address{
+            "Warszawska 42",
+            "2",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"55030101193"},
+        Gender::Male};
+
+    Student babacki{
+        "Bdam",
+        "Babacki",
+        Address{
+            "Warszawska 43",
+            "3",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"55030101230"},
+        Gender::Male};
+
+    Database db;
+    db.add(abacki);
+    db.add(babacki);
+
+    const auto matches = db.search_by_pesel(Pesel{"55030101193"});
+    const std::list<Student> ref_matches = {abacki};
+
+    EXPECT_EQ(matches, ref_matches);
+}
+
 TEST(Database, DisplayDatabase) {
     Student abacki{
         "Adam",
