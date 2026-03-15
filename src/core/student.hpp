@@ -6,6 +6,8 @@
 #include "helpers/gender.hpp"
 #include "helpers/pesel.hpp"
 
+class Database;
+
 class Student {
 public:
     enum class ErrorCode {
@@ -19,7 +21,6 @@ public:
         const std::string& first_name,
         const std::string& last_name,
         const Address& address,
-        const uint64_t index_num,
         const Pesel& pesel,
         const Gender gender);
 
@@ -40,12 +41,20 @@ public:
     static auto validate_name(const std::string& name) noexcept -> std::optional<ErrorCode>;
 
 private:
+    auto set_index_num(const uint64_t index_num) -> void {
+        if (index_num != 0 && m_index_num != 0) {
+            m_index_num = index_num;
+        }
+    }
+
     const std::string m_first_name;
     const std::string m_last_name;
     const Address m_address;
     const Pesel m_pesel;
-    const uint64_t m_index_num;
+    uint64_t m_index_num;
     const Gender m_gender;
+
+    friend class Database;
 };
 
 auto parse_student_error_code(Student::ErrorCode error) -> std::string_view;

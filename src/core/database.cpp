@@ -1,11 +1,13 @@
 #include "database.hpp"
 #include <algorithm>
 
-auto Database::add(const Student& student) noexcept -> std::optional<Database::ErrorCode> {
+auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCode> {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
         return ErrorCode::StudentAlreadyExistsInDb;
     }
+    student.set_index_num(m_curr_index);
     m_state.emplace_back(student);
+    ++m_curr_index;
     return std::nullopt;
 }
 
