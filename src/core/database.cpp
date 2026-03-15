@@ -52,6 +52,16 @@ auto Database::search_by_pesel(const Pesel& pesel) const noexcept -> std::list<S
     return matches;
 }
 
+// ascending order -> from youngest to oldest
+// descending order -> from oldest to youngest
+auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel().value() > rhs.pesel().value(); });
+    } else {
+        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel().value() < rhs.pesel().value(); });
+    }
+}
+
 auto Database::parse_student(const Student& student) noexcept -> std::array<std::string, 9> {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();
