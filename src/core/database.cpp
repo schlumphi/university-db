@@ -30,6 +30,17 @@ auto Database::display(const char sep) const noexcept -> std::string {
     return db;
 }
 
+auto Database::search_by_last_name(const std::string& name) const noexcept -> std::list<Student> {
+    std::list<Student> matches;
+    for (const auto& student : m_state) {
+        if (student.last_name() == name) {
+            matches.push_back(student);
+        }
+    }
+
+    return matches;
+}
+
 auto Database::parse_student(const Student& student) noexcept -> std::array<std::string, 9> {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();

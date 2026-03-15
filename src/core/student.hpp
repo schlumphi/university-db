@@ -24,7 +24,7 @@ public:
         const Pesel& pesel,
         const Gender gender);
 
-    auto operator==(const Student& other) -> bool {
+    auto operator==(const Student& other) const noexcept -> bool {
         if (other.pesel().value() == m_pesel.value()) {
             return true;
         }
