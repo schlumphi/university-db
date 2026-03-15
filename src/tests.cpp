@@ -18,7 +18,7 @@ TEST(Database, DisplayDatabase) {
     Database db;
     db.add(abacki);
 
-    const std::string ref_db_display = "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\nAdam|Abacki|Warszawska 42|2|01-234|Warszawa|0|55030101193|male\n";
+    const std::string ref_db_display = "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\nAdam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n";
 
     EXPECT_EQ(db.display(), ref_db_display);
 }
@@ -153,7 +153,9 @@ TEST(Database, AddingNewStudent) {
         Gender::Male};
 
     Database db;
+    EXPECT_EQ(abacki.index_num(), 0ULL);
     EXPECT_EQ(db.add(abacki), std::nullopt);
+    EXPECT_EQ(abacki.index_num(), 1ULL);
     EXPECT_EQ(db.add(abacki), Database::ErrorCode::StudentAlreadyExistsInDb);
 }
 

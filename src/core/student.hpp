@@ -42,7 +42,7 @@ public:
 
 private:
     auto set_index_num(const uint64_t index_num) -> void {
-        if (index_num != 0 && m_index_num != 0) {
+        if (index_num != 0ULL && m_index_num == 0ULL) {
             m_index_num = index_num;
         }
     }
