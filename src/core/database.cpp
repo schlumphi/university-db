@@ -56,9 +56,9 @@ auto Database::search_by_pesel(const Pesel& pesel) const noexcept -> std::list<S
 // descending order -> from oldest to youngest
 auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
     if (order == SortOrder::Ascending) {
-        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel().value() > rhs.pesel().value(); });
+        m_state.sort([](Student lhs, Student rhs) { return (lhs.pesel() < rhs.pesel()); });
     } else {
-        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel().value() < rhs.pesel().value(); });
+        m_state.sort([](Student lhs, Student rhs) { return !(lhs.pesel() < rhs.pesel()); });
     }
 }
 
