@@ -20,6 +20,9 @@ Student::Student(
     if (auto error = validate_name(last_name)) {
         throw std::invalid_argument(std::string(parse_student_error_code(*error)));
     }
+    if (auto error = validate_gender(pesel, gender)) {
+        throw std::invalid_argument(std::string(parse_student_error_code(*error)));
+    }
 }
 
 auto Student::validate_name(const std::string& name) noexcept -> std::optional<Student::ErrorCode> {
@@ -38,6 +41,13 @@ auto Student::validate_name(const std::string& name) noexcept -> std::optional<S
     return std::nullopt;
 }
 
+auto Student::validate_gender(const Pesel& pesel, const Gender gender) noexcept -> std::optional<Student::ErrorCode> {
+    if (pesel.gender() != gender) {
+        return ErrorCode::GenderPeselMismatch;
+    }
+    return std::nullopt;
+}
+
 auto parse_student_error_code(Student::ErrorCode error) -> std::string_view {
     switch (error) {
     case Student::ErrorCode::EmptyName:
@@ -48,6 +58,8 @@ auto parse_student_error_code(Student::ErrorCode error) -> std::string_view {
         return "name must contain only alpha letters";
     case Student::ErrorCode::NameContainsUppercaseCharacters:
         return "uppercase character is only available at the beggining of the name";
+    case Student::ErrorCode::GenderPeselMismatch:
+        return "invalid gender for provided pesel num";
     default:
         return "Ok";
     }
