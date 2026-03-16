@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include "helpers/bytes/tokenize.hpp"
 
 auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCode> {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
@@ -90,6 +91,51 @@ auto Database::save(const std::string& filepath, const char sep) const noexcept 
 
     db_file_handler << display(sep);
     db_file_handler.close();
+}
+
+auto Database::load(const std::string& filepath, const char sep = '|') -> std::optional<ErrorCode> {
+    auto fp = std::filesystem::path(filepath);
+    if (!std::filesystem::exists(fp)) {
+        return ErrorCode::FilepathDoesNotExist;
+    }
+
+    std::ifstream db_file_handler(fp);
+    std::string read_line{""};
+    std::getline(db_file_handler, read_line, '\n');
+    const auto header = bytes::tokenize(read_line, sep);
+    if (!std::equal(header.begin(), header.end(), columns.begin(), columns.end(), [](std::string lhs, std::string_view rhs) { return lhs == rhs; })) {
+        return ErrorCode::InvalidHeader;
+    }
+
+    auto backup_state = std::list<Student>{};
+    m_state.splice(m_state.end(), backup_state);
+
+    std::vector<uint64_t> read_index_nums;  // FIXME: reserve memory
+    while (std::getline(db_file_handler, read_line, '\n')) {
+        const auto tokens = bytes::tokenize(read_line, sep);
+        auto student = deserialize(tokens);
+        const auto read_index_num = tokens[6];
+        if () {
+        }
+        // add(student);
+        // TODO: private add method with index_num param
+    }
+
+    db_file_handler.close();
+
+    return std::nullopt;
+}
+
+auto Database::deserialize(const std::vector<std::string>& tokens) -> Student {
+    const auto first_name = tokens[0];
+    const auto last_name = tokens[1];
+    const auto address = Address{
+        tokens[2], tokens[3], PostalCode{tokens[4]}, tokens[5]};
+    const auto pesel = Pesel{tokens[7]};
+    const auto gender = parse_gender(tokens[8]);
+
+    return Student{
+        first_name, last_name, address, pesel, gender};
 }
 
 auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
