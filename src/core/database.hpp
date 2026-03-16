@@ -22,8 +22,9 @@ public:
     auto search_by_last_name(const std::string& name) const noexcept -> std::list<Student>;
     auto search_by_pesel(const Pesel& pesel) const noexcept -> std::list<Student>;
     auto sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept -> void;
+    auto sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept -> void;
 
-    static auto parse_student(const Student& student) noexcept -> std::array<std::string, 9>;
+    static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
 
     static constexpr std::array<std::string_view, 9> columns{
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
