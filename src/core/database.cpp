@@ -1,5 +1,8 @@
 #include "database.hpp"
 #include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 
 auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCode> {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
@@ -78,6 +81,15 @@ auto Database::delete_by_index(const uint64_t index) -> std::optional<ErrorCode>
         }
     }
     return ErrorCode::IndexNotFound;
+}
+
+auto Database::save(const std::string& filepath, const char sep) const noexcept -> void {
+    auto fp = std::filesystem::path(filepath);
+
+    std::ofstream db_file_handler(fp);
+
+    db_file_handler << display(sep);
+    db_file_handler.close();
 }
 
 auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
