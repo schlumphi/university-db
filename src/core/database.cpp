@@ -62,6 +62,14 @@ auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
     }
 }
 
+auto Database::sort_by_name(const SortOrder order) noexcept -> void {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
+    } else {
+        m_state.sort([](Student lhs, Student rhs) { return lhs.last_name() > rhs.last_name(); });
+    }
+}
+
 auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();
