@@ -26,6 +26,7 @@ public:
     auto value() const noexcept -> const std::string& { return m_number; }
     auto gender() const noexcept -> const Gender;
 
+    // TODO: validate day of the month
     static auto validate_format(const std::string& number) noexcept -> std::optional<ErrorCode>;
     static auto validate_correctness(const std::string& number) noexcept -> std::optional<ErrorCode>;
 

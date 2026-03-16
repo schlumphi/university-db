@@ -97,15 +97,15 @@ auto parse_month(const Pesel& pesel, const Century century) -> uint64_t {
     switch (century) {
     case Century::Nineteenth:
         return month - 80ULL;
-    case Century::Twentieth:
-        return month;
     case Century::TwentyFirst:
         return month - 20ULL;
     case Century::TwentySecond:
         return month - 40ULL;
     case Century::TwentyThird:
         return month - 60ULL;
-        }
+    default:
+        return month;
+    }
 }
 
 auto parse_year(const Pesel& pesel, const Century century) -> uint64_t {
@@ -113,14 +113,14 @@ auto parse_year(const Pesel& pesel, const Century century) -> uint64_t {
     switch (century) {
     case Century::Nineteenth:
         return year + 1800ULL;
-    case Century::Twentieth:
-        return year + 1900ULL;
     case Century::TwentyFirst:
         return year + 2000ULL;
     case Century::TwentySecond:
         return year + 2100ULL;
     case Century::TwentyThird:
         return year + 2200ULL;
+    default:
+        return year + 1900ULL;
     }
 }
 auto approx_days_since_epoch(const Pesel& pesel) -> uint64_t {
