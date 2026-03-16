@@ -20,7 +20,7 @@ auto Database::display(const char sep) const noexcept -> std::string {
     db.back() = '\n';
 
     for (const auto& student : m_state) {
-        auto tokens = parse_student(student);
+        auto tokens = tokenize_student(student);
         for (const auto& token : tokens) {
             db += token;
             db += sep;
@@ -62,7 +62,15 @@ auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
     }
 }
 
-auto Database::parse_student(const Student& student) noexcept -> std::array<std::string, 9> {
+auto Database::sort_by_name(const SortOrder order) noexcept -> void {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
+    } else {
+        m_state.sort([](Student lhs, Student rhs) { return lhs.last_name() > rhs.last_name(); });
+    }
+}
+
+auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();
     tokens[1] = student.last_name();
