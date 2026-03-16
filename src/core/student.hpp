@@ -15,6 +15,7 @@ public:
         NameDoesntBeginWithUppercase,
         NameContainsUppercaseCharacters,
         NameContainsInvalidCharacters,
+        GenderPeselMismatch
     };
 
     Student(
@@ -39,6 +40,7 @@ public:
     auto gender() const noexcept -> const Gender { return m_gender; }
 
     static auto validate_name(const std::string& name) noexcept -> std::optional<ErrorCode>;
+    static auto validate_gender(const Pesel& pesel, const Gender gender) noexcept -> std::optional<ErrorCode>;
 
 private:
     auto set_index_num(const uint64_t index_num) -> void {
