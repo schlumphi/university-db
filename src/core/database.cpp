@@ -70,6 +70,16 @@ auto Database::sort_by_name(const SortOrder order) noexcept -> void {
     }
 }
 
+auto Database::delete_by_index(const uint64_t index) -> std::optional<ErrorCode> {
+    for (const auto& student : m_state) {
+        if (student.index_num() == index) {
+            m_state.remove(student);
+            return std::nullopt;
+        }
+    }
+    return ErrorCode::IndexNotFound;
+}
+
 auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();
@@ -89,6 +99,8 @@ auto parse_database_error_code(Database::ErrorCode error) noexcept -> std::strin
     switch (error) {
     case Database::ErrorCode::StudentAlreadyExistsInDb:
         return "student already exists in database";
+    case Database::ErrorCode::IndexNotFound:
+        return "could not find student with provided index";
     default:
         return "ok";
     }
