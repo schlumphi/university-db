@@ -9,7 +9,8 @@
 class Database {
 public:
     enum class ErrorCode {
-        StudentAlreadyExistsInDb
+        StudentAlreadyExistsInDb,
+        IndexNotFound
     };
 
     enum class SortOrder {
@@ -23,6 +24,7 @@ public:
     auto search_by_pesel(const Pesel& pesel) const noexcept -> std::list<Student>;
     auto sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept -> void;
     auto sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept -> void;
+    auto delete_by_index(const uint64_t index) -> std::optional<ErrorCode>;
 
     static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
 
