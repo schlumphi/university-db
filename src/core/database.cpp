@@ -15,6 +15,15 @@ auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCo
     return std::nullopt;
 }
 
+auto Database::add(Student& student, const uint64_t index_num) noexcept -> std::optional<ErrorCode> {
+    if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
+        return ErrorCode::StudentAlreadyExistsInDb;
+    }
+    student.set_index_num(index_num);
+    m_state.emplace_back(student);
+    return std::nullopt;
+}
+
 auto Database::display(const char sep) const noexcept -> std::string {
     std::string db{""};
     for (const auto& col : columns) {
@@ -93,7 +102,7 @@ auto Database::save(const std::string& filepath, const char sep) const noexcept 
     db_file_handler.close();
 }
 
-auto Database::load(const std::string& filepath, const char sep = '|') -> std::optional<ErrorCode> {
+auto Database::load(const std::string& filepath, const char sep) -> std::optional<ErrorCode> {
     auto fp = std::filesystem::path(filepath);
     if (!std::filesystem::exists(fp)) {
         return ErrorCode::FilepathDoesNotExist;
@@ -103,24 +112,37 @@ auto Database::load(const std::string& filepath, const char sep = '|') -> std::o
     std::string read_line{""};
     std::getline(db_file_handler, read_line, '\n');
     const auto header = bytes::tokenize(read_line, sep);
-    if (!std::equal(header.begin(), header.end(), columns.begin(), columns.end(), [](std::string lhs, std::string_view rhs) { return lhs == rhs; })) {
+    if (!std::equal(
+            header.begin(), header.end(), columns.begin(), columns.end(),
+            [](std::string lhs, std::string_view rhs) { return lhs == rhs; })) {
         return ErrorCode::InvalidHeader;
     }
 
     auto backup_state = std::list<Student>{};
     m_state.splice(m_state.end(), backup_state);
 
-    std::vector<uint64_t> read_index_nums;  // FIXME: reserve memory
     while (std::getline(db_file_handler, read_line, '\n')) {
         const auto tokens = bytes::tokenize(read_line, sep);
         auto student = deserialize(tokens);
-        const auto read_index_num = tokens[6];
-        if () {
+        const auto read_index_num = std::stoi(tokens[6]);
+
+        const auto it = std::find_if(
+            m_state.begin(), m_state.end(),
+            [read_index_num](Student student) { return student.index_num() == read_index_num; });
+
+        if (it == m_state.end()) {
+            add(student, read_index_num);
+        } else {
+            backup_state.splice(backup_state.end(), m_state);
+            return ErrorCode::DuplicateIndexNum;
         }
-        // add(student);
-        // TODO: private add method with index_num param
     }
 
+    m_curr_index = (std::max_element(
+                        m_state.begin(), m_state.end(),
+                        [](Student lhs, Student rhs) { return lhs.index_num() < rhs.index_num(); })
+                        ->index_num());
+    ++m_curr_index;
     db_file_handler.close();
 
     return std::nullopt;

@@ -4,6 +4,7 @@
 #include <list>
 #include <optional>
 #include <string_view>
+#include <vector>
 #include "student.hpp"
 
 class Database {
@@ -38,6 +39,8 @@ public:
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
+    auto add(Student& student, const uint64_t index_num) noexcept -> std::optional<ErrorCode>;
+
     std::list<Student> m_state;
     uint64_t m_curr_index = 1ULL;
 };
