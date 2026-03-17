@@ -28,10 +28,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/s
 target_compile_options(${PROJECT_NAME} PRIVATE -Werror -std=c++20)
 
 enable_testing()
+
+file(GLOB_RECURSE TESTS
+    ${CMAKE_CURRENT_SOURCE_DIR}/*_ut.cpp)
+
 add_executable(
     ${PROJECT_NAME}-ut
     ${SOURCES}
-    src/tests.cpp
+    ${TESTS}
 )
 target_include_directories(${PROJECT_NAME}-ut PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(
