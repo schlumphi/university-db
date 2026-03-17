@@ -32,6 +32,8 @@ public:
     auto save(const std::string& filepath, const char sep = '|') const noexcept -> void;
     auto load(const std::string& filepath, const char sep = '|') -> std::optional<ErrorCode>;
 
+    auto students() const noexcept -> const std::list<Student>& { return m_state; }
+
     static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
     static auto deserialize(const std::vector<std::string>& tokens) -> Student;
 
