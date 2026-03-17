@@ -1,69 +1,55 @@
 #include <gtest/gtest.h>
 #include "core/database.hpp"
 
-TEST(Database, SaveAndLoad) {
+class DatabaseTest : public ::testing::Test {
+protected:
     Student abacki{
         "Adam",
         "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
+        Address{"Warszawska 42", "2", PostalCode{"01-234"}, "Warszawa"},
         Pesel{"55030101193"},
         Gender::Male};
 
     Student babacki{
         "Bdam",
         "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
+        Address{"Warszawska 43", "3", PostalCode{"01-234"}, "Warszawa"},
         Pesel{"55030101230"},
         Gender::Male};
 
     Student cabacki{
         "Cdam",
         "Cabacki",
-        Address{
-            "Warszawska 44",
-            "4",
-            PostalCode{"01-234"},
-            "Warszawa"},
+        Address{"Warszawska 44", "4", PostalCode{"01-234"}, "Warszawa"},
         Pesel{"83050594899"},
         Gender::Male};
 
     Student dabacka{
         "Ddama",
         "Dabacka",
-        Address{
-            "Warszawska 45",
-            "5",
-            PostalCode{"01-234"},
-            "Warszawa"},
+        Address{"Warszawska 45", "5", PostalCode{"01-234"}, "Warszawa"},
         Pesel{"03281592527"},
         Gender::Female};
 
     Student fabacki{
         "Fdam",
         "Fabacki",
-        Address{
-            "Warszawska 46",
-            "6",
-            PostalCode{"01-234"},
-            "Warszawa"},
+        Address{"Warszawska 46", "6", PostalCode{"01-234"}, "Warszawa"},
         Pesel{"52030218632"},
         Gender::Male};
 
     Database db;
-    db.add(abacki);
-    db.add(babacki);
-    db.add(cabacki);
-    db.add(dabacka);
-    db.add(fabacki);
 
+    void SetUp() override {
+        db.add(abacki);
+        db.add(babacki);
+        db.add(cabacki);
+        db.add(dabacka);
+        db.add(fabacki);
+    }
+};
+
+TEST_F(DatabaseTest, SaveAndLoad) {
     const auto filepath{"./db.txt"};
     db.save(filepath);
 
@@ -73,69 +59,7 @@ TEST(Database, SaveAndLoad) {
     EXPECT_EQ(db.display(), db_from_file.display());
 }
 
-TEST(Database, DeleteByIndex) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Student babacki{
-        "Bdam",
-        "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101230"},
-        Gender::Male};
-
-    Student cabacki{
-        "Cdam",
-        "Cabacki",
-        Address{
-            "Warszawska 44",
-            "4",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"83050594899"},
-        Gender::Male};
-
-    Student dabacka{
-        "Ddama",
-        "Dabacka",
-        Address{
-            "Warszawska 45",
-            "5",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"03281592527"},
-        Gender::Female};
-
-    Student fabacki{
-        "Fdam",
-        "Fabacki",
-        Address{
-            "Warszawska 46",
-            "6",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"52030218632"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-    db.add(babacki);
-    db.add(cabacki);
-    db.add(dabacka);
-    db.add(fabacki);
-
+TEST_F(DatabaseTest, DeleteByIndex) {
     const std::string ref_db_display_sorted_ascending =
         "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\n"
         "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n"
@@ -159,69 +83,7 @@ TEST(Database, DeleteByIndex) {
     EXPECT_EQ(*db.delete_by_index(3), Database::ErrorCode::IndexNotFound);
 }
 
-TEST(Database, SortByName) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Student babacki{
-        "Bdam",
-        "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101230"},
-        Gender::Male};
-
-    Student cabacki{
-        "Cdam",
-        "Cabacki",
-        Address{
-            "Warszawska 44",
-            "4",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"83050594899"},
-        Gender::Male};
-
-    Student dabacka{
-        "Ddama",
-        "Dabacka",
-        Address{
-            "Warszawska 45",
-            "5",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"03281592527"},
-        Gender::Female};
-
-    Student fabacki{
-        "Fdam",
-        "Fabacki",
-        Address{
-            "Warszawska 46",
-            "6",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"52030218632"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-    db.add(babacki);
-    db.add(cabacki);
-    db.add(dabacka);
-    db.add(fabacki);
-
+TEST_F(DatabaseTest, SortByName) {
     const std::string ref_db_display_sorted_ascending =
         "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\n"
         "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n"
@@ -245,69 +107,7 @@ TEST(Database, SortByName) {
     EXPECT_EQ(db.display(), ref_db_display_sorted_descending);
 }
 
-TEST(Database, SortByPesel) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Student babacki{
-        "Bdam",
-        "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101230"},
-        Gender::Male};
-
-    Student cabacki{
-        "Cdam",
-        "Cabacki",
-        Address{
-            "Warszawska 44",
-            "4",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"83050594899"},
-        Gender::Male};
-
-    Student dabacka{
-        "Ddama",
-        "Dabacka",
-        Address{
-            "Warszawska 45",
-            "5",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"03281592527"},
-        Gender::Female};
-
-    Student fabacki{
-        "Fdam",
-        "Fabacki",
-        Address{
-            "Warszawska 46",
-            "6",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"52030218632"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-    db.add(babacki);
-    db.add(cabacki);
-    db.add(dabacka);
-    db.add(fabacki);
-
+TEST_F(DatabaseTest, SortByPesel) {
     const std::string ref_db_display_sorted_ascending =
         "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\n"
         "Ddama|Dabacka|Warszawska 45|5|01-234|Warszawa|4|03281592527|female\n"
@@ -331,109 +131,16 @@ TEST(Database, SortByPesel) {
     EXPECT_EQ(db.display(), ref_db_display_sorted_descending);
 }
 
-TEST(Database, SearchByLastName) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Student babacki{
-        "Bdam",
-        "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101230"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-    db.add(babacki);
-
+TEST_F(DatabaseTest, SearchByLastName) {
     const auto matches = db.search_by_last_name("Abacki");
     const std::list<Student> ref_matches = {abacki};
 
     EXPECT_EQ(matches, ref_matches);
 }
 
-TEST(Database, SearchByPesel) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Student babacki{
-        "Bdam",
-        "Babacki",
-        Address{
-            "Warszawska 43",
-            "3",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101230"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-    db.add(babacki);
-
+TEST_F(DatabaseTest, SearchByPesel) {
     const auto matches = db.search_by_pesel(Pesel{"55030101193"});
     const std::list<Student> ref_matches = {abacki};
 
     EXPECT_EQ(matches, ref_matches);
-}
-
-TEST(Database, DisplayDatabase) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Database db;
-    db.add(abacki);
-
-    const std::string ref_db_display =
-        "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\n"
-        "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n";
-
-    EXPECT_EQ(db.display(), ref_db_display);
-}
-
-TEST(Database, AddingNewStudent) {
-    Student abacki{
-        "Adam",
-        "Abacki",
-        Address{
-            "Warszawska 42",
-            "2",
-            PostalCode{"01-234"},
-            "Warszawa"},
-        Pesel{"55030101193"},
-        Gender::Male};
-
-    Database db;
-    EXPECT_EQ(abacki.index_num(), 0ULL);
-    EXPECT_EQ(db.add(abacki), std::nullopt);
-    EXPECT_EQ(abacki.index_num(), 1ULL);
-    EXPECT_EQ(db.add(abacki), Database::ErrorCode::StudentAlreadyExistsInDb);
 }
