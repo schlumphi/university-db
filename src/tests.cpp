@@ -2,6 +2,78 @@
 #include "core/database.hpp"
 #include "core/student.hpp"
 
+TEST(Database, SaveAndLoad) {
+    Student abacki{
+        "Adam",
+        "Abacki",
+        Address{
+            "Warszawska 42",
+            "2",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"55030101193"},
+        Gender::Male};
+
+    Student babacki{
+        "Bdam",
+        "Babacki",
+        Address{
+            "Warszawska 43",
+            "3",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"55030101230"},
+        Gender::Male};
+
+    Student cabacki{
+        "Cdam",
+        "Cabacki",
+        Address{
+            "Warszawska 44",
+            "4",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"83050594899"},
+        Gender::Male};
+
+    Student dabacka{
+        "Ddama",
+        "Dabacka",
+        Address{
+            "Warszawska 45",
+            "5",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"03281592527"},
+        Gender::Female};
+
+    Student fabacki{
+        "Fdam",
+        "Fabacki",
+        Address{
+            "Warszawska 46",
+            "6",
+            PostalCode{"01-234"},
+            "Warszawa"},
+        Pesel{"52030218632"},
+        Gender::Male};
+
+    Database db;
+    db.add(abacki);
+    db.add(babacki);
+    db.add(cabacki);
+    db.add(dabacka);
+    db.add(fabacki);
+
+    const auto filepath{"./db.txt"};
+    db.save(filepath);
+
+    Database db_from_file;
+    db_from_file.load(filepath);
+
+    EXPECT_EQ(db.display(), db_from_file.display());
+}
+
 TEST(Database, DeleteByIndex) {
     Student abacki{
         "Adam",

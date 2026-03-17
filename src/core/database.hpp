@@ -4,13 +4,17 @@
 #include <list>
 #include <optional>
 #include <string_view>
+#include <vector>
 #include "student.hpp"
 
 class Database {
 public:
     enum class ErrorCode {
         StudentAlreadyExistsInDb,
-        IndexNotFound
+        IndexNotFound,
+        FilepathDoesNotExist,
+        InvalidHeader,
+        DuplicateIndexNum
     };
 
     enum class SortOrder {
@@ -25,13 +29,18 @@ public:
     auto sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept -> void;
     auto sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept -> void;
     auto delete_by_index(const uint64_t index) -> std::optional<ErrorCode>;
+    auto save(const std::string& filepath, const char sep = '|') const noexcept -> void;
+    auto load(const std::string& filepath, const char sep = '|') -> std::optional<ErrorCode>;
 
     static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
+    static auto deserialize(const std::vector<std::string>& tokens) -> Student;
 
     static constexpr std::array<std::string_view, 9> columns{
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
+    auto add(Student& student, const uint64_t index_num) noexcept -> std::optional<ErrorCode>;
+
     std::list<Student> m_state;
     uint64_t m_curr_index = 1ULL;
 };
