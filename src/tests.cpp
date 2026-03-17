@@ -65,9 +65,13 @@ TEST(Database, SaveAndLoad) {
     db.add(dabacka);
     db.add(fabacki);
 
-    db.save("./db.txt");
+    const auto filepath{"./db.txt"};
+    db.save(filepath);
 
-    EXPECT_TRUE(true);
+    Database db_from_file;
+    db_from_file.load(filepath);
+
+    EXPECT_EQ(db.display(), db_from_file.display());
 }
 
 TEST(Database, DeleteByIndex) {
