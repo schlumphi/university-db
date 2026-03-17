@@ -181,6 +181,12 @@ auto parse_database_error_code(Database::ErrorCode error) noexcept -> std::strin
         return "student already exists in database";
     case Database::ErrorCode::IndexNotFound:
         return "could not find student with provided index";
+    case Database::ErrorCode::FilepathDoesNotExist:
+        return "provided filepath to database file does not exist";
+    case Database::ErrorCode::InvalidHeader:
+        return "could not read properly column names from database file";
+    case Database::ErrorCode::DuplicateIndexNum:
+        return "encountered the same index number more than once in database file";
     default:
         return "ok";
     }
