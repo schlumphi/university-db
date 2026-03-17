@@ -8,6 +8,7 @@ The database allows you to:
 
 - Add new students
 - Search students by **PESEL** or **last name**
+- Sort students by **PESEL** or **last name**
 - Delete students by **index number**
 - Display the database
 - Save the database to a file and load it back
