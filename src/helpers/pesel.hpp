@@ -35,6 +35,9 @@ public:
     // checks if lhs is younger than rhs
     auto operator<(const Pesel& rhs) const noexcept -> bool;
 
+    // checks if lhs is older than rhs
+    auto operator>(const Pesel& rhs) const noexcept -> bool;
+
 private:
     const std::string m_number;
 };

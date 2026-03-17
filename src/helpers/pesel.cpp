@@ -56,6 +56,19 @@ auto Pesel::operator<(const Pesel& rhs) const noexcept -> bool {
     }
 }
 
+// checks if lhs is older than rhs
+auto Pesel::operator>(const Pesel& rhs) const noexcept -> bool {
+    const auto this_days = approx_days_since_epoch(*this);
+    const auto rhs_days = approx_days_since_epoch(rhs);
+    if (this_days < rhs_days) {
+        return true;
+    } else if (this_days == rhs_days) {
+        return m_number.substr(6, 5) < rhs.value();
+    } else {
+        return false;
+    }
+}
+
 auto parse_pesel_error_code(Pesel::ErrorCode error) -> std::string_view {
     switch (error) {
     case Pesel::ErrorCode::InvalidPeselFormat:
