@@ -124,7 +124,7 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     while (std::getline(db_file_handler, read_line, '\n')) {
         const auto tokens = bytes::tokenize(read_line, sep);
         auto student = deserialize(tokens);
-        const auto read_index_num = std::stoi(tokens[6]);
+        const auto read_index_num = static_cast<uint64_t>(std::stoi(tokens[6]));
 
         const auto it = std::find_if(
             m_state.begin(), m_state.end(),

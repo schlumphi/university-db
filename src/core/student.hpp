@@ -36,8 +36,8 @@ public:
     auto last_name() const noexcept -> const std::string& { return m_last_name; }
     auto address() const noexcept -> const Address& { return m_address; }
     auto pesel() const noexcept -> const Pesel& { return m_pesel; }
-    auto index_num() const noexcept -> const uint64_t { return m_index_num; }
-    auto gender() const noexcept -> const Gender { return m_gender; }
+    auto index_num() const noexcept -> uint64_t { return m_index_num; }
+    auto gender() const noexcept -> Gender { return m_gender; }
 
     static auto validate_name(const std::string& name) noexcept -> std::optional<ErrorCode>;
     static auto validate_gender(const Pesel& pesel, const Gender gender) noexcept -> std::optional<ErrorCode>;

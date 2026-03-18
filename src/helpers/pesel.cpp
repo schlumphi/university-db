@@ -34,7 +34,7 @@ auto Pesel::validate_correctness(const std::string& number) noexcept -> std::opt
     }
 }
 
-auto Pesel::gender() const noexcept -> const Gender {
+auto Pesel::gender() const noexcept -> Gender {
     const auto tenth_digit = static_cast<uint8_t>((m_number.at(9)));
     if (tenth_digit % 2 == 0) {
         return Gender::Female;

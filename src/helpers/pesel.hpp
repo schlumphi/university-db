@@ -24,7 +24,7 @@ public:
     Pesel(const std::string& number);
 
     auto value() const noexcept -> const std::string& { return m_number; }
-    auto gender() const noexcept -> const Gender;
+    auto gender() const noexcept -> Gender;
 
     // TODO: validate day of the month
     static auto validate_format(const std::string& number) noexcept -> std::optional<ErrorCode>;

@@ -12,8 +12,8 @@ Student::Student(
                            m_last_name(last_name),
                            m_address(address),
                            m_pesel(pesel),
-                           m_gender(gender),
-                           m_index_num(0ULL) {
+                           m_index_num(0ULL),
+                           m_gender(gender) {
     if (auto error = validate_name(first_name)) {
         throw std::invalid_argument(std::string(parse_student_error_code(*error)));
     }
