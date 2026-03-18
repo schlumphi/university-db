@@ -25,7 +25,7 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_compile_options(${PROJECT_NAME} PRIVATE -Werror -std=c++20)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror -std=c++20)
 
 enable_testing()
 
@@ -43,7 +43,7 @@ target_link_libraries(
     GTest::gtest
     GTest::gtest_main
 )
-target_compile_options(${PROJECT_NAME}-ut PRIVATE -Werror -std=c++20)
+target_compile_options(${PROJECT_NAME}-ut PRIVATE -Wall -Wextra -Wpedantic -Werror -std=c++20)
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}-ut)
