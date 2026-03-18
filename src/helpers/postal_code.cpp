@@ -1,4 +1,5 @@
 #include "postal_code.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cctype>

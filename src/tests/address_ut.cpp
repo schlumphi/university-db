@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "helpers/address.hpp"
 #include "helpers/postal_code.hpp"
 

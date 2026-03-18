@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "core/student.hpp"
 
 TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {

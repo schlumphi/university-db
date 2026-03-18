@@ -1,8 +1,10 @@
 #include "database.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+
 #include "helpers/bytes/tokenize.hpp"
 
 auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCode> {

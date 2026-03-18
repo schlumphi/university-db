@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include "helpers/pesel.hpp"
 
 TEST(Pesel, ConstructorWithInvalidValidFormatThrowsError) {
