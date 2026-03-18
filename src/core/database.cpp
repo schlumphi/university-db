@@ -119,7 +119,7 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     }
 
     auto backup_state = std::list<Student>{};
-    m_state.splice(m_state.end(), backup_state);
+    m_state.splice(backup_state.begin(), m_state);
 
     while (std::getline(db_file_handler, read_line, '\n')) {
         const auto tokens = bytes::tokenize(read_line, sep);
@@ -133,7 +133,8 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
         if (it == m_state.end()) {
             add(student, read_index_num);
         } else {
-            backup_state.splice(backup_state.end(), m_state);
+            m_state.clear();
+            backup_state.splice(m_state.begin(), backup_state);
             return ErrorCode::DuplicateIndexNum;
         }
     }
