@@ -5,8 +5,8 @@
 
 TEST(Address, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Warsaw"));
-    // EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "New York"));
-    // EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Bielsko-Biala"));
+    EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "New York"));
+    EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Bielsko-Biala"));
 }
 
 TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
@@ -86,28 +86,38 @@ TEST(Address, ConstructorWithInvalidCityNameThrowsError) {
     const auto apartment = std::string{"42"};
     const auto postal_code = PostalCode{"01-234"};
 
-    EXPECT_EQ(Address::validate_city(""), Address::ErrorCode::CityNameTooShort);
+    EXPECT_EQ(Address::validate_city(""), Address::ErrorCode::CityNameChunkTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, ""),
         std::invalid_argument);
 
-    EXPECT_EQ(Address::validate_city("A"), Address::ErrorCode::CityNameTooShort);
+    EXPECT_EQ(Address::validate_city("A"), Address::ErrorCode::CityNameChunkTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "A"),
         std::invalid_argument);
 
-    EXPECT_EQ(Address::validate_city("a"), Address::ErrorCode::CityNameTooShort);
+    EXPECT_EQ(Address::validate_city("a"), Address::ErrorCode::CityNameChunkTooShort);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "a"),
         std::invalid_argument);
 
-    EXPECT_EQ(Address::validate_city("a42"), Address::ErrorCode::CityNameInvalidCharacters);
+    EXPECT_EQ(Address::validate_city("a42"), Address::ErrorCode::CityNameDoesntStartWithCapitalLetter);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "a42"),
+        std::invalid_argument);
+
+    EXPECT_EQ(Address::validate_city("A42"), Address::ErrorCode::CityNameInvalidCharacters);
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "A42"),
         std::invalid_argument);
 
     EXPECT_EQ(Address::validate_city("oS"), Address::ErrorCode::CityNameDoesntStartWithCapitalLetter);
     EXPECT_THROW(
         Address(street, apartment, postal_code, "oS"),
+        std::invalid_argument);
+
+    EXPECT_EQ(Address::validate_city("OS"), Address::ErrorCode::CityNameChunkContainsInnerUpperCaseLetter);
+    EXPECT_THROW(
+        Address(street, apartment, postal_code, "OS"),
         std::invalid_argument);
 }

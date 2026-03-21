@@ -83,18 +83,32 @@ auto Address::validate_apartment(const std::string& apartment) noexcept -> std::
 }
 
 auto Address::validate_city(const std::string& city) noexcept -> std::optional<Address::ErrorCode> {
-    if (city.length() < 2) {
-        return ErrorCode::CityNameTooShort;
+    auto city_name_space_chunks = bytes::tokenize(city, ' ');
+    for (const auto name_space_chunk : city_name_space_chunks) {
+        auto city_name_hyphen_chunks = bytes::tokenize(name_space_chunk, '-');
+        for (auto name_hyphen_chunk : city_name_hyphen_chunks) {
+            if (name_hyphen_chunk.size() < 2) {
+                return ErrorCode::CityNameChunkTooShort;
+            }
+            if (!std::isupper(name_hyphen_chunk.front())) {
+                return ErrorCode::CityNameDoesntStartWithCapitalLetter;
+            }
+            if (std::any_of(
+                    name_hyphen_chunk.begin(),
+                    name_hyphen_chunk.end(),
+                    [](char c) { return !std::isalpha(c); })) {
+                return ErrorCode::CityNameInvalidCharacters;
+            }
+            auto inner_name_hyphen_chunk = name_hyphen_chunk.substr(1);
+            if (std::any_of(
+                    inner_name_hyphen_chunk.begin(),
+                    inner_name_hyphen_chunk.end(),
+                    [](char c) { return std::isupper(c); })) {
+                return ErrorCode::CityNameChunkContainsInnerUpperCaseLetter;
+            }
+        }
     }
-    if (std::any_of(
-            city.begin(),
-            city.end(),
-            [](char c) { return !std::isalpha(c); })) {
-        return ErrorCode::CityNameInvalidCharacters;
-    }
-    if (!std::isupper(city.front())) {
-        return ErrorCode::CityNameDoesntStartWithCapitalLetter;
-    }
+
     return std::nullopt;
 }
 
@@ -110,12 +124,14 @@ auto parse_address_error_code(Address::ErrorCode error) -> std::string_view {
         return "street number must have the form: NUM[NUM][ALPHA]";
     case Address::ErrorCode::ApartmentInvalidCharacters:
         return "expected apartment in alpahunmerical format e.g. 21/37, 42";
-    case Address::ErrorCode::CityNameTooShort:
-        return "city name must be at least 2 characters length";
+    case Address::ErrorCode::CityNameChunkTooShort:
+        return "city name chunk must be at least 2 characters length";
     case Address::ErrorCode::CityNameDoesntStartWithCapitalLetter:
         return "city name must start with capital letter";
     case Address::ErrorCode::CityNameInvalidCharacters:
         return "expected city name to contain only alphabetic characters";
+    case Address::ErrorCode::CityNameChunkContainsInnerUpperCaseLetter:
+        return "city name chunks cannot contain uppercase letters except fist one";
     default:
         return "Ok";
     }
