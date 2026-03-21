@@ -1,19 +1,19 @@
 #include "tokenize.hpp"
 
 namespace bytes {
-auto tokenize(const std::string& data, const char delim) -> std::vector<std::string> {
-    std::vector<std::string> tokens;
-    std::string buffer;
-    for (auto c : data) {
-        if (c == delim && !buffer.empty()) {
-            tokens.push_back(buffer);
-            buffer.clear();
-        } else if (c != delim) {
-            buffer.push_back(c);
+std::vector<std::string_view> tokenize(std::string_view data, const char delimiter) {
+    std::vector<std::string_view> tokens;
+
+    while (true) {
+        auto pos = data.find(delimiter);
+
+        if (pos == std::string_view::npos) {
+            tokens.emplace_back(data);
+            break;
         }
-    }
-    if (!buffer.empty()) {
-        tokens.push_back(buffer);
+
+        tokens.emplace_back(data.substr(0, pos));
+        data = data.substr(pos + 1);
     }
 
     return tokens;

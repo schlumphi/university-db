@@ -36,7 +36,7 @@ public:
     auto students() const noexcept -> const std::list<Student>& { return m_state; }
 
     static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
-    static auto deserialize(const std::vector<std::string>& tokens) -> Student;
+    static auto deserialize(const std::vector<std::string_view>& tokens) -> Student;
 
     static constexpr std::array<std::string_view, 9> columns{
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};

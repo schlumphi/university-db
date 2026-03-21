@@ -116,7 +116,7 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     const auto header = bytes::tokenize(read_line, sep);
     if (!std::equal(
             header.begin(), header.end(), columns.begin(), columns.end(),
-            [](std::string lhs, std::string_view rhs) { return lhs == rhs; })) {
+            [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
         return ErrorCode::InvalidHeader;
     }
 
@@ -126,7 +126,7 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     while (std::getline(db_file_handler, read_line, '\n')) {
         const auto tokens = bytes::tokenize(read_line, sep);
         auto student = deserialize(tokens);
-        const auto read_index_num = static_cast<uint64_t>(std::stoi(tokens[6]));
+        const auto read_index_num = static_cast<uint64_t>(std::stoi(std::string(tokens[6])));
 
         const auto it = std::find_if(
             m_state.begin(), m_state.end(),
@@ -151,13 +151,13 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     return std::nullopt;
 }
 
-auto Database::deserialize(const std::vector<std::string>& tokens) -> Student {
-    const auto first_name = tokens[0];
-    const auto last_name = tokens[1];
+auto Database::deserialize(const std::vector<std::string_view>& tokens) -> Student {
+    const auto first_name = std::string(tokens[0]);
+    const auto last_name = std::string(tokens[1]);
     const auto address = Address{
-        tokens[2], tokens[3], PostalCode{tokens[4]}, tokens[5]};
-    const auto pesel = Pesel{tokens[7]};
-    const auto gender = parse_gender(tokens[8]);
+        std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
+    const auto pesel = Pesel{std::string(tokens[7])};
+    const auto gender = parse_gender(std::string(tokens[8]));
 
     return Student{
         first_name, last_name, address, pesel, gender};

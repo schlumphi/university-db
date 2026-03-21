@@ -12,9 +12,10 @@ public:
         StreetNameInvalidNameFormat,
         StreetInvalidNumberFormat,
         ApartmentInvalidCharacters,
-        CityNameTooShort,
+        CityNameChunkTooShort,
         CityNameDoesntStartWithCapitalLetter,
-        CityNameInvalidCharacters
+        CityNameInvalidCharacters,
+        CityNameChunkContainsInnerUpperCaseLetter
     };
 
     Address(

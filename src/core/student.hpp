@@ -13,6 +13,7 @@ class Student {
 public:
     enum class ErrorCode {
         EmptyName,
+        NameTooShort,
         NameDoesntBeginWithUppercase,
         NameContainsUppercaseCharacters,
         NameContainsInvalidCharacters,
