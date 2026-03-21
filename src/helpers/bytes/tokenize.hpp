@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <vector>
 
 namespace bytes {
-auto tokenize(const std::string& data, const char delim) -> std::vector<std::string>;
+std::vector<std::string_view> tokenize(std::string_view data, const char delimiter);
 }  // namespace bytes

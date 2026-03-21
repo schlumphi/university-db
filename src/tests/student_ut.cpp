@@ -117,4 +117,25 @@ TEST(Student, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_EQ(abacki.index_num(), 0ULL);
     EXPECT_EQ(abacki.pesel().value(), "55030101193");
     EXPECT_EQ(abacki.gender(), Gender::Male);
+
+    // const Student przerwa{
+    //     "Adam",
+    //     "Przerwa-Tetmajer",
+    //     Address{
+    //         "Warszawska 42",
+    //         "2",
+    //         PostalCode{"01-234"},
+    //         "Warszawa"},
+    //     Pesel{"55030101193"},
+    //     Gender::Male};
+
+    // EXPECT_EQ(abacki.first_name(), "Adam");
+    // EXPECT_EQ(abacki.last_name(), "Przerwa-Tetmajer");
+    // EXPECT_EQ(abacki.address().street(), "Warszawska 42");
+    // EXPECT_EQ(abacki.address().apartment(), "2");
+    // EXPECT_EQ(abacki.address().postal_code().value(), "01-234");
+    // EXPECT_EQ(abacki.address().city(), "Warszawa");
+    // EXPECT_EQ(abacki.index_num(), 0ULL);
+    // EXPECT_EQ(abacki.pesel().value(), "55030101193");
+    // EXPECT_EQ(abacki.gender(), Gender::Male);
 }
