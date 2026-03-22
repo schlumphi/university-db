@@ -9,6 +9,8 @@ bool contains_only_alpha(std::string_view data);
 
 bool contains_only_digits(std::string_view data);
 
+bool contains_only_digits_with_optional_trailing_alpha(std::string_view data);
+
 bool contains_only_alphanum(std::string_view data);
 
 bool contains_only_lowercase_alpha(std::string_view data);

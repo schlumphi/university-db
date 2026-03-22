@@ -23,6 +23,23 @@ bool contains_only_digits(std::string_view data) {
     return true;
 }
 
+bool contains_only_digits_with_optional_trailing_alpha(std::string_view data) {
+    if (!contains_only_alphanum(data) || !std::isdigit(data.front())) {
+        return false;
+    }
+
+    bool alpha_encountered = false;
+    for (const auto c : data) {
+        if (std::isalpha(c) && !alpha_encountered) {
+            alpha_encountered = true;
+        } else if (std::isdigit(c) && alpha_encountered) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool contains_only_alphanum(std::string_view data) {
     if (data.empty()) {
         return false;
