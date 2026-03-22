@@ -21,6 +21,7 @@ set(SOURCES
     src/helpers/pesel.cpp
     src/helpers/postal_code.cpp
     src/helpers/bytes/tokenize.cpp
+    src/helpers/predicates/string_checks.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} src/main.cpp)
