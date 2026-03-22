@@ -15,16 +15,7 @@ protected:
     const Gender valid_gender{Gender::Male};
 };
 
-TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
-    const auto valid_last_name = "Abacki";
-    const auto valid_address = Address{
-        "Warszawska 42",
-        "2",
-        PostalCode{"01-234"},
-        "Warszawa"};
-    const auto valid_pesel = Pesel{"55030101193"};
-    const auto valid_gender = Gender::Male;
-
+TEST_F(StudentTest, ConstructorWithInvalidFirstNameThrowsError) {
     EXPECT_THROW(Student(
                      "",
                      valid_last_name,
@@ -66,16 +57,7 @@ TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
                  std::invalid_argument);
 }
 
-TEST(Student, ConstructorWithInvalidLastNameThrowsError) {
-    const auto valid_first_name = "Adam";
-    const auto valid_address = Address{
-        "Warszawska 42",
-        "2",
-        PostalCode{"01-234"},
-        "Warszawa"};
-    const auto valid_pesel = Pesel{"55030101193"};
-    const auto valid_gender = Gender::Male;
-
+TEST_F(StudentTest, ConstructorWithInvalidLastNameThrowsError) {
     EXPECT_THROW(Student(
                      valid_first_name,
                      "",
