@@ -24,33 +24,33 @@ public:
 
     Pesel(const std::string& number);
 
-    auto value() const noexcept -> const std::string& { return m_number; }
-    auto gender() const noexcept -> Gender;
+    const std::string& value() const noexcept { return m_number; }
+    Gender gender() const noexcept;
 
     // TODO: validate day of the month
-    static auto validate_format(const std::string& number) noexcept -> std::optional<ErrorCode>;
-    static auto validate_correctness(const std::string& number) noexcept -> std::optional<ErrorCode>;
+    static std::optional<ErrorCode> validate_format(const std::string& number) noexcept;
+    static std::optional<ErrorCode> validate_correctness(const std::string& number) noexcept;
 
     static constexpr std::array<uint8_t, 11> weights{1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1};
 
     // checks if lhs is younger than rhs
-    auto operator<(const Pesel& rhs) const noexcept -> bool;
+    bool operator<(const Pesel& rhs) const noexcept;
 
     // checks if lhs is older than rhs
-    auto operator>(const Pesel& rhs) const noexcept -> bool;
+    bool operator>(const Pesel& rhs) const noexcept;
 
 private:
     const std::string m_number;
 };
 
-auto parse_pesel_error_code(Pesel::ErrorCode error) -> std::string_view;
+std::string_view parse_pesel_error_code(Pesel::ErrorCode error);
 
-auto derive_century(const Pesel& pesel) -> Century;
+Century derive_century(const Pesel& pesel);
 
-auto parse_day(const Pesel& pesel) -> uint64_t;
+uint64_t parse_day(const Pesel& pesel);
 
-auto parse_month(const Pesel& pesel, const Century century) -> uint64_t;
+uint64_t parse_month(const Pesel& pesel, const Century century);
 
-auto parse_year(const Pesel& pesel, const Century century) -> uint64_t;
+uint64_t parse_year(const Pesel& pesel, const Century century);
 
-auto approx_days_since_epoch(const Pesel& pesel) -> uint64_t;
+uint64_t approx_days_since_epoch(const Pesel& pesel);

@@ -25,7 +25,7 @@ Address::Address(
     }
 }
 
-auto Address::validate_street(const std::string& code) noexcept -> std::optional<Address::ErrorCode> {
+std::optional<Address::ErrorCode> Address::validate_street(const std::string& code) noexcept {
     if (code.empty()) {
         return ErrorCode::StreetNameEmpty;
     }
@@ -62,7 +62,7 @@ auto Address::validate_street(const std::string& code) noexcept -> std::optional
     return std::nullopt;
 }
 
-auto Address::validate_apartment(const std::string& apartment) noexcept -> std::optional<Address::ErrorCode> {
+std::optional<Address::ErrorCode> Address::validate_apartment(const std::string& apartment) noexcept {
     if (apartment.empty()) {
         return std::nullopt;
     }
@@ -82,7 +82,7 @@ auto Address::validate_apartment(const std::string& apartment) noexcept -> std::
     }
 }
 
-auto Address::validate_city(const std::string& city) noexcept -> std::optional<Address::ErrorCode> {
+std::optional<Address::ErrorCode> Address::validate_city(const std::string& city) noexcept {
     auto city_name_space_chunks = bytes::tokenize(city, ' ');
     for (const auto name_space_chunk : city_name_space_chunks) {
         auto city_name_hyphen_chunks = bytes::tokenize(name_space_chunk, '-');
@@ -112,7 +112,7 @@ auto Address::validate_city(const std::string& city) noexcept -> std::optional<A
     return std::nullopt;
 }
 
-auto parse_address_error_code(Address::ErrorCode error) -> std::string_view {
+std::string_view parse_address_error_code(Address::ErrorCode error) {
     switch (error) {
     case Address::ErrorCode::StreetNameEmpty:
         return "expected non-empty street name";

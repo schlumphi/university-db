@@ -15,14 +15,14 @@ Pesel::Pesel(const std::string& number) : m_number(number) {
     }
 }
 
-auto Pesel::validate_format(const std::string& number) noexcept -> std::optional<Pesel::ErrorCode> {
+std::optional<Pesel::ErrorCode> Pesel::validate_format(const std::string& number) noexcept {
     if (number.length() != 11 || std::any_of(number.begin(), number.end(), [](char c) { return !std::isdigit(c); })) {
         return Pesel::ErrorCode::InvalidPeselFormat;
     }
     return std::nullopt;
 }
 
-auto Pesel::validate_correctness(const std::string& number) noexcept -> std::optional<ErrorCode> {
+std::optional<Pesel::ErrorCode> Pesel::validate_correctness(const std::string& number) noexcept {
     auto sum = std::inner_product(
         number.begin(), number.end(), weights.begin(),
         0ULL, std::plus<>(),
@@ -35,7 +35,7 @@ auto Pesel::validate_correctness(const std::string& number) noexcept -> std::opt
     }
 }
 
-auto Pesel::gender() const noexcept -> Gender {
+Gender Pesel::gender() const noexcept {
     const auto tenth_digit = static_cast<uint8_t>((m_number.at(9)));
     if (tenth_digit % 2 == 0) {
         return Gender::Female;
@@ -45,7 +45,7 @@ auto Pesel::gender() const noexcept -> Gender {
 }
 
 // checks if lhs is younger than rhs
-auto Pesel::operator<(const Pesel& rhs) const noexcept -> bool {
+bool Pesel::operator<(const Pesel& rhs) const noexcept {
     const auto this_days = approx_days_since_epoch(*this);
     const auto rhs_days = approx_days_since_epoch(rhs);
     if (this_days < rhs_days) {
@@ -58,7 +58,7 @@ auto Pesel::operator<(const Pesel& rhs) const noexcept -> bool {
 }
 
 // checks if lhs is older than rhs
-auto Pesel::operator>(const Pesel& rhs) const noexcept -> bool {
+bool Pesel::operator>(const Pesel& rhs) const noexcept {
     const auto this_days = approx_days_since_epoch(*this);
     const auto rhs_days = approx_days_since_epoch(rhs);
     if (this_days < rhs_days) {
@@ -70,7 +70,7 @@ auto Pesel::operator>(const Pesel& rhs) const noexcept -> bool {
     }
 }
 
-auto parse_pesel_error_code(Pesel::ErrorCode error) -> std::string_view {
+std::string_view parse_pesel_error_code(Pesel::ErrorCode error) {
     switch (error) {
     case Pesel::ErrorCode::InvalidPeselFormat:
         return "expected 'number' to be 11 digits length";
@@ -81,7 +81,7 @@ auto parse_pesel_error_code(Pesel::ErrorCode error) -> std::string_view {
     }
 }
 
-auto derive_century(const Pesel& pesel) -> Century {
+Century derive_century(const Pesel& pesel) {
     const uint64_t month_code = std::stoi(pesel.value().substr(2, 1));
 
     switch (month_code) {
@@ -102,11 +102,11 @@ auto derive_century(const Pesel& pesel) -> Century {
     }
 }
 
-auto parse_day(const Pesel& pesel) -> uint64_t {
+uint64_t parse_day(const Pesel& pesel) {
     return std::stoi(pesel.value().substr(4, 2));
 }
 
-auto parse_month(const Pesel& pesel, const Century century) -> uint64_t {
+uint64_t parse_month(const Pesel& pesel, const Century century) {
     const uint64_t month = std::stoi(pesel.value().substr(2, 2));
     switch (century) {
     case Century::Nineteenth:
@@ -122,7 +122,7 @@ auto parse_month(const Pesel& pesel, const Century century) -> uint64_t {
     }
 }
 
-auto parse_year(const Pesel& pesel, const Century century) -> uint64_t {
+uint64_t parse_year(const Pesel& pesel, const Century century) {
     const uint64_t year = std::stoi(pesel.value().substr(0, 2));
     switch (century) {
     case Century::Nineteenth:
@@ -137,7 +137,8 @@ auto parse_year(const Pesel& pesel, const Century century) -> uint64_t {
         return year + 1900ULL;
     }
 }
-auto approx_days_since_epoch(const Pesel& pesel) -> uint64_t {
+
+uint64_t approx_days_since_epoch(const Pesel& pesel) {
     const auto century = derive_century(pesel);
     const auto year = parse_year(pesel, century);
     const auto month = parse_month(pesel, century);

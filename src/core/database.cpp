@@ -7,7 +7,7 @@
 
 #include "helpers/bytes/tokenize.hpp"
 
-auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCode> {
+std::optional<Database::ErrorCode> Database::add(Student& student) noexcept {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
         return ErrorCode::StudentAlreadyExistsInDb;
     }
@@ -17,7 +17,7 @@ auto Database::add(Student& student) noexcept -> std::optional<Database::ErrorCo
     return std::nullopt;
 }
 
-auto Database::add(Student& student, const uint64_t index_num) noexcept -> std::optional<ErrorCode> {
+std::optional<Database::ErrorCode> Database::add(Student& student, const uint64_t index_num) noexcept {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
         return ErrorCode::StudentAlreadyExistsInDb;
     }
@@ -26,7 +26,7 @@ auto Database::add(Student& student, const uint64_t index_num) noexcept -> std::
     return std::nullopt;
 }
 
-auto Database::display(const char sep) const noexcept -> std::string {
+std::string Database::display(const char sep) const noexcept {
     std::string db{""};
     for (const auto& col : columns) {
         db += col;
@@ -45,7 +45,7 @@ auto Database::display(const char sep) const noexcept -> std::string {
     return db;
 }
 
-auto Database::search_by_last_name(const std::string& name) const noexcept -> std::list<Student> {
+std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
     std::list<Student> matches;
     for (const auto& student : m_state) {
         if (student.last_name() == name) {
@@ -56,7 +56,7 @@ auto Database::search_by_last_name(const std::string& name) const noexcept -> st
     return matches;
 }
 
-auto Database::search_by_pesel(const Pesel& pesel) const noexcept -> std::list<Student> {
+std::list<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
     std::list<Student> matches;
     for (const auto& student : m_state) {
         if (student.pesel().value() == pesel.value()) {
@@ -69,7 +69,7 @@ auto Database::search_by_pesel(const Pesel& pesel) const noexcept -> std::list<S
 
 // ascending order -> from youngest to oldest
 // descending order -> from oldest to youngest
-auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
+void Database::sort_by_pesel(const SortOrder order) noexcept {
     if (order == SortOrder::Ascending) {
         m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() < rhs.pesel(); });
     } else {
@@ -77,7 +77,7 @@ auto Database::sort_by_pesel(const SortOrder order) noexcept -> void {
     }
 }
 
-auto Database::sort_by_name(const SortOrder order) noexcept -> void {
+void Database::sort_by_name(const SortOrder order) noexcept {
     if (order == SortOrder::Ascending) {
         m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
     } else {
@@ -85,7 +85,7 @@ auto Database::sort_by_name(const SortOrder order) noexcept -> void {
     }
 }
 
-auto Database::delete_by_index(const uint64_t index) -> std::optional<ErrorCode> {
+std::optional<Database::ErrorCode> Database::delete_by_index(const uint64_t index) {
     for (const auto& student : m_state) {
         if (student.index_num() == index) {
             m_state.remove(student);
@@ -95,7 +95,7 @@ auto Database::delete_by_index(const uint64_t index) -> std::optional<ErrorCode>
     return ErrorCode::IndexNotFound;
 }
 
-auto Database::save(const std::string& filepath, const char sep) const noexcept -> void {
+void Database::save(const std::string& filepath, const char sep) const noexcept {
     auto fp = std::filesystem::path(filepath);
 
     std::ofstream db_file_handler(fp);
@@ -104,7 +104,7 @@ auto Database::save(const std::string& filepath, const char sep) const noexcept 
     db_file_handler.close();
 }
 
-auto Database::load(const std::string& filepath, const char sep) -> std::optional<ErrorCode> {
+std::optional<Database::ErrorCode> Database::load(const std::string& filepath, const char sep) {
     auto fp = std::filesystem::path(filepath);
     if (!std::filesystem::exists(fp)) {
         return ErrorCode::FilepathDoesNotExist;
@@ -151,7 +151,7 @@ auto Database::load(const std::string& filepath, const char sep) -> std::optiona
     return std::nullopt;
 }
 
-auto Database::deserialize(const std::vector<std::string_view>& tokens) -> Student {
+Student Database::deserialize(const std::vector<std::string_view>& tokens) {
     const auto first_name = std::string(tokens[0]);
     const auto last_name = std::string(tokens[1]);
     const auto address = Address{
@@ -163,7 +163,7 @@ auto Database::deserialize(const std::vector<std::string_view>& tokens) -> Stude
         first_name, last_name, address, pesel, gender};
 }
 
-auto Database::tokenize_student(const Student& student) noexcept -> std::array<std::string, 9> {
+std::array<std::string, 9> Database::tokenize_student(const Student& student) noexcept {
     std::array<std::string, 9> tokens;
     tokens[0] = student.first_name();
     tokens[1] = student.last_name();
@@ -178,7 +178,7 @@ auto Database::tokenize_student(const Student& student) noexcept -> std::array<s
     return tokens;
 }
 
-auto parse_database_error_code(Database::ErrorCode error) noexcept -> std::string_view {
+std::string_view parse_database_error_code(Database::ErrorCode error) noexcept {
     switch (error) {
     case Database::ErrorCode::StudentAlreadyExistsInDb:
         return "student already exists in database";

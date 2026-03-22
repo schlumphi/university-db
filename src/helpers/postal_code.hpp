@@ -10,11 +10,11 @@ public:
     };
     PostalCode(const std::string& code);
 
-    auto value() const noexcept -> const std::string& { return m_code; }
-    static auto validate_code(const std::string& code) noexcept -> std::optional<ErrorCode>;
+    const std::string& value() const noexcept { return m_code; }
+    static std::optional<ErrorCode> validate_code(const std::string& code) noexcept;
 
 private:
     const std::string m_code;
 };
 
-auto parse_postal_code_error_code(PostalCode::ErrorCode error) -> std::string_view;
+std::string_view parse_postal_code_error_code(PostalCode::ErrorCode error);

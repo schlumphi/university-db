@@ -6,7 +6,7 @@ enum class Gender {
     Female
 };
 
-inline auto parse_gender(const Gender gender) noexcept -> std::string {
+inline std::string parse_gender(const Gender gender) noexcept {
     if (gender == Gender::Male) {
         return "male";
     } else {
@@ -14,7 +14,7 @@ inline auto parse_gender(const Gender gender) noexcept -> std::string {
     }
 }
 
-inline auto parse_gender(const std::string& gender) -> Gender {
+inline Gender parse_gender(const std::string& gender) {
     if (gender == "male") {
         return Gender::Male;
     } else if (gender == "female") {

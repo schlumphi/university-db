@@ -23,29 +23,29 @@ public:
         Descending
     };
 
-    auto add(Student& student) noexcept -> std::optional<ErrorCode>;
-    auto display(const char sep = '|') const noexcept -> std::string;
-    auto search_by_last_name(const std::string& name) const noexcept -> std::list<Student>;
-    auto search_by_pesel(const Pesel& pesel) const noexcept -> std::list<Student>;
-    auto sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept -> void;
-    auto sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept -> void;
-    auto delete_by_index(const uint64_t index) -> std::optional<ErrorCode>;
-    auto save(const std::string& filepath, const char sep = '|') const noexcept -> void;
-    auto load(const std::string& filepath, const char sep = '|') -> std::optional<ErrorCode>;
+    std::optional<ErrorCode> add(Student& student) noexcept;
+    std::string display(const char sep = '|') const noexcept;
+    std::list<Student> search_by_last_name(const std::string& name) const noexcept;
+    std::list<Student> search_by_pesel(const Pesel& pesel) const noexcept;
+    void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
+    void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
+    std::optional<ErrorCode> delete_by_index(const uint64_t index);
+    void save(const std::string& filepath, const char sep = '|') const noexcept;
+    std::optional<ErrorCode> load(const std::string& filepath, const char sep = '|');
 
-    auto students() const noexcept -> const std::list<Student>& { return m_state; }
+    const std::list<Student>& students() const noexcept { return m_state; }
 
-    static auto tokenize_student(const Student& student) noexcept -> std::array<std::string, 9>;
-    static auto deserialize(const std::vector<std::string_view>& tokens) -> Student;
+    static std::array<std::string, 9> tokenize_student(const Student& student) noexcept;
+    static Student deserialize(const std::vector<std::string_view>& tokens);
 
     static constexpr std::array<std::string_view, 9> columns{
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
-    auto add(Student& student, const uint64_t index_num) noexcept -> std::optional<ErrorCode>;
+    std::optional<ErrorCode> add(Student& student, const uint64_t index_num) noexcept;
 
     std::list<Student> m_state;
     uint64_t m_curr_index = 1ULL;
 };
 
-auto parse_database_error_code(Database::ErrorCode error) noexcept -> std::string_view;
+std::string_view parse_database_error_code(Database::ErrorCode error) noexcept;

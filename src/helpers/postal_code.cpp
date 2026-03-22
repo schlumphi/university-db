@@ -11,7 +11,7 @@ PostalCode::PostalCode(const std::string& code) : m_code(code) {
     }
 }
 
-auto PostalCode::validate_code(const std::string& code) noexcept -> std::optional<ErrorCode> {
+std::optional<PostalCode::ErrorCode> PostalCode::validate_code(const std::string& code) noexcept {
     if (code.length() != 6) {
         return ErrorCode::InvalidCodeLen;
     }
@@ -26,7 +26,7 @@ auto PostalCode::validate_code(const std::string& code) noexcept -> std::optiona
     return std::nullopt;
 }
 
-auto parse_postal_code_error_code(PostalCode::ErrorCode error) -> std::string_view {
+std::string_view parse_postal_code_error_code(PostalCode::ErrorCode error) {
     switch (error) {
     case PostalCode::ErrorCode::InvalidCodeLen:
         return "expected 'code' to be 6 characters len";

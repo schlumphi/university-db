@@ -28,7 +28,7 @@ Student::Student(
     }
 }
 
-auto Student::validate_name(const std::string& name) noexcept -> std::optional<Student::ErrorCode> {
+std::optional<Student::ErrorCode> Student::validate_name(const std::string& name) noexcept {
     const auto name_chunks = bytes::tokenize(name, '-');
     for (const auto name_chunk : name_chunks) {
         if (name_chunk.empty()) {
@@ -51,14 +51,14 @@ auto Student::validate_name(const std::string& name) noexcept -> std::optional<S
     return std::nullopt;
 }
 
-auto Student::validate_gender(const Pesel& pesel, const Gender gender) noexcept -> std::optional<Student::ErrorCode> {
+std::optional<Student::ErrorCode> Student::validate_gender(const Pesel& pesel, const Gender gender) noexcept {
     if (pesel.gender() != gender) {
         return ErrorCode::GenderPeselMismatch;
     }
     return std::nullopt;
 }
 
-auto parse_student_error_code(Student::ErrorCode error) -> std::string_view {
+std::string_view parse_student_error_code(Student::ErrorCode error) {
     switch (error) {
     case Student::ErrorCode::EmptyName:
         return "name cannot be empty";
