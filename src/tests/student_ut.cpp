@@ -2,6 +2,19 @@
 
 #include "core/student.hpp"
 
+class StudentTest : public ::testing::Test {
+protected:
+    const std::string valid_first_name{"Adam"};
+    const std::string valid_last_name{"Abacki"};
+    const Address valid_address{
+        "Sezamkowa 42",
+        "2",
+        PostalCode{"01-234"},
+        "Warsaw"};
+    const Pesel valid_pesel{"55030101193"};
+    const Gender valid_gender{Gender::Male};
+};
+
 TEST(Student, ConstructorWithInvalidFirstNameThrowsError) {
     const auto valid_last_name = "Abacki";
     const auto valid_address = Address{
