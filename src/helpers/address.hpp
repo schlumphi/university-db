@@ -24,6 +24,11 @@ public:
     static std::string validate_city(const std::string& city);
 
 private:
+    static void validate_street_name_chunk(std::string_view name_chunk);
+    static void validate_street_name_alpha_chunk(std::string_view chunk);
+    static void validate_street_name_digit_chunk(std::string_view chunk);
+    static void validate_street_number(std::string_view street_number);
+
     const std::string m_street;
     const std::string m_apartment;
     const PostalCode m_postal_code;

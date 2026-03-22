@@ -19,6 +19,7 @@ TEST(Address, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_NO_THROW(Address("3 Maja 42", "2", PostalCode{"01-234"}, "Warsaw"));
     EXPECT_NO_THROW(Address("11 Listopada 42", "2", PostalCode{"01-234"}, "Warsaw"));
     EXPECT_NO_THROW(Address("Edwarda Rydza-Smiglego 42", "2", PostalCode{"01-234"}, "Warsaw"));
+    EXPECT_NO_THROW(Address("Dywizjonu 303 42", "2", PostalCode{"01-234"}, "Warsaw"));
 }
 
 TEST_F(AddressTest, ConstructorWithInvalidStreetNameThrowsError) {
@@ -39,6 +40,10 @@ TEST_F(AddressTest, ConstructorWithInvalidStreetNameThrowsError) {
         std::invalid_argument);
 
     EXPECT_THROW(
+        Address("WarsZawska 2", valid_apartment, valid_postal_code, valid_city),
+        std::invalid_argument);
+
+    EXPECT_THROW(
         Address("Warszawska F2", valid_apartment, valid_postal_code, valid_city),
         std::invalid_argument);
 
@@ -50,13 +55,13 @@ TEST_F(AddressTest, ConstructorWithInvalidStreetNameThrowsError) {
         Address("11 Listopada", valid_apartment, valid_postal_code, valid_city),
         std::invalid_argument);
 
-    // EXPECT_THROW(
-    //     Address("!@#$ 2", valid_apartment, valid_postal_code, valid_city),
-    //     std::invalid_argument);
+    EXPECT_THROW(
+        Address("!@#$ 2", valid_apartment, valid_postal_code, valid_city),
+        std::invalid_argument);
 
-    // EXPECT_THROW(
-    //     Address("!@#$",, valid_apartment, valid_postal_code, valid_city),
-    //     std::invalid_argument);
+    EXPECT_THROW(
+        Address("!@#$", valid_apartment, valid_postal_code, valid_city),
+        std::invalid_argument);
 }
 
 TEST_F(AddressTest, ConstructorWithInvalidApartmentThrowsError) {
