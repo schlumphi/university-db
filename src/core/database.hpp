@@ -34,7 +34,7 @@ public:
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
-    void validate_loaded_header(const std::string& header, const char sep = '|');
+    void validate_loaded_header(const std::string& header, const char sep = '|') const;
     bool is_index_taken(const uint64_t index_num) const noexcept;
     uint64_t find_highest_index_num() const noexcept;
     void reset_current_index_number() noexcept;

@@ -146,7 +146,7 @@ void Database::load(const std::string& filepath, const char sep) {
     db_file_handler.close();
 }
 
-void Database::validate_loaded_header(const std::string& header, const char sep) {
+void Database::validate_loaded_header(const std::string& header, const char sep) const {
     const auto header_tokens = bytes::tokenize(header, sep);
     if (!std::equal(
             header_tokens.begin(), header_tokens.end(), columns.begin(), columns.end(),
