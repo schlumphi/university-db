@@ -111,9 +111,16 @@ TEST_F(DatabaseTest, SearchByLastName) {
     EXPECT_EQ(matches, expected);
 }
 
-TEST_F(DatabaseTest, SearchByPesel) {
-    const auto matches = db.search_by_pesel(Pesel{"55030101193"});
-    const std::list<Student> expected{abacki};
+TEST_F(DatabaseTest, SearchByPeselFound) {
+    const auto match = db.search_by_pesel(Pesel{"55030101193"});
+    const auto expected = abacki;
 
-    EXPECT_EQ(matches, expected);
+    EXPECT_EQ(match, expected);
+}
+
+TEST_F(DatabaseTest, SearchByPeselNotFound) {
+    const auto match = db.search_by_pesel(Pesel{"74031288887"});
+    const auto expected = std::nullopt;
+
+    EXPECT_EQ(match, expected);
 }
