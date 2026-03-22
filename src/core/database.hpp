@@ -10,12 +10,6 @@
 
 class Database {
 public:
-    enum class ErrorCode {
-        FilepathDoesNotExist,
-        InvalidHeader,
-        DuplicateIndexNum
-    };
-
     enum class SortOrder {
         Ascending,
         Descending
@@ -29,7 +23,7 @@ public:
     void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
     void delete_by_index(const uint64_t index);
     void save(const std::string& filepath, const char sep = '|') const noexcept;
-    std::optional<ErrorCode> load(const std::string& filepath, const char sep = '|');
+    void load(const std::string& filepath, const char sep = '|');
 
     const std::list<Student>& students() const noexcept { return m_state; }
 
@@ -45,5 +39,3 @@ private:
     std::list<Student> m_state;
     uint64_t m_curr_index = 1ULL;
 };
-
-std::string_view parse_database_error_code(Database::ErrorCode error) noexcept;

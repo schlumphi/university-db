@@ -103,10 +103,10 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
 }
 
 // FIXME: disperse into smaller private methods
-std::optional<Database::ErrorCode> Database::load(const std::string& filepath, const char sep) {
+void Database::load(const std::string& filepath, const char sep) {
     auto fp = std::filesystem::path(filepath);
     if (!std::filesystem::exists(fp)) {
-        return ErrorCode::FilepathDoesNotExist;
+        throw std::invalid_argument("provided filepath to database file does not exist");
     }
 
     std::ifstream db_file_handler(fp);
@@ -116,7 +116,7 @@ std::optional<Database::ErrorCode> Database::load(const std::string& filepath, c
     if (!std::equal(
             header.begin(), header.end(), columns.begin(), columns.end(),
             [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
-        return ErrorCode::InvalidHeader;
+        throw std::runtime_error("could not read properly column names from database file");
     }
 
     auto backup_state = std::list<Student>{};
@@ -136,7 +136,7 @@ std::optional<Database::ErrorCode> Database::load(const std::string& filepath, c
         } else {
             m_state.clear();
             backup_state.splice(m_state.begin(), backup_state);
-            return ErrorCode::DuplicateIndexNum;
+            throw std::runtime_error("encountered the same index number more than once in database file");
         }
     }
 
@@ -146,8 +146,6 @@ std::optional<Database::ErrorCode> Database::load(const std::string& filepath, c
                         ->index_num());
     ++m_curr_index;
     db_file_handler.close();
-
-    return std::nullopt;
 }
 
 Student Database::deserialize(const std::vector<std::string_view>& tokens) {
@@ -175,17 +173,4 @@ std::array<std::string, 9> Database::tokenize_student(const Student& student) no
     tokens[8] = parse_gender(student.gender());
 
     return tokens;
-}
-
-std::string_view parse_database_error_code(Database::ErrorCode error) noexcept {
-    switch (error) {
-    case Database::ErrorCode::FilepathDoesNotExist:
-        return "provided filepath to database file does not exist";
-    case Database::ErrorCode::InvalidHeader:
-        return "could not read properly column names from database file";
-    case Database::ErrorCode::DuplicateIndexNum:
-        return "encountered the same index number more than once in database file";
-    default:
-        return "ok";
-    }
 }
