@@ -5,33 +5,29 @@
 #include <iostream>
 #include <numeric>
 
-Pesel::Pesel(const std::string& number) : m_number(number) {
-    if (auto error = validate_format(number)) {
-        throw std::invalid_argument(std::string(parse_pesel_error_code(*error)));
-    }
+Pesel::Pesel(const std::string& number) : m_number(validate_number(number)) {}
 
-    if (auto error = validate_correctness(number)) {
-        throw std::invalid_argument(std::string(parse_pesel_error_code(*error)));
-    }
+std::string Pesel::validate_number(const std::string& number) {
+    validate_format(number);
+    validate_correctness(number);
+
+    return number;
 }
 
-std::optional<Pesel::ErrorCode> Pesel::validate_format(const std::string& number) noexcept {
+void Pesel::validate_format(const std::string& number) {
     if (number.length() != 11 || std::any_of(number.begin(), number.end(), [](char c) { return !std::isdigit(c); })) {
-        return Pesel::ErrorCode::InvalidPeselFormat;
+        throw std::invalid_argument("expected 'number' to be 11 digits length");
     }
-    return std::nullopt;
 }
 
-std::optional<Pesel::ErrorCode> Pesel::validate_correctness(const std::string& number) noexcept {
+void Pesel::validate_correctness(const std::string& number) {
     auto sum = std::inner_product(
         number.begin(), number.end(), weights.begin(),
         0ULL, std::plus<>(),
         [](char c, uint8_t w) { return (static_cast<uint8_t>(c) - 48) * w; });
 
     if (sum % 10 != 0) {
-        return Pesel::ErrorCode::InvalidPeselChecksum;
-    } else {
-        return std::nullopt;
+        throw std::invalid_argument("'number' is invalid due to incorrect checksum");
     }
 }
 
@@ -67,17 +63,6 @@ bool Pesel::operator>(const Pesel& rhs) const noexcept {
         return m_number.substr(6, 5) < rhs.value();
     } else {
         return false;
-    }
-}
-
-std::string_view parse_pesel_error_code(Pesel::ErrorCode error) {
-    switch (error) {
-    case Pesel::ErrorCode::InvalidPeselFormat:
-        return "expected 'number' to be 11 digits length";
-    case Pesel::ErrorCode::InvalidPeselChecksum:
-        return "'number' is invalid due to incorrect checksum";
-    default:
-        return "Ok";
     }
 }
 
