@@ -11,15 +11,6 @@ class Database;
 
 class Student {
 public:
-    enum class ErrorCode {
-        EmptyName,
-        NameTooShort,
-        NameDoesntBeginWithUppercase,
-        NameContainsUppercaseCharacters,
-        NameContainsInvalidCharacters,
-        GenderPeselMismatch
-    };
-
     Student(
         const std::string& first_name,
         const std::string& last_name,
@@ -41,8 +32,8 @@ public:
     uint64_t index_num() const noexcept { return m_index_num; }
     Gender gender() const noexcept { return m_gender; }
 
-    static std::optional<ErrorCode> validate_name(const std::string& name) noexcept;
-    static std::optional<ErrorCode> validate_gender(const Pesel& pesel, const Gender gender) noexcept;
+    static std::string validate_name(const std::string& name);
+    static Gender validate_gender(const Pesel& pesel, const Gender gender);
 
 private:
     void set_index_num(const uint64_t index_num) {
@@ -60,5 +51,3 @@ private:
 
     friend class Database;
 };
-
-std::string_view parse_student_error_code(Student::ErrorCode error);
