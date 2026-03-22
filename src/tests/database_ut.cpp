@@ -62,6 +62,10 @@ TEST_F(DatabaseTest, Display) {
     EXPECT_EQ(db.display(), ref_db_display);
 }
 
+TEST_F(DatabaseTest, AddDuplicateStudent) {
+    EXPECT_THROW(db.add(abacki), std::invalid_argument);
+}
+
 TEST_F(DatabaseTest, SaveAndLoad) {
     const auto filepath{"./db.txt"};
     db.save(filepath);
@@ -90,7 +94,7 @@ TEST_F(DatabaseTest, SortByName) {
     EXPECT_EQ(db.students(), expected);
 }
 
-TEST_F(DatabaseTest, SortByPesel) {  // FIXME:
+TEST_F(DatabaseTest, SortByPesel) {
     std::list<Student> expected{dabacka, cabacki, babacki, abacki, fabacki};
     db.sort_by_pesel(Database::SortOrder::Ascending);
     EXPECT_EQ(db.students(), expected);
