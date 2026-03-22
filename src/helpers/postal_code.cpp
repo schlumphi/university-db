@@ -5,34 +5,19 @@
 #include <cctype>
 #include <iostream>
 
-PostalCode::PostalCode(const std::string& code) : m_code(code) {
-    if (auto error = validate_code(code)) {
-        throw std::invalid_argument(std::string(parse_postal_code_error_code(*error)));
-    }
-}
+PostalCode::PostalCode(const std::string& code) : m_code(validate_code(code)) {}
 
-std::optional<PostalCode::ErrorCode> PostalCode::validate_code(const std::string& code) noexcept {
+std::string PostalCode::validate_code(const std::string& code) {
     if (code.length() != 6) {
-        return ErrorCode::InvalidCodeLen;
+        throw std::invalid_argument("expected 'code' to be 6 characters len");
     }
     if (code[2] != '-') {
-        return ErrorCode::InvalidCodeFormat;
+        throw std::invalid_argument("expected 'code' format: XX-XXX");
     }
 
     auto digits = code.substr(0, 2) + code.substr(3, 3);
     if (std::any_of(digits.begin(), digits.end(), [](char c) { return !std::isdigit(c); })) {
-        return ErrorCode::InvalidCodeFormat;
+        throw std::invalid_argument("expected 'code' format: XX-XXX");
     }
-    return std::nullopt;
-}
-
-std::string_view parse_postal_code_error_code(PostalCode::ErrorCode error) {
-    switch (error) {
-    case PostalCode::ErrorCode::InvalidCodeLen:
-        return "expected 'code' to be 6 characters len";
-    case PostalCode::ErrorCode::InvalidCodeFormat:
-        return "expected 'code' format: XX-XXX";
-    default:
-        return "Ok";
-    }
+    return code;
 }
