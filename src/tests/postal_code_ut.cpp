@@ -10,6 +10,8 @@ TEST(PostalCode, ConstructorWithValidDataCreatesValidObject) {
 }
 
 TEST(PostalCode, ConstructorWithInvalidDataThrowsError) {
+    EXPECT_THROW(PostalCode{""}, std::invalid_argument);
+
     EXPECT_THROW(PostalCode{"0-000"}, std::invalid_argument);
 
     EXPECT_THROW(PostalCode{"00000"}, std::invalid_argument);
