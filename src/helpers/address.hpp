@@ -18,7 +18,6 @@ public:
     const std::string& city() const noexcept { return m_city; }
 
     // FIXME: validate positively names with polish letters like ą, ę...
-    // FIXME: better validator function atomization
     static std::string validate_street(const std::string& street);
     static std::string validate_apartment(const std::string& apartment);
     static std::string validate_city(const std::string& city);
@@ -28,6 +27,8 @@ private:
     static void validate_street_name_alpha_chunk(std::string_view chunk);
     static void validate_street_name_digit_chunk(std::string_view chunk);
     static void validate_street_number(std::string_view street_number);
+
+    static void validate_city_name_chunk(std::string_view chunk);
 
     const std::string m_street;
     const std::string m_apartment;

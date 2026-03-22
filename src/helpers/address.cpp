@@ -108,33 +108,35 @@ std::string Address::validate_apartment(const std::string& apartment) {
     }
 }
 
-// FIXME: disperse into smaller private methods
 std::string Address::validate_city(const std::string& city) {
     auto city_name_space_chunks = bytes::tokenize(city, ' ');
     for (const auto name_space_chunk : city_name_space_chunks) {
         auto city_name_hyphen_chunks = bytes::tokenize(name_space_chunk, '-');
         for (auto name_hyphen_chunk : city_name_hyphen_chunks) {
-            if (name_hyphen_chunk.size() < 2) {
-                throw std::invalid_argument("city name chunk must be at least 2 characters length");
-            }
-            if (!std::isupper(name_hyphen_chunk.front())) {
-                throw std::invalid_argument("city name chunk must start with capital letter");
-            }
-            if (std::any_of(
-                    name_hyphen_chunk.begin(),
-                    name_hyphen_chunk.end(),
-                    [](char c) { return !std::isalpha(c); })) {
-                throw std::invalid_argument("expected city name chunk to contain only alphabetic characters");
-            }
-            auto inner_name_hyphen_chunk = name_hyphen_chunk.substr(1);
-            if (std::any_of(
-                    inner_name_hyphen_chunk.begin(),
-                    inner_name_hyphen_chunk.end(),
-                    [](char c) { return std::isupper(c); })) {
-                throw std::invalid_argument("city name chunks cannot contain uppercase letters except fist one");
-            }
+            validate_city_name_chunk(name_hyphen_chunk);
         }
     }
 
     return city;
+}
+
+void Address::validate_city_name_chunk(std::string_view chunk) {
+    if (chunk.size() < 2) {
+        throw std::invalid_argument("city name chunk must be at least 2 characters length");
+    }
+    if (!std::isupper(chunk.front())) {
+        throw std::invalid_argument("city name chunk must start with capital letter");
+    }
+    if (std::any_of(
+            chunk.begin(),
+            chunk.end(),
+            [](char c) { return !std::isalpha(c); })) {
+        throw std::invalid_argument("expected city name chunk to contain only alphabetic characters");
+    }
+    if (std::any_of(
+            chunk.begin() + 1,
+            chunk.end(),
+            [](char c) { return std::isupper(c); })) {
+        throw std::invalid_argument("city name chunks cannot contain uppercase letters except fist one");
+    }
 }
