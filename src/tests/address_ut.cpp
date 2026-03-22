@@ -41,6 +41,10 @@ TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
         Address("Warszawska 2F2", apartment, postal_code, city),
         std::invalid_argument);
 
+    EXPECT_THROW(
+        Address("11 Listopada", apartment, postal_code, city),
+        std::invalid_argument);
+
     // EXPECT_THROW(
     //     Address("!@#$ 2", apartment, postal_code, city),
     //     std::invalid_argument);
