@@ -7,6 +7,9 @@ TEST(Address, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Warsaw"));
     EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "New York"));
     EXPECT_NO_THROW(Address("Sezamkowa 42", "2", PostalCode{"01-234"}, "Bielsko-Biala"));
+
+    EXPECT_NO_THROW(Address("3 Maja 42", "2", PostalCode{"01-234"}, "Warsaw"));
+    EXPECT_NO_THROW(Address("11 Listopada 42", "2", PostalCode{"01-234"}, "Warsaw"));
 }
 
 TEST(Address, ConstructorWithInvalidStreetNameThrowsError) {
