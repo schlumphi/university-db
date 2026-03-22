@@ -7,23 +7,21 @@
 
 #include "helpers/bytes/tokenize.hpp"
 
-std::optional<Database::ErrorCode> Database::add(Student& student) noexcept {
+void Database::add(Student& student) {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-        return ErrorCode::StudentAlreadyExistsInDb;
+        throw std::invalid_argument("student already exists in database");
     }
     student.set_index_num(m_curr_index);
     m_state.emplace_back(student);
     ++m_curr_index;
-    return std::nullopt;
 }
 
-std::optional<Database::ErrorCode> Database::add(Student& student, const uint64_t index_num) noexcept {
+void Database::add(Student& student, const uint64_t index_num) {
     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-        return ErrorCode::StudentAlreadyExistsInDb;
+        throw std::invalid_argument("student already exists in database");
     }
     student.set_index_num(index_num);
     m_state.emplace_back(student);
-    return std::nullopt;
 }
 
 // FIXME: disperse into smaller private methods
@@ -182,8 +180,6 @@ std::array<std::string, 9> Database::tokenize_student(const Student& student) no
 
 std::string_view parse_database_error_code(Database::ErrorCode error) noexcept {
     switch (error) {
-    case Database::ErrorCode::StudentAlreadyExistsInDb:
-        return "student already exists in database";
     case Database::ErrorCode::IndexNotFound:
         return "could not find student with provided index";
     case Database::ErrorCode::FilepathDoesNotExist:

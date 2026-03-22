@@ -11,7 +11,6 @@
 class Database {
 public:
     enum class ErrorCode {
-        StudentAlreadyExistsInDb,
         IndexNotFound,
         FilepathDoesNotExist,
         InvalidHeader,
@@ -23,7 +22,7 @@ public:
         Descending
     };
 
-    std::optional<ErrorCode> add(Student& student) noexcept;
+    void add(Student& student);
     std::string display(const char sep = '|') const noexcept;
     std::list<Student> search_by_last_name(const std::string& name) const noexcept;
     std::list<Student> search_by_pesel(const Pesel& pesel) const noexcept;
@@ -42,7 +41,7 @@ public:
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
-    std::optional<ErrorCode> add(Student& student, const uint64_t index_num) noexcept;
+    void add(Student& student, const uint64_t index_num);
 
     std::list<Student> m_state;
     uint64_t m_curr_index = 1ULL;
