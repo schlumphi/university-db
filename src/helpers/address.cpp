@@ -13,9 +13,6 @@ Address::Address(
     const std::string& city)
     : m_street(validate_street(street)), m_apartment(validate_apartment(apartment)), m_postal_code(postal_code), m_city(validate_city(city)) {}
 
-// FIXME: better validation with tokenize
-// FIXME: disperse into smaller private methods
-// BUG: ut failure
 std::string Address::validate_street(const std::string& street) {
     if (street.empty()) {
         throw std::invalid_argument("expected non-empty street name");
@@ -26,23 +23,62 @@ std::string Address::validate_street(const std::string& street) {
         throw std::invalid_argument("expected street format: 'name [name] alphanum' e.g. Warszawska 43F");
     }
 
-    auto st_name = tokens.front();
-    if (std::any_of(st_name.begin(), st_name.end(), [](char c) { return !std::isalnum(c); })) {
-        throw std::invalid_argument(
-            "expected street name chunks to be alphanum, e.g. ul. 3 Maja, Batalionów Chłopskich");
+    auto street_number = tokens.back();
+    validate_street_number(street_number);
+    tokens.pop_back();
+
+    for (auto street_name_space_chunk : tokens) {
+        auto street_name_hyphen_tokens = bytes::tokenize(street_name_space_chunk, '-');
+        for (auto street_name_hyphen_chunk : street_name_hyphen_tokens) {
+            validate_street_name_chunk(street_name_hyphen_chunk);
+        }
     }
 
-    auto st_num = tokens.back();
-    if (std::any_of(st_num.begin(), st_num.end(), [](char c) { return !std::isalnum(c); })) {
+    return street;
+}
+
+void Address::validate_street_name_chunk(std::string_view name_chunk) {
+    if (name_chunk.empty()) {
+        throw std::invalid_argument("expected non-empty street name chunk");
+    }
+
+    if (std::isalpha(name_chunk.front())) {
+        validate_street_name_alpha_chunk(name_chunk);
+    } else if (std::isdigit(name_chunk.front())) {
+        validate_street_name_digit_chunk(name_chunk);
+    } else {
+        throw std::invalid_argument("encountered unexpected character in street name chunk (expected alphanum characters)");
+    }
+}
+
+void Address::validate_street_name_alpha_chunk(std::string_view chunk) {
+    if (!std::isupper(chunk.front())) {
+        throw std::invalid_argument("street name alphabetic chunk must start with capital letter");
+    }
+    if (std::any_of(chunk.begin() + 1, chunk.end(), [](char c) { return !std::isalpha(c) || std::isupper(c); })) {
+        throw std::invalid_argument(
+            "street name alphabetic chunk must contain lowercase letter and start with capital letter");
+    }
+}
+
+void Address::validate_street_name_digit_chunk(std::string_view chunk) {
+    if (std::any_of(chunk.begin() + 1, chunk.end(), [](char c) { return !std::isdigit(c); })) {
+        throw std::invalid_argument(
+            "street name digit chunk must contain only number characters");
+    }
+}
+
+void Address::validate_street_number(std::string_view street_number) {
+    if (std::any_of(street_number.begin(), street_number.end(), [](char c) { return !std::isalnum(c); })) {
         throw std::invalid_argument("street number must have the form: NUM[NUM][ALPHA]");
     }
 
-    if (!std::isdigit(st_num.front())) {
+    if (!std::isdigit(street_number.front())) {
         throw std::invalid_argument("street number must have the form: NUM[NUM][ALPHA]");
     }
 
     auto alpha_encountered = false;
-    for (auto c : st_num) {
+    for (auto c : street_number) {
         if (!alpha_encountered && std::isalpha(c)) {
             alpha_encountered = true;
         }
@@ -50,8 +86,6 @@ std::string Address::validate_street(const std::string& street) {
             throw std::invalid_argument("street number must have the form: NUM[NUM][ALPHA]");
         }
     }
-
-    return street;
 }
 
 // FIXME: disperse into smaller private methods
