@@ -11,7 +11,6 @@
 class Database {
 public:
     enum class ErrorCode {
-        IndexNotFound,
         FilepathDoesNotExist,
         InvalidHeader,
         DuplicateIndexNum
@@ -28,7 +27,7 @@ public:
     std::list<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
     void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
-    std::optional<ErrorCode> delete_by_index(const uint64_t index);
+    void delete_by_index(const uint64_t index);
     void save(const std::string& filepath, const char sep = '|') const noexcept;
     std::optional<ErrorCode> load(const std::string& filepath, const char sep = '|');
 

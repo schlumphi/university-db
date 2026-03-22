@@ -84,14 +84,14 @@ void Database::sort_by_name(const SortOrder order) noexcept {
     }
 }
 
-std::optional<Database::ErrorCode> Database::delete_by_index(const uint64_t index) {
+void Database::delete_by_index(const uint64_t index) {
     for (const auto& student : m_state) {
         if (student.index_num() == index) {
             m_state.remove(student);
-            return std::nullopt;
+            return;
         }
     }
-    return ErrorCode::IndexNotFound;
+    throw std::invalid_argument("could not find student with provided index");
 }
 
 void Database::save(const std::string& filepath, const char sep) const noexcept {
@@ -180,8 +180,6 @@ std::array<std::string, 9> Database::tokenize_student(const Student& student) no
 
 std::string_view parse_database_error_code(Database::ErrorCode error) noexcept {
     switch (error) {
-    case Database::ErrorCode::IndexNotFound:
-        return "could not find student with provided index";
     case Database::ErrorCode::FilepathDoesNotExist:
         return "provided filepath to database file does not exist";
     case Database::ErrorCode::InvalidHeader:
