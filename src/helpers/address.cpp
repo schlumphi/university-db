@@ -14,6 +14,7 @@ Address::Address(
     : m_street(validate_street(street)), m_apartment(validate_apartment(apartment)), m_postal_code(postal_code), m_city(validate_city(city)) {}
 
 // FIXME: better validation with tokenize
+// FIXME: disperse into smaller private methods
 // BUG: ut failure
 std::string Address::validate_street(const std::string& street) {
     if (street.empty()) {
@@ -53,6 +54,7 @@ std::string Address::validate_street(const std::string& street) {
     return street;
 }
 
+// FIXME: disperse into smaller private methods
 std::string Address::validate_apartment(const std::string& apartment) {
     if (apartment.empty()) {
         return apartment;

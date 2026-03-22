@@ -26,6 +26,7 @@ std::optional<Database::ErrorCode> Database::add(Student& student, const uint64_
     return std::nullopt;
 }
 
+// FIXME: disperse into smaller private methods
 std::string Database::display(const char sep) const noexcept {
     std::string db{""};
     for (const auto& col : columns) {
@@ -104,6 +105,7 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
     db_file_handler.close();
 }
 
+// FIXME: disperse into smaller private methods
 std::optional<Database::ErrorCode> Database::load(const std::string& filepath, const char sep) {
     auto fp = std::filesystem::path(filepath);
     if (!std::filesystem::exists(fp)) {

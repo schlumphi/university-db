@@ -18,6 +18,7 @@ Student::Student(
                            m_index_num(0ULL),
                            m_gender(validate_gender(pesel, gender)) {}
 
+// FIXME: disperse into smaller private methods
 std::string Student::validate_name(const std::string& name) {
     const auto name_chunks = bytes::tokenize(name, '-');
     for (const auto name_chunk : name_chunks) {
