@@ -5,19 +5,19 @@
 #include <cctype>
 #include <iostream>
 
+#include "bytes/tokenize.hpp"
+
 PostalCode::PostalCode(const std::string& code) : m_code(validate_code(code)) {}
 
 std::string PostalCode::validate_code(const std::string& code) {
-    if (code.length() != 6) {
-        throw std::invalid_argument("expected 'code' to be 6 characters len");
+    auto tokens = bytes::tokenize(code, '-');
+    if (tokens.size() != 2 || tokens.front().size() != 2 || tokens.back().size() != 3) {
+        throw std::invalid_argument("expected 'code' format: XX-XXX, where X is digit character");
     }
-    if (code[2] != '-') {
-        throw std::invalid_argument("expected 'code' format: XX-XXX");
-    }
-
-    auto digits = code.substr(0, 2) + code.substr(3, 3);
-    if (std::any_of(digits.begin(), digits.end(), [](char c) { return !std::isdigit(c); })) {
-        throw std::invalid_argument("expected 'code' format: XX-XXX");
+    for (auto code_chunk : tokens) {
+        if (std::any_of(code_chunk.begin(), code_chunk.end(), [](char c) { return !std::isdigit(c); })) {
+            throw std::invalid_argument("expected 'code' format: XX-XXX, where X is digit character");
+        }
     }
     return code;
 }
