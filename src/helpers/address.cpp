@@ -86,25 +86,18 @@ void Address::validate_street_number(std::string_view street_number) {
     }
 }
 
-// FIXME: disperse into smaller private methods
-// BUG: error prone, need fix
 std::string Address::validate_apartment(const std::string& apartment) {
     if (apartment.empty()) {
         return apartment;
     }
 
-    if (std::all_of(
-            apartment.begin(),
-            apartment.end(),
-            [](char c) { return std::isalnum(c) || c == '/'; })) {
-        if (apartment.starts_with('/') || apartment.ends_with('/')) {
-            throw std::invalid_argument("expected apartment in alpahunmerical format e.g. 21/37, 42");
-        } else {
-            return apartment;
+    auto tokens = bytes::tokenize(apartment, '/');
+    for (auto apartment_chunk : tokens) {
+        if (!predicates::contains_only_alphanum(apartment_chunk)) {
+            throw std::invalid_argument("expected apartment chunk in alphanumerical format e.g. 21/37, 42");
         }
-    } else {
-        throw std::invalid_argument("expected apartment in alpahunmerical format e.g. 21/37, 42");
     }
+    return apartment;
 }
 
 std::string Address::validate_city(const std::string& city) {
