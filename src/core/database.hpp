@@ -24,7 +24,7 @@ public:
     void add(Student& student);
     std::string display(const char sep = '|') const noexcept;
     std::list<Student> search_by_last_name(const std::string& name) const noexcept;
-    std::list<Student> search_by_pesel(const Pesel& pesel) const noexcept;
+    std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
     void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
     void delete_by_index(const uint64_t index);

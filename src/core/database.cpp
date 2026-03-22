@@ -55,15 +55,14 @@ std::list<Student> Database::search_by_last_name(const std::string& name) const 
     return matches;
 }
 
-std::list<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
-    std::list<Student> matches;
+std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
     for (const auto& student : m_state) {
         if (student.pesel().value() == pesel.value()) {
-            matches.push_back(student);
+            return student;
         }
     }
 
-    return matches;
+    return std::nullopt;
 }
 
 // ascending order -> from youngest to oldest
