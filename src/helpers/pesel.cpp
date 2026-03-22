@@ -5,6 +5,8 @@
 #include <iostream>
 #include <numeric>
 
+#include "predicates/string_checks.hpp"
+
 Pesel::Pesel(const std::string& number) : m_number(validate_number(number)) {}
 
 std::string Pesel::validate_number(const std::string& number) {
@@ -15,7 +17,7 @@ std::string Pesel::validate_number(const std::string& number) {
 }
 
 void Pesel::validate_format(const std::string& number) {
-    if (number.length() != 11 || std::any_of(number.begin(), number.end(), [](char c) { return !std::isdigit(c); })) {
+    if (number.length() != 11 || !predicates::contains_only_digits(number)) {
         throw std::invalid_argument("expected 'number' to be 11 digits length");
     }
 }

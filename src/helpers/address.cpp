@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "helpers/bytes/tokenize.hpp"
+#include "predicates/string_checks.hpp"
 
 Address::Address(
     const std::string& street,
@@ -52,24 +53,21 @@ void Address::validate_street_name_chunk(std::string_view name_chunk) {
 }
 
 void Address::validate_street_name_alpha_chunk(std::string_view chunk) {
-    if (!std::isupper(chunk.front())) {
-        throw std::invalid_argument("street name alphabetic chunk must start with capital letter");
-    }
-    if (std::any_of(chunk.begin() + 1, chunk.end(), [](char c) { return !std::isalpha(c) || std::isupper(c); })) {
+    if (!predicates::is_capitalized_alpha(chunk)) {
         throw std::invalid_argument(
             "street name alphabetic chunk must contain lowercase letter and start with capital letter");
     }
 }
 
 void Address::validate_street_name_digit_chunk(std::string_view chunk) {
-    if (std::any_of(chunk.begin() + 1, chunk.end(), [](char c) { return !std::isdigit(c); })) {
+    if (!predicates::contains_only_digits(chunk)) {
         throw std::invalid_argument(
             "street name digit chunk must contain only number characters");
     }
 }
 
 void Address::validate_street_number(std::string_view street_number) {
-    if (std::any_of(street_number.begin(), street_number.end(), [](char c) { return !std::isalnum(c); })) {
+    if (!predicates::contains_only_alphanum(street_number)) {
         throw std::invalid_argument("street number must have the form: NUM[NUM][ALPHA]");
     }
 
@@ -89,6 +87,7 @@ void Address::validate_street_number(std::string_view street_number) {
 }
 
 // FIXME: disperse into smaller private methods
+// BUG: error prone, need fix
 std::string Address::validate_apartment(const std::string& apartment) {
     if (apartment.empty()) {
         return apartment;
@@ -124,19 +123,7 @@ void Address::validate_city_name_chunk(std::string_view chunk) {
     if (chunk.size() < 2) {
         throw std::invalid_argument("city name chunk must be at least 2 characters length");
     }
-    if (!std::isupper(chunk.front())) {
-        throw std::invalid_argument("city name chunk must start with capital letter");
-    }
-    if (std::any_of(
-            chunk.begin(),
-            chunk.end(),
-            [](char c) { return !std::isalpha(c); })) {
-        throw std::invalid_argument("expected city name chunk to contain only alphabetic characters");
-    }
-    if (std::any_of(
-            chunk.begin() + 1,
-            chunk.end(),
-            [](char c) { return std::isupper(c); })) {
-        throw std::invalid_argument("city name chunks cannot contain uppercase letters except fist one");
+    if (!predicates::is_capitalized_alpha(chunk)) {
+        throw std::invalid_argument("city name chunk must be capitalized alphabetic string");
     }
 }

@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "bytes/tokenize.hpp"
+#include "predicates/string_checks.hpp"
 
 PostalCode::PostalCode(const std::string& code) : m_code(validate_code(code)) {}
 
@@ -15,7 +16,7 @@ std::string PostalCode::validate_code(const std::string& code) {
         throw std::invalid_argument("expected 'code' format: XX-XXX, where X is digit character");
     }
     for (auto code_chunk : tokens) {
-        if (std::any_of(code_chunk.begin(), code_chunk.end(), [](char c) { return !std::isdigit(c); })) {
+        if (!predicates::contains_only_digits(code_chunk)) {
             throw std::invalid_argument("expected 'code' format: XX-XXX, where X is digit character");
         }
     }
