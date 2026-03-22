@@ -93,8 +93,8 @@ std::string Address::validate_apartment(const std::string& apartment) {
 
     auto tokens = bytes::tokenize(apartment, '/');
     for (auto apartment_chunk : tokens) {
-        if (!predicates::contains_only_alphanum(apartment_chunk)) {
-            throw std::invalid_argument("expected apartment chunk in alphanumerical format e.g. 21/37, 42");
+        if (!predicates::contains_only_digits_with_optional_trailing_alpha(apartment_chunk)) {
+            throw std::invalid_argument("expected apartment chunk in alphanumerical format e.g. 21/37, 42a, 35f/2a");
         }
     }
     return apartment;
