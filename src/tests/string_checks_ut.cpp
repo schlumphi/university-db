@@ -15,6 +15,11 @@ TEST(StringChecks, ContainsOnlyDigits) {
     EXPECT_FALSE(predicates::contains_only_digits(""));
 }
 
+TEST(StringChecks, ContainsOnlyDigitsWithOptionalTrailingAlpha) {
+    EXPECT_TRUE(predicates::contains_only_digits_with_optional_trailing_alpha("21f"));
+    EXPECT_FALSE(predicates::contains_only_digits_with_optional_trailing_alpha("21f2"));
+}
+
 TEST(StringChecks, ContainsOnlyAlphanum) {
     EXPECT_TRUE(predicates::contains_only_alphanum("a070b088c0"));
     EXPECT_FALSE(predicates::contains_only_alphanum("a070b0 88c0"));
