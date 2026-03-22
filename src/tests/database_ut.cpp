@@ -81,7 +81,7 @@ TEST_F(DatabaseTest, DeleteByIndex) {
     const std::list<Student> expected{abacki, babacki, dabacka, fabacki};
     db.delete_by_index(3);
     EXPECT_EQ(db.students(), expected);
-    EXPECT_EQ(*db.delete_by_index(3), Database::ErrorCode::IndexNotFound);
+    EXPECT_THROW(db.delete_by_index(3), std::invalid_argument);
 }
 
 TEST_F(DatabaseTest, SortByName) {
