@@ -34,6 +34,12 @@ public:
         "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
 
 private:
+    void validate_loaded_header(const std::string& header, const char sep = '|');
+    bool is_index_taken(const uint64_t index_num) const noexcept;
+    uint64_t find_highest_index_num() const noexcept;
+    void reset_current_index_number() noexcept;
+    void load_student_record(const std::string& student_record_line, const char sep = '|');
+
     void add(Student& student, const uint64_t index_num);
 
     std::list<Student> m_state;
