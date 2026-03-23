@@ -32,10 +32,10 @@ bool Database::is_index_taken(const uint64_t index_num) const noexcept {
         m_state.begin(), m_state.end(),
         [index_num](Student student) { return student.index_num() == index_num; });
 
-    if (it == m_state.end()) {
-        return false;
-    } else {
+    if (it != m_state.end()) {
         return true;
+    } else {
+        return false;
     }
 }
 
@@ -109,7 +109,7 @@ void Database::delete_by_index(const uint64_t index) {
 }
 
 void Database::save(const std::string& filepath, const char sep) const noexcept {
-    auto fp = std::filesystem::path(filepath);
+    const auto fp = std::filesystem::path(filepath);
 
     std::ofstream db_file_handler(fp);
 
@@ -118,7 +118,7 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
 }
 
 void Database::load(const std::string& filepath, const char sep) {
-    auto fp = std::filesystem::path(filepath);
+    const auto fp = std::filesystem::path(filepath);
     if (!std::filesystem::exists(fp)) {
         throw std::invalid_argument("provided filepath to database file does not exist");
     }
