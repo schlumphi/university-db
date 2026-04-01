@@ -21,8 +21,8 @@ public:
 
     uint64_t index_num() const noexcept { return m_index_num; }
 
-private:
-    void set_index_num(const uint64_t index_num) {
+protected:
+    virtual void set_index_num(const uint64_t index_num) {
         if (index_num != 0ULL && m_index_num == 0ULL) {
             m_index_num = index_num;
         }

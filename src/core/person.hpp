@@ -6,12 +6,6 @@
 
 class Person {
 public:
-    Person(const std::string& first_name,
-           const std::string& last_name,
-           const Address& address,
-           const Pesel& pesel,
-           const Gender gender);
-
     virtual ~Person() = default;
 
     bool operator==(const Person& other) const noexcept {
@@ -32,6 +26,12 @@ public:
     static Gender validate_gender(const Pesel& pesel, const Gender gender);
 
 protected:
+    Person(const std::string& first_name,
+           const std::string& last_name,
+           const Address& address,
+           const Pesel& pesel,
+           const Gender gender);
+
     const std::string m_first_name;
     const std::string m_last_name;
     const Address m_address;

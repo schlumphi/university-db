@@ -13,8 +13,8 @@ public:
 
     uint64_t salary() const noexcept { return m_salary; }
 
-private:
-    void set_salary(const uint64_t salary) { m_salary = salary; }
+protected:
+    virtual void set_salary(const uint64_t salary) { m_salary = salary; }
 
     uint64_t m_salary;
 
