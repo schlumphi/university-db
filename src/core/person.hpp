@@ -21,7 +21,7 @@ public:
         return false;
     }
 
-    virtual bool isNull() const noexcept { return false; }
+    virtual bool is_null() const noexcept { return false; }
     const std::string& first_name() const noexcept { return m_first_name; }
     const std::string& last_name() const noexcept { return m_last_name; }
     const Address& address() const noexcept { return m_address; }
