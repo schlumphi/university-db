@@ -1,0 +1,43 @@
+#include "person.hpp"
+
+#include <algorithm>
+#include <cctype>
+#include <iostream>
+
+#include "helpers/bytes/tokenize.hpp"
+#include "helpers/predicates/string_checks.hpp"
+
+Person::Person(
+    const std::string& first_name,
+    const std::string& last_name,
+    const Address& address,
+    const Pesel& pesel,
+    const Gender gender) : m_first_name(validate_name(first_name)),
+                           m_last_name(validate_name(last_name)),
+                           m_address(address),
+                           m_pesel(pesel),
+                           m_gender(validate_gender(pesel, gender)) {}
+
+std::string Person::validate_name(const std::string& name) {
+    const auto name_chunks = bytes::tokenize(name, '-');
+    for (const auto name_chunk : name_chunks) {
+        if (name_chunk.empty()) {
+            throw std::invalid_argument("name chunk cannot be empty");
+        }
+        if (name_chunk.size() < 2) {
+            throw std::invalid_argument("expected name chunk to be at least 2 character length");
+        }
+        if (!predicates::is_capitalized_alpha(name_chunk)) {
+            throw std::invalid_argument("name chunk must be capitalized string");
+        }
+    }
+
+    return name;
+}
+
+Gender Person::validate_gender(const Pesel& pesel, const Gender gender) {
+    if (pesel.gender() != gender) {
+        throw std::invalid_argument("invalid gender for provided pesel num");
+    }
+    return gender;
+}
