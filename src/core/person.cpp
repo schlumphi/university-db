@@ -36,7 +36,7 @@ std::string Person::validate_name(const std::string& name) {
 }
 
 Gender Person::validate_gender(const Pesel& pesel, const Gender gender) {
-    if (pesel.gender() != gender) {
+    if (pesel.gender() != gender && gender != Gender::Unspecified) {
         throw std::invalid_argument("invalid gender for provided pesel num");
     }
     return gender;
