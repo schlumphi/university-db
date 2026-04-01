@@ -16,7 +16,6 @@ FetchContent_MakeAvailable(googletest)
 
 set(SOURCES
     src/core/person.cpp
-    src/core/student.cpp
     src/core/database.cpp
     src/helpers/address.cpp
     src/helpers/pesel.cpp
