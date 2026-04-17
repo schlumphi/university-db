@@ -22,6 +22,8 @@ public:
     static std::string validate_apartment(const std::string& apartment);
     static std::string validate_city(const std::string& city);
 
+    static Address null() noexcept;
+
 private:
     static void validate_street_name_chunk(std::string_view name_chunk);
     static void validate_street_name_alpha_chunk(std::string_view chunk);
