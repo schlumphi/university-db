@@ -27,7 +27,7 @@ TEST(PostalCode, ConstructorWithInvalidDataThrowsError) {
     EXPECT_THROW(PostalCode{"0000-0"}, std::invalid_argument);
 }
 
-TEST(PostalCode, ConstructNullPostalCode) {
+TEST(PostalCode, ConstructingNullPostalCode) {
     auto null_postal_code = PostalCode::null();
     const std::string expected{"00-000"};
     EXPECT_EQ(null_postal_code.value(), expected);

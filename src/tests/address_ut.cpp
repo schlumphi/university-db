@@ -112,7 +112,7 @@ TEST_F(AddressTest, ConstructorWithInvalidCityNameThrowsError) {
         std::invalid_argument);
 }
 
-TEST(Address, ConstructNullAddress) {
+TEST(Address, ConstructingNullAddress) {
     auto null_address = Address::null();
     EXPECT_EQ(null_address.street(), "Null 1");
     EXPECT_EQ(null_address.apartment(), "");

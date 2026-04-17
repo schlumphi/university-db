@@ -68,6 +68,10 @@ bool Pesel::operator>(const Pesel& rhs) const noexcept {
     }
 }
 
+Pesel Pesel::null() noexcept {
+    return Pesel("00210100004");
+}
+
 Century derive_century(const Pesel& pesel) {
     const uint64_t month_code = std::stoi(pesel.value().substr(2, 1));
 
