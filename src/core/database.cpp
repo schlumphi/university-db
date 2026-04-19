@@ -16,6 +16,21 @@ const Person* Database::find_by_pesel(const Pesel& pesel) const noexcept {
     return nullptr;
 }
 
+bool Database::exists(const std::unique_ptr<Person>& person) const noexcept {
+    if (find_by_pesel(person->pesel()) != nullptr) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Database::add(std::unique_ptr<Person> person) {
+    if (exists(person)) {
+        return false;
+    }
+    return true;
+}
+
 Person* Database::find_by_pesel(const Pesel& pesel) noexcept {
     for (const auto& person_ptr : m_state) {
         if (person_ptr->pesel().value() == pesel.value()) {
