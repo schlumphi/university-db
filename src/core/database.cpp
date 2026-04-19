@@ -7,201 +7,225 @@
 
 #include "helpers/bytes/tokenize.hpp"
 
-void Database::add(Student& student) {
-    if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-        throw std::invalid_argument("student already exists in database");
-    }
-    student.set_index_num(m_curr_index);
-    m_state.emplace_back(student);
-    ++m_curr_index;
-}
+// const Person& Database::find_by_pesel(const Pesel& pesel) const noexcept {
+//     for (const auto& person_ptr : m_state) {
+//         if (person_ptr->pesel().value() == pesel.value()) {
+//             return *person_ptr;
+//         }
+//     }
 
-void Database::add(Student& student, const uint64_t index_num) {
-    if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-        throw std::invalid_argument("student already exists in database");
-    }
-    if (is_index_taken(index_num)) {
-        throw std::invalid_argument("provided 'index_num' is already assigned to another student");
-    }
-    student.set_index_num(index_num);
-    m_state.emplace_back(student);
-}
+// std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
+//     for (const auto& student : m_state) {
+//         if (student.pesel().value() == pesel.value()) {
+//             return student;
+//         }
+//     }
 
-bool Database::is_index_taken(const uint64_t index_num) const noexcept {
-    const auto it = std::find_if(
-        m_state.begin(), m_state.end(),
-        [index_num](Student student) { return student.index_num() == index_num; });
+//     return std::nullopt;
+// }
+// }
 
-    if (it != m_state.end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
+// void Database::add(std::unique_ptr<Person> person) {
+//     if(dynamic_cast<Student>(person.get())) {
 
-// FIXME: disperse into smaller private methods
-std::string Database::display(const char sep) const noexcept {
-    std::string db{""};
-    for (const auto& col : columns) {
-        db += col;
-        db += sep;
-    }
-    db.back() = '\n';
+//     }
+// }
 
-    for (const auto& student : m_state) {
-        auto tokens = tokenize_student(student);
-        for (const auto& token : tokens) {
-            db += token;
-            db += sep;
-        }
-        db.back() = '\n';
-    }
-    return db;
-}
+// void Database::add(Student& student) {
+//     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
+//         throw std::invalid_argument("student already exists in database");
+//     }
+//     student.set_index_num(m_curr_index);
+//     m_state.emplace_back(student);
+//     ++m_curr_index;
+// }
 
-std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
-    std::list<Student> matches;
-    for (const auto& student : m_state) {
-        if (student.last_name() == name) {
-            matches.push_back(student);
-        }
-    }
+// void Database::add(Student& student, const uint64_t index_num) {
+//     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
+//         throw std::invalid_argument("student already exists in database");
+//     }
+//     if (is_index_taken(index_num)) {
+//         throw std::invalid_argument("provided 'index_num' is already assigned to another student");
+//     }
+//     student.set_index_num(index_num);
+//     m_state.emplace_back(student);
+// }
 
-    return matches;
-}
+// bool Database::is_index_taken(const uint64_t index_num) const noexcept {
+//     const auto it = std::find_if(
+//         m_state.begin(), m_state.end(),
+//         [index_num](Student student) { return student.index_num() == index_num; });
 
-std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
-    for (const auto& student : m_state) {
-        if (student.pesel().value() == pesel.value()) {
-            return student;
-        }
-    }
+//     if (it != m_state.end()) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
-    return std::nullopt;
-}
+// // FIXME: disperse into smaller private methods
+// std::string Database::display(const char sep) const noexcept {
+//     std::string db{""};
+//     for (const auto& col : columns) {
+//         db += col;
+//         db += sep;
+//     }
+//     db.back() = '\n';
 
-// ascending order -> from youngest to oldest
-// descending order -> from oldest to youngest
-void Database::sort_by_pesel(const SortOrder order) noexcept {
-    if (order == SortOrder::Ascending) {
-        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() < rhs.pesel(); });
-    } else {
-        m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() > rhs.pesel(); });
-    }
-}
+//     for (const auto& student : m_state) {
+//         auto tokens = tokenize_student(student);
+//         for (const auto& token : tokens) {
+//             db += token;
+//             db += sep;
+//         }
+//         db.back() = '\n';
+//     }
+//     return db;
+// }
 
-void Database::sort_by_name(const SortOrder order) noexcept {
-    if (order == SortOrder::Ascending) {
-        m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
-    } else {
-        m_state.sort([](Student lhs, Student rhs) { return lhs.last_name() > rhs.last_name(); });
-    }
-}
+// std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
+//     std::list<Student> matches;
+//     for (const auto& student : m_state) {
+//         if (student.last_name() == name) {
+//             matches.push_back(student);
+//         }
+//     }
 
-void Database::delete_by_index(const uint64_t index) {
-    for (const auto& student : m_state) {
-        if (student.index_num() == index) {
-            m_state.remove(student);
-            return;
-        }
-    }
-    throw std::invalid_argument("could not find student with provided index");
-}
+//     return matches;
+// }
 
-void Database::save(const std::string& filepath, const char sep) const noexcept {
-    const auto fp = std::filesystem::path(filepath);
+// std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
+//     for (const auto& student : m_state) {
+//         if (student.pesel().value() == pesel.value()) {
+//             return student;
+//         }
+//     }
 
-    std::ofstream db_file_handler(fp);
+//     return std::nullopt;
+// }
 
-    db_file_handler << display(sep);
-    db_file_handler.close();
-}
+// // ascending order -> from youngest to oldest
+// // descending order -> from oldest to youngest
+// void Database::sort_by_pesel(const SortOrder order) noexcept {
+//     if (order == SortOrder::Ascending) {
+//         m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() < rhs.pesel(); });
+//     } else {
+//         m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() > rhs.pesel(); });
+//     }
+// }
 
-void Database::load(const std::string& filepath, const char sep) {
-    const auto fp = std::filesystem::path(filepath);
-    if (!std::filesystem::exists(fp)) {
-        throw std::invalid_argument("provided filepath to database file does not exist");
-    }
+// void Database::sort_by_name(const SortOrder order) noexcept {
+//     if (order == SortOrder::Ascending) {
+//         m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
+//     } else {
+//         m_state.sort([](Student lhs, Student rhs) { return lhs.last_name() > rhs.last_name(); });
+//     }
+// }
 
-    std::ifstream db_file_handler(fp);
-    std::string read_line{""};
+// void Database::delete_by_index(const uint64_t index) {
+//     for (const auto& student : m_state) {
+//         if (student.index_num() == index) {
+//             m_state.remove(student);
+//             return;
+//         }
+//     }
+//     throw std::invalid_argument("could not find student with provided index");
+// }
 
-    std::getline(db_file_handler, read_line, '\n');
-    validate_loaded_header(read_line, sep);
+// void Database::save(const std::string& filepath, const char sep) const noexcept {
+//     const auto fp = std::filesystem::path(filepath);
 
-    auto backup_state = std::list<Student>{};
-    m_state.splice(backup_state.begin(), m_state);
+//     std::ofstream db_file_handler(fp);
 
-    while (std::getline(db_file_handler, read_line, '\n')) {
-        try {
-            load_student_record(read_line);
-        } catch (std::invalid_argument const& error) {
-            m_state.clear();
-            backup_state.splice(m_state.begin(), backup_state);
-            throw std::runtime_error(error.what());
-        }
-    }
+//     db_file_handler << display(sep);
+//     db_file_handler.close();
+// }
 
-    reset_current_index_number();
-    db_file_handler.close();
-}
+// void Database::load(const std::string& filepath, const char sep) {
+//     const auto fp = std::filesystem::path(filepath);
+//     if (!std::filesystem::exists(fp)) {
+//         throw std::invalid_argument("provided filepath to database file does not exist");
+//     }
 
-void Database::validate_loaded_header(const std::string& header, const char sep) const {
-    const auto header_tokens = bytes::tokenize(header, sep);
-    if (!std::equal(
-            header_tokens.begin(), header_tokens.end(), columns.begin(), columns.end(),
-            [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
-        throw std::runtime_error("the header from the loaded database is incorrect");
-    }
-}
+//     std::ifstream db_file_handler(fp);
+//     std::string read_line{""};
 
-void Database::load_student_record(const std::string& student_record_line, const char sep) {
-    const auto tokens = bytes::tokenize(student_record_line, sep);
-    auto student = deserialize(tokens);
-    const auto read_index_num = static_cast<uint64_t>(std::stoi(std::string(tokens[6])));
+//     std::getline(db_file_handler, read_line, '\n');
+//     validate_loaded_header(read_line, sep);
 
-    add(student, read_index_num);
-}
+//     auto backup_state = std::list<Student>{};
+//     m_state.splice(backup_state.begin(), m_state);
 
-uint64_t Database::find_highest_index_num() const noexcept {
-    if (m_state.empty()) {
-        return 0ULL;
-    } else {
-        return (std::max_element(
-                    m_state.begin(), m_state.end(),
-                    [](Student lhs, Student rhs) { return lhs.index_num() < rhs.index_num(); })
-                    ->index_num());
-    }
-}
+//     while (std::getline(db_file_handler, read_line, '\n')) {
+//         try {
+//             load_student_record(read_line);
+//         } catch (std::invalid_argument const& error) {
+//             m_state.clear();
+//             backup_state.splice(m_state.begin(), backup_state);
+//             throw std::runtime_error(error.what());
+//         }
+//     }
 
-void Database::reset_current_index_number() noexcept {
-    m_curr_index = find_highest_index_num();
-    ++m_curr_index;
-}
+//     reset_current_index_number();
+//     db_file_handler.close();
+// }
 
-Student Database::deserialize(const std::vector<std::string_view>& tokens) {
-    const auto first_name = std::string(tokens[0]);
-    const auto last_name = std::string(tokens[1]);
-    const auto address = Address{
-        std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
-    const auto pesel = Pesel{std::string(tokens[7])};
-    const auto gender = parse_gender(std::string(tokens[8]));
+// void Database::validate_loaded_header(const std::string& header, const char sep) const {
+//     const auto header_tokens = bytes::tokenize(header, sep);
+//     if (!std::equal(
+//             header_tokens.begin(), header_tokens.end(), columns.begin(), columns.end(),
+//             [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
+//         throw std::runtime_error("the header from the loaded database is incorrect");
+//     }
+// }
 
-    return Student{
-        first_name, last_name, address, pesel, gender};
-}
+// void Database::load_student_record(const std::string& student_record_line, const char sep) {
+//     const auto tokens = bytes::tokenize(student_record_line, sep);
+//     auto student = deserialize(tokens);
+//     const auto read_index_num = static_cast<uint64_t>(std::stoi(std::string(tokens[6])));
 
-std::array<std::string, 9> Database::tokenize_student(const Student& student) noexcept {
-    std::array<std::string, 9> tokens;
-    tokens[0] = student.first_name();
-    tokens[1] = student.last_name();
-    tokens[2] = student.address().street();
-    tokens[3] = student.address().apartment();
-    tokens[4] = student.address().postal_code().value();
-    tokens[5] = student.address().city();
-    tokens[6] = std::to_string(student.index_num());
-    tokens[7] = student.pesel().value();
-    tokens[8] = parse_gender(student.gender());
+//     add(student, read_index_num);
+// }
 
-    return tokens;
-}
+// uint64_t Database::find_highest_index_num() const noexcept {
+//     if (m_state.empty()) {
+//         return 0ULL;
+//     } else {
+//         return (std::max_element(
+//                     m_state.begin(), m_state.end(),
+//                     [](Student lhs, Student rhs) { return lhs.index_num() < rhs.index_num(); })
+//                     ->index_num());
+//     }
+// }
+
+// void Database::reset_current_index_number() noexcept {
+//     m_curr_index = find_highest_index_num();
+//     ++m_curr_index;
+// }
+
+// Student Database::deserialize(const std::vector<std::string_view>& tokens) {
+//     const auto first_name = std::string(tokens[0]);
+//     const auto last_name = std::string(tokens[1]);
+//     const auto address = Address{
+//         std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
+//     const auto pesel = Pesel{std::string(tokens[7])};
+//     const auto gender = parse_gender(std::string(tokens[8]));
+
+//     return Student{
+//         first_name, last_name, address, pesel, gender};
+// }
+
+// std::array<std::string, 9> Database::tokenize_student(const Student& student) noexcept {
+//     std::array<std::string, 9> tokens;
+//     tokens[0] = student.first_name();
+//     tokens[1] = student.last_name();
+//     tokens[2] = student.address().street();
+//     tokens[3] = student.address().apartment();
+//     tokens[4] = student.address().postal_code().value();
+//     tokens[5] = student.address().city();
+//     tokens[6] = std::to_string(student.index_num());
+//     tokens[7] = student.pesel().value();
+//     tokens[8] = parse_gender(student.gender());
+
+//     return tokens;
+// }

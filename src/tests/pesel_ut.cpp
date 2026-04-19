@@ -15,8 +15,3 @@ TEST(Pesel, ConstructorWithInvalidChecksumThrowsError) {
 TEST(Pesel, ConstructorWithValidDataCreatesValidObject) {
     EXPECT_NO_THROW(Pesel("55030101230"));
 }
-
-TEST(Pesel, ConstructingNullPesel) {
-    auto null_pesel = Pesel::null();
-    EXPECT_EQ(null_pesel.value(), "00210100004");
-}

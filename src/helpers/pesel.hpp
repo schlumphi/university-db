@@ -32,8 +32,6 @@ public:
     // checks if lhs is older than rhs
     bool operator>(const Pesel& rhs) const noexcept;
 
-    static Pesel null() noexcept;
-
 private:
     // TODO: validate day of the month
     static void validate_format(const std::string& number);

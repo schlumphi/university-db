@@ -120,7 +120,3 @@ void Address::validate_city_name_chunk(std::string_view chunk) {
         throw std::invalid_argument("city name chunk must be capitalized alphabetic string");
     }
 }
-
-Address Address::null() noexcept {
-    return Address("Null 1", "", PostalCode::null(), "Null");
-};
