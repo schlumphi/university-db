@@ -7,6 +7,24 @@
 
 #include "helpers/bytes/tokenize.hpp"
 
+const Person* Database::find_by_pesel(const Pesel& pesel) const noexcept {
+    for (const auto& person_ptr : m_state) {
+        if (person_ptr->pesel().value() == pesel.value()) {
+            return person_ptr.get();
+        }
+    }
+    return nullptr;
+}
+
+Person* Database::find_by_pesel(const Pesel& pesel) noexcept {
+    for (const auto& person_ptr : m_state) {
+        if (person_ptr->pesel().value() == pesel.value()) {
+            return person_ptr.get();
+        }
+    }
+    return nullptr;
+}
+
 // const Person& Database::find_by_pesel(const Pesel& pesel) const noexcept {
 //     for (const auto& person_ptr : m_state) {
 //         if (person_ptr->pesel().value() == pesel.value()) {
