@@ -8,8 +8,6 @@
 #include "helpers/pesel.hpp"
 #include "person.hpp"
 
-class Database;
-
 class Student : public Person {
 public:
     Student(
@@ -22,6 +20,9 @@ public:
     uint64_t index_num() const noexcept { return m_index_num; }
 
 protected:
+    void on_database_add() override {}
+
+private:
     void set_index_num(const uint64_t index_num) {
         if (index_num != 0ULL && m_index_num == 0ULL) {
             m_index_num = index_num;
@@ -29,6 +30,4 @@ protected:
     }
 
     uint64_t m_index_num;
-
-    friend class Database;
 };
