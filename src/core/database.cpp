@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "helpers/bytes/tokenize.hpp"
+#include "helpers/random/pseudorandom.hpp"
 
 const Person* Database::find_by_pesel(const Pesel& pesel) const noexcept {
     for (const auto& person_ptr : m_state) {
@@ -28,6 +29,12 @@ void Database::add(std::unique_ptr<Person> person) {
     if (exists(person)) {
         throw std::runtime_error("person already exists in database");
     }
+
+    if (auto student_ptr = dynamic_cast<Student*>(person.get())) {
+        student_ptr->set_index_num(generate_index_num());
+    }
+
+    m_state.push_back(std::move(person));
 }
 
 Person* Database::find_by_pesel(const Pesel& pesel) noexcept {
@@ -37,6 +44,25 @@ Person* Database::find_by_pesel(const Pesel& pesel) noexcept {
         }
     }
     return nullptr;
+}
+
+bool Database::is_index_taken(const uint64_t index_num) const noexcept {
+    for (const auto& person_ptr : m_state) {
+        if (auto student = dynamic_cast<Student*>(person_ptr.get())) {
+            if (student->index_num() == index_num) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+uint64_t Database::generate_index_num() const noexcept {
+    auto index_num = m_state.size() + static_cast<uint64_t>(pseudorandom::random_uint32());
+    while (is_index_taken(index_num)) {
+        index_num = m_state.size() + static_cast<uint64_t>(pseudorandom::random_uint32());
+    }
+    return index_num;
 }
 
 // const Person& Database::find_by_pesel(const Pesel& pesel) const noexcept {

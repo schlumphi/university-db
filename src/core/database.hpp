@@ -21,6 +21,8 @@ public:
     void add(std::unique_ptr<Person> person);
     const Person* find_by_pesel(const Pesel& pesel) const noexcept;
     bool exists(const std::unique_ptr<Person>& person) const noexcept;
+    uint64_t generate_index_num() const noexcept;
+    bool is_index_taken(const uint64_t index_num) const noexcept;
     // std::string display(const char sep = '|') const noexcept;
     // std::list<Student> search_by_last_name(const std::string& name) const noexcept;
     // std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
