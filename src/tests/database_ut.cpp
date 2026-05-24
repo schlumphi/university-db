@@ -2,57 +2,48 @@
 
 #include "core/database.hpp"
 
-TEST(Database, AddToDatabase) {
-    EXPECT_EQ(true, true);
-}
+class DatabaseTest : public ::testing::Test {
+protected:
+    std::unique_ptr<Student> abacki = std::make_unique<Student>("Adam",
+                                                                "Abacki",
+                                                                Address{"Warszawska 42", "2", PostalCode{"01-234"}, "Warszawa"},
+                                                                Pesel{"55030101193"},
+                                                                Gender::Male);
 
-// class DatabaseTest : public ::testing::Test {
-// protected:
-//     Student abacki{
-//         "Adam",
-//         "Abacki",
-//         Address{"Warszawska 42", "2", PostalCode{"01-234"}, "Warszawa"},
-//         Pesel{"55030101193"},
-//         Gender::Male};
+    std::unique_ptr<Student> babacki = std::make_unique<Student>("Bdam",
+                                                                 "Babacki",
+                                                                 Address{"Warszawska 43", "3", PostalCode{"01-234"}, "Warszawa"},
+                                                                 Pesel{"55030101230"},
+                                                                 Gender::Male);
 
-//     Student babacki{
-//         "Bdam",
-//         "Babacki",
-//         Address{"Warszawska 43", "3", PostalCode{"01-234"}, "Warszawa"},
-//         Pesel{"55030101230"},
-//         Gender::Male};
+    std::unique_ptr<Student> cabacki = std::make_unique<Student>("Cdam",
+                                                                 "Cabacki",
+                                                                 Address{"Warszawska 44", "4", PostalCode{"01-234"}, "Warszawa"},
+                                                                 Pesel{"83050594899"},
+                                                                 Gender::Male);
 
-//     Student cabacki{
-//         "Cdam",
-//         "Cabacki",
-//         Address{"Warszawska 44", "4", PostalCode{"01-234"}, "Warszawa"},
-//         Pesel{"83050594899"},
-//         Gender::Male};
+    std::unique_ptr<Student> dabacka = std::make_unique<Student>("Ddama",
+                                                                 "Dabacka",
+                                                                 Address{"Warszawska 45", "5", PostalCode{"01-234"}, "Warszawa"},
+                                                                 Pesel{"03281592527"},
+                                                                 Gender::Female);
 
-//     Student dabacka{
-//         "Ddama",
-//         "Dabacka",
-//         Address{"Warszawska 45", "5", PostalCode{"01-234"}, "Warszawa"},
-//         Pesel{"03281592527"},
-//         Gender::Female};
+    std::unique_ptr<Student> fabacki = std::make_unique<Student>("Fdam",
+                                                                 "Fabacki",
+                                                                 Address{"Warszawska 46", "6", PostalCode{"01-234"}, "Warszawa"},
+                                                                 Pesel{"52030218632"},
+                                                                 Gender::Male);
 
-//     Student fabacki{
-//         "Fdam",
-//         "Fabacki",
-//         Address{"Warszawska 46", "6", PostalCode{"01-234"}, "Warszawa"},
-//         Pesel{"52030218632"},
-//         Gender::Male};
+    Database db;
 
-//     Database db;
-
-//     void SetUp() override {
-//         db.add(abacki);
-//         db.add(babacki);
-//         db.add(cabacki);
-//         db.add(dabacka);
-//         db.add(fabacki);
-//     }
-// };
+    void SetUp() override {
+        db.add(std::move(abacki));
+        db.add(std::move(babacki));
+        db.add(std::move(cabacki));
+        db.add(std::move(dabacka));
+        db.add(std::move(fabacki));
+    }
+};
 
 // TEST_F(DatabaseTest, Display) {
 //     const std::string ref_db_display =
