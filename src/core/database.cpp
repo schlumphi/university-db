@@ -24,11 +24,10 @@ bool Database::exists(const std::unique_ptr<Person>& person) const noexcept {
     }
 }
 
-bool Database::add(std::unique_ptr<Person> person) {
+void Database::add(std::unique_ptr<Person> person) {
     if (exists(person)) {
-        return false;
+        throw std::runtime_error("person already exists in database");
     }
-    return true;
 }
 
 Person* Database::find_by_pesel(const Pesel& pesel) noexcept {

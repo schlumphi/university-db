@@ -18,7 +18,7 @@ public:
         Descending
     };
 
-    bool add(std::unique_ptr<Person> person);
+    void add(std::unique_ptr<Person> person);
     const Person* find_by_pesel(const Pesel& pesel) const noexcept;
     bool exists(const std::unique_ptr<Person>& person) const noexcept;
     // std::string display(const char sep = '|') const noexcept;

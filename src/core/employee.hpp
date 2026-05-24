@@ -1,6 +1,8 @@
 #pragma once
 #include "person.hpp"
 
+class Database;
+
 class Employee : public Person {
 public:
     Employee(const std::string& first_name,
@@ -11,11 +13,10 @@ public:
 
     uint64_t salary() const noexcept { return m_salary; }
 
-protected:
-    void on_database_add() override {}
-
 private:
     void set_salary(const uint64_t salary) { m_salary = salary; }
 
     uint64_t m_salary;
+
+    friend class Database;
 };

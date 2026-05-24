@@ -4,8 +4,6 @@
 #include "helpers/gender.hpp"
 #include "helpers/pesel.hpp"
 
-class Database;
-
 class Person {
 public:
     virtual ~Person() = default;
@@ -36,13 +34,9 @@ protected:
            const Pesel& pesel,
            const Gender gender);
 
-    virtual void on_database_add() = 0;
-
     const std::string m_first_name;
     const std::string m_last_name;
     const Address m_address;
     const Pesel m_pesel;
     const Gender m_gender;
-
-    friend class Database;
 };
