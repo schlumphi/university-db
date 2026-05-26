@@ -39,6 +39,14 @@ protected:
 
     Student* fabacki = fabacki_ptr.get();
 
+    std::unique_ptr<Employee> gabacki_ptr = std::make_unique<Employee>("Gdam",
+                                                                       "Gabacki",
+                                                                       Address{"Warszawska 47", "7", PostalCode{"01-234"}, "Warszawa"},
+                                                                       Pesel{"71030467716"},
+                                                                       Gender::Male);
+
+    Employee* gabacki = gabacki_ptr.get();
+
     Database db;
 
     void SetUp() override {
@@ -47,6 +55,7 @@ protected:
         db.add(std::move(cabacki_ptr));
         db.add(std::move(dabacka_ptr));
         db.add(std::move(fabacki_ptr));
+        db.add(std::move(gabacki_ptr));
     }
 };
 
@@ -55,18 +64,21 @@ TEST_F(DatabaseTest, Display) {
         "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender|salary\n"
         "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|" +
         std::to_string(abacki->index_num()) +
-        "|55030101193|male|0\n"
+        "|55030101193|male|\n"
         "Bdam|Babacki|Warszawska 43|3|01-234|Warszawa|" +
         std::to_string(babacki->index_num()) +
-        "|55030101230|male|0\n"
+        "|55030101230|male|\n"
         "Cdam|Cabacki|Warszawska 44|4|01-234|Warszawa|" +
         std::to_string(cabacki->index_num()) +
-        "|83050594899|male|0\n"
+        "|83050594899|male|\n"
         "Ddama|Dabacka|Warszawska 45|5|01-234|Warszawa|" +
         std::to_string(dabacka->index_num()) +
-        "|03281592527|female|0\n"
+        "|03281592527|female|\n"
         "Fdam|Fabacki|Warszawska 46|6|01-234|Warszawa|" +
-        std::to_string(fabacki->index_num()) + "|52030218632|male|0\n";
+        std::to_string(fabacki->index_num()) +
+        "|52030218632|male|\n"
+        "Gdam|Gabacki|Warszawska 47|7|01-234|Warszawa||71030467716|male|" +
+        std::to_string(gabacki->salary()) + "\n";
 
     EXPECT_EQ(db.display(), ref_db_display);
 }
