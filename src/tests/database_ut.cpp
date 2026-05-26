@@ -4,58 +4,72 @@
 
 class DatabaseTest : public ::testing::Test {
 protected:
-    std::unique_ptr<Student> abacki = std::make_unique<Student>("Adam",
-                                                                "Abacki",
-                                                                Address{"Warszawska 42", "2", PostalCode{"01-234"}, "Warszawa"},
-                                                                Pesel{"55030101193"},
-                                                                Gender::Male);
+    std::unique_ptr<Student> abacki_ptr = std::make_unique<Student>("Adam",
+                                                                    "Abacki",
+                                                                    Address{"Warszawska 42", "2", PostalCode{"01-234"}, "Warszawa"},
+                                                                    Pesel{"55030101193"},
+                                                                    Gender::Male);
+    Student* abacki = abacki_ptr.get();
+    std::unique_ptr<Student> babacki_ptr = std::make_unique<Student>("Bdam",
+                                                                     "Babacki",
+                                                                     Address{"Warszawska 43", "3", PostalCode{"01-234"}, "Warszawa"},
+                                                                     Pesel{"55030101230"},
+                                                                     Gender::Male);
 
-    std::unique_ptr<Student> babacki = std::make_unique<Student>("Bdam",
-                                                                 "Babacki",
-                                                                 Address{"Warszawska 43", "3", PostalCode{"01-234"}, "Warszawa"},
-                                                                 Pesel{"55030101230"},
-                                                                 Gender::Male);
+    Student* babacki = babacki_ptr.get();
+    std::unique_ptr<Student> cabacki_ptr = std::make_unique<Student>("Cdam",
+                                                                     "Cabacki",
+                                                                     Address{"Warszawska 44", "4", PostalCode{"01-234"}, "Warszawa"},
+                                                                     Pesel{"83050594899"},
+                                                                     Gender::Male);
 
-    std::unique_ptr<Student> cabacki = std::make_unique<Student>("Cdam",
-                                                                 "Cabacki",
-                                                                 Address{"Warszawska 44", "4", PostalCode{"01-234"}, "Warszawa"},
-                                                                 Pesel{"83050594899"},
-                                                                 Gender::Male);
+    Student* cabacki = cabacki_ptr.get();
+    std::unique_ptr<Student> dabacka_ptr = std::make_unique<Student>("Ddama",
+                                                                     "Dabacka",
+                                                                     Address{"Warszawska 45", "5", PostalCode{"01-234"}, "Warszawa"},
+                                                                     Pesel{"03281592527"},
+                                                                     Gender::Female);
 
-    std::unique_ptr<Student> dabacka = std::make_unique<Student>("Ddama",
-                                                                 "Dabacka",
-                                                                 Address{"Warszawska 45", "5", PostalCode{"01-234"}, "Warszawa"},
-                                                                 Pesel{"03281592527"},
-                                                                 Gender::Female);
+    Student* dabacka = dabacka_ptr.get();
+    std::unique_ptr<Student> fabacki_ptr = std::make_unique<Student>("Fdam",
+                                                                     "Fabacki",
+                                                                     Address{"Warszawska 46", "6", PostalCode{"01-234"}, "Warszawa"},
+                                                                     Pesel{"52030218632"},
+                                                                     Gender::Male);
 
-    std::unique_ptr<Student> fabacki = std::make_unique<Student>("Fdam",
-                                                                 "Fabacki",
-                                                                 Address{"Warszawska 46", "6", PostalCode{"01-234"}, "Warszawa"},
-                                                                 Pesel{"52030218632"},
-                                                                 Gender::Male);
+    Student* fabacki = fabacki_ptr.get();
 
     Database db;
 
     void SetUp() override {
-        db.add(std::move(abacki));
-        db.add(std::move(babacki));
-        db.add(std::move(cabacki));
-        db.add(std::move(dabacka));
-        db.add(std::move(fabacki));
+        db.add(std::move(abacki_ptr));
+        db.add(std::move(babacki_ptr));
+        db.add(std::move(cabacki_ptr));
+        db.add(std::move(dabacka_ptr));
+        db.add(std::move(fabacki_ptr));
     }
 };
 
-// TEST_F(DatabaseTest, Display) {
-//     const std::string ref_db_display =
-//         "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender\n"
-//         "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|1|55030101193|male\n"
-//         "Bdam|Babacki|Warszawska 43|3|01-234|Warszawa|2|55030101230|male\n"
-//         "Cdam|Cabacki|Warszawska 44|4|01-234|Warszawa|3|83050594899|male\n"
-//         "Ddama|Dabacka|Warszawska 45|5|01-234|Warszawa|4|03281592527|female\n"
-//         "Fdam|Fabacki|Warszawska 46|6|01-234|Warszawa|5|52030218632|male\n";
+TEST_F(DatabaseTest, Display) {
+    const std::string ref_db_display =
+        "first_name|last_name|street|apartment|postal_code|city|index_num|pesel|gender|salary\n"
+        "Adam|Abacki|Warszawska 42|2|01-234|Warszawa|" +
+        std::to_string(abacki->index_num()) +
+        "|55030101193|male|0\n"
+        "Bdam|Babacki|Warszawska 43|3|01-234|Warszawa|" +
+        std::to_string(babacki->index_num()) +
+        "|55030101230|male|0\n"
+        "Cdam|Cabacki|Warszawska 44|4|01-234|Warszawa|" +
+        std::to_string(cabacki->index_num()) +
+        "|83050594899|male|0\n"
+        "Ddama|Dabacka|Warszawska 45|5|01-234|Warszawa|" +
+        std::to_string(dabacka->index_num()) +
+        "|03281592527|female|0\n"
+        "Fdam|Fabacki|Warszawska 46|6|01-234|Warszawa|" +
+        std::to_string(fabacki->index_num()) + "|52030218632|male|0\n";
 
-//     EXPECT_EQ(db.display(), ref_db_display);
-// }
+    EXPECT_EQ(db.display(), ref_db_display);
+}
 
 // TEST_F(DatabaseTest, AddDuplicateStudent) {
 //     EXPECT_THROW(db.add(abacki), std::invalid_argument);
