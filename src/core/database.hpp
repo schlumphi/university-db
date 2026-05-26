@@ -35,7 +35,7 @@ public:
 
     // const std::list<Student>& students() const noexcept { return m_state; }
 
-    static std::array<std::string, 10> tokenize_student(const Student& student) noexcept;
+    // static std::array<std::string, 10> tokenize(const Person& person) noexcept;
     // static Student deserialize(const std::vector<std::string_view>& tokens);
 
     static constexpr std::array<std::string_view, 10> columns{

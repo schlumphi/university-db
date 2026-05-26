@@ -130,14 +130,11 @@ std::string Database::display(const char sep) const noexcept {
     db.back() = '\n';
 
     for (const auto& person_ptr : m_state) {
-        if (auto student_ptr = dynamic_cast<Student*>(person_ptr.get())) {
-            auto tokens = tokenize_student(*student_ptr);
-            for (const auto& token : tokens) {
-                db += token;
-                db += sep;
-            }
-            db.back() = '\n';
+        for (const auto& token : person_ptr->tokenize()) {
+            db += token;
+            db += sep;
         }
+        db.back() = '\n';
     }
     return db;
 }
@@ -274,18 +271,18 @@ std::string Database::display(const char sep) const noexcept {
 //         first_name, last_name, address, pesel, gender};
 // }
 
-std::array<std::string, 10> Database::tokenize_student(const Student& student) noexcept {
-    std::array<std::string, 10> tokens;
-    tokens[0] = student.first_name();
-    tokens[1] = student.last_name();
-    tokens[2] = student.address().street();
-    tokens[3] = student.address().apartment();
-    tokens[4] = student.address().postal_code().value();
-    tokens[5] = student.address().city();
-    tokens[6] = std::to_string(student.index_num());
-    tokens[7] = student.pesel().value();
-    tokens[8] = parse_gender(student.gender());
-    tokens[9] = "0";
+// std::array<std::string, 10> Database::tokenize_student(const Student& student) noexcept {
+//     std::array<std::string, 10> tokens;
+//     tokens[0] = student.first_name();
+//     tokens[1] = student.last_name();
+//     tokens[2] = student.address().street();
+//     tokens[3] = student.address().apartment();
+//     tokens[4] = student.address().postal_code().value();
+//     tokens[5] = student.address().city();
+//     tokens[6] = std::to_string(student.index_num());
+//     tokens[7] = student.pesel().value();
+//     tokens[8] = parse_gender(student.gender());
+//     tokens[9] = "0";
 
-    return tokens;
-}
+//     return tokens;
+// }
