@@ -23,7 +23,8 @@ public:
     bool exists(const std::unique_ptr<Person>& person) const noexcept;
     uint64_t generate_index_num() const noexcept;
     bool is_index_taken(const uint64_t index_num) const noexcept;
-    // std::string display(const char sep = '|') const noexcept;
+
+    std::string display(const char sep = '|') const noexcept;
     // std::list<Student> search_by_last_name(const std::string& name) const noexcept;
     // std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     // void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
@@ -34,11 +35,11 @@ public:
 
     // const std::list<Student>& students() const noexcept { return m_state; }
 
-    // static std::array<std::string, 9> tokenize_student(const Student& student) noexcept;
+    static std::array<std::string, 10> tokenize_student(const Student& student) noexcept;
     // static Student deserialize(const std::vector<std::string_view>& tokens);
 
-    // static constexpr std::array<std::string_view, 9> columns{
-    //     "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender"};
+    static constexpr std::array<std::string_view, 10> columns{
+        "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender", "salary"};
 
 private:
     Person* find_by_pesel(const Pesel& pesel) noexcept;
