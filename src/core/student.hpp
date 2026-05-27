@@ -21,18 +21,10 @@ public:
 
     uint64_t index_num() const noexcept { return m_index_num; }
 
-    std::array<std::string, 10> tokenize() noexcept override {
-        std::array<std::string, 10> tokens;
-        tokens[0] = m_first_name;
-        tokens[1] = m_last_name;
-        tokens[2] = m_address.street();
-        tokens[3] = m_address.apartment();
-        tokens[4] = m_address.postal_code().value();
-        tokens[5] = m_address.city();
-        tokens[6] = std::to_string(m_index_num);
-        tokens[7] = m_pesel.value();
-        tokens[8] = parse_gender(m_gender);
-        tokens[9] = "";
+    std::vector<std::string> tokenize() noexcept override {
+        auto tokens = Person::tokenize();
+        tokens.push_back(std::to_string(m_index_num));
+        tokens.push_back("");
 
         return tokens;
     }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "helpers/address.hpp"
 #include "helpers/gender.hpp"
 #include "helpers/pesel.hpp"
@@ -27,7 +29,7 @@ public:
     static std::string validate_name(const std::string& name);
     static Gender validate_gender(const Pesel& pesel, const Gender gender);
 
-    virtual std::array<std::string, 10> tokenize() noexcept = 0;
+    virtual std::vector<std::string> tokenize() noexcept;
 
 protected:
     Person(const std::string& first_name,

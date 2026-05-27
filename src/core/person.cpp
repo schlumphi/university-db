@@ -41,3 +41,17 @@ Gender Person::validate_gender(const Pesel& pesel, const Gender gender) {
     }
     return gender;
 }
+
+std::vector<std::string> Person::tokenize() noexcept {
+    std::vector<std::string> tokens(8);
+    tokens[0] = m_first_name;
+    tokens[1] = m_last_name;
+    tokens[2] = m_address.street();
+    tokens[3] = m_address.apartment();
+    tokens[4] = m_address.postal_code().value();
+    tokens[5] = m_address.city();
+    tokens[6] = m_pesel.value();
+    tokens[7] = parse_gender(m_gender);
+
+    return tokens;
+}

@@ -39,7 +39,7 @@ public:
     // static Student deserialize(const std::vector<std::string_view>& tokens);
 
     static constexpr std::array<std::string_view, 10> columns{
-        "first_name", "last_name", "street", "apartment", "postal_code", "city", "index_num", "pesel", "gender", "salary"};
+        "first_name", "last_name", "street", "apartment", "postal_code", "city", "pesel", "gender", "index_num", "salary"};
 
 private:
     Person* find_by_pesel(const Pesel& pesel) noexcept;
