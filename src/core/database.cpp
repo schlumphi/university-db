@@ -68,7 +68,7 @@ uint64_t Database::generate_index_num() const noexcept {
 }
 
 void Database::assign_starting_salary(Employee& employee) {
-    auto salary = pseudorandom::random_uint64() % 5000 + 4500;
+    auto salary = pseudorandom::random_uint64() % 5000ULL + 4500ULL;
     employee.set_salary(salary);
 }
 
