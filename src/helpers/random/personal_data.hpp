@@ -6,20 +6,7 @@
 #include "helpers/pesel.hpp"
 #include "helpers/random/pseudorandom.hpp"
 
-namespace pseudorandom::personal_data {
-inline Pesel random_pesel(const Gender gender) {
-    auto random_year = random_uint64() % 100ULL + 1900ULL;
-    auto random_month = random_uint64() % 12ULL + 1ULL;
-    auto random_day = helpers::random_day_of_month(random_year, random_month);
-    auto birth_date = helpers::BirthDate{random_year, random_month, random_day};
-
-    auto pesel_ciphers = helpers::create_pesel_ciphers(birth_date, gender);
-    helpers::compute_checksum(pesel_ciphers);
-
-    return Pesel(helpers::derive_pesel(pesel_ciphers));
-}
-
-namespace helpers {
+namespace pseudorandom::personal_data::helpers {
 struct BirthDate {
     BirthDate(const uint64_t year, const uint64_t month, const uint64_t day) : m_year(year), m_month(month), m_day(day) {}
 
@@ -45,6 +32,15 @@ struct PeselCiphers {
     uint64_t gender_cipher;
     uint64_t checksum_cipher;
 };
+
+inline uint64_t random_nonce_for_gender(const Gender gender) {
+    if (gender == Gender::Female) {
+        return ((random_uint64() % 100ULL) * 2ULL) % 10ULL;
+    } else if (gender == Gender::Male) {
+        return ((random_uint64() % 100ULL) * 2ULL + 1ULL) % 10ULL;
+    }
+    return random_uint64() % 10ULL;
+}
 
 inline PeselCiphers create_pesel_ciphers(
     const BirthDate birth_date, const Gender gender) {
@@ -76,7 +72,7 @@ inline void compute_checksum(PeselCiphers& pesel_ciphers) {
                 pesel_ciphers.random_nonce_c +
                 pesel_ciphers.gender_cipher * 3ULL);
 
-    pesel_ciphers.checksum_cipher = 10ULL - (sum % 10ULL);
+    pesel_ciphers.checksum_cipher = (10ULL - (sum % 10ULL)) % 10ULL;
 }
 
 inline std::string derive_pesel(const PeselCiphers& pesel_ciphers) {
@@ -115,14 +111,18 @@ inline uint64_t random_day_of_month(const uint64_t year, const uint64_t month) {
         return random_uint64() % 30ULL + 1ULL;
     }
 }
+}  // namespace pseudorandom::personal_data::helpers
 
-inline uint64_t random_nonce_for_gender(const Gender gender) {
-    if (gender == Gender::Female) {
-        return ((random_uint64() % 100ULL) * 2ULL) % 10ULL;
-    } else if (gender == Gender::Male) {
-        return ((random_uint64() % 100ULL) * 2ULL + 1ULL) % 10ULL;
-    }
-    return random_uint64() % 10ULL;
+namespace pseudorandom::personal_data {
+inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
+    auto random_year = random_uint64() % 100ULL + 1900ULL;
+    auto random_month = random_uint64() % 12ULL + 1ULL;
+    auto random_day = helpers::random_day_of_month(random_year, random_month);
+    auto birth_date = helpers::BirthDate{random_year, random_month, random_day};
+
+    auto pesel_ciphers = helpers::create_pesel_ciphers(birth_date, gender);
+    helpers::compute_checksum(pesel_ciphers);
+
+    return Pesel(helpers::derive_pesel(pesel_ciphers));
 }
-}  // namespace helpers
 }  // namespace pseudorandom::personal_data
