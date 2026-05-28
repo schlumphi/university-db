@@ -111,9 +111,56 @@ inline uint64_t random_day_of_month(const uint64_t year, const uint64_t month) {
         return random_uint64() % 30ULL + 1ULL;
     }
 }
+
+inline constexpr std::array<std::string_view, 21> male_names{
+    "Adam",
+    "Bartosz",
+    "Cyprian",
+    "Dawid",
+    "Eustachy",
+    "Filip",
+    "Grzegorz",
+    "Henryk",
+    "Ignacy",
+    "Jakub",
+    "Krzysztof",
+    "Lucjan",
+    "Mariusz",
+    "Nataniel",
+    "Olaf",
+    "Patryk",
+    "Ryszard",
+    "Szymon",
+    "Tomasz",
+    "Udalryk",
+    "Zenon"};
+
+inline constexpr std::array<std::string_view, 21> female_names{
+    "Alicja",
+    "Beata",
+    "Celestyna",
+    "Daria",
+    "Ewa",
+    "Flora",
+    "Gabriela",
+    "Helena",
+    "Izabela",
+    "Jagna",
+    "Karolina",
+    "Lidia",
+    "Maria",
+    "Nadia",
+    "Otylia",
+    "Petra",
+    "Roksana",
+    "Sabina",
+    "Teresa",
+    "Urszula",
+    "Zuzanna"};
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
+// FIXME: dodac obsluge wszystkich zakresow peseli
 inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
     auto random_year = random_uint64() % 100ULL + 1900ULL;
     auto random_month = random_uint64() % 12ULL + 1ULL;
@@ -124,5 +171,18 @@ inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
     helpers::compute_checksum(pesel_ciphers);
 
     return Pesel(helpers::derive_pesel(pesel_ciphers));
+}
+
+inline std::string random_name(const Gender gender = Gender::Unspecified) {
+    if (gender == Gender::Male) {
+        return static_cast<std::string>(helpers::male_names[pseudorandom::random_uint64() % helpers::male_names.size()]);
+    } else if (gender == Gender::Female) {
+        return static_cast<std::string>(helpers::female_names[pseudorandom::random_uint64() % helpers::female_names.size()]);
+    } else {
+        std::array<std::string_view, 42> names;
+        std::copy(helpers::male_names.begin(), helpers::male_names.end(), names.begin());
+        std::copy(helpers::female_names.begin(), helpers::female_names.end(), names.begin() + helpers::male_names.size());
+        return static_cast<std::string>(names[pseudorandom::random_uint64() % names.size()]);
+    }
 }
 }  // namespace pseudorandom::personal_data
