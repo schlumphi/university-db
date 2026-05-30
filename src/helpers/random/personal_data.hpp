@@ -112,7 +112,7 @@ inline uint64_t random_day_of_month(const uint64_t year, const uint64_t month) {
     }
 }
 
-inline constexpr std::array<std::string_view, 21> male_names{
+inline constexpr std::array<std::string_view, 22> male_names{
     "Adam",
     "Bartosz",
     "Cyprian",
@@ -133,9 +133,10 @@ inline constexpr std::array<std::string_view, 21> male_names{
     "Szymon",
     "Tomasz",
     "Udalryk",
+    "Wojciech",
     "Zenon"};
 
-inline constexpr std::array<std::string_view, 21> female_names{
+inline constexpr std::array<std::string_view, 22> female_names{
     "Alicja",
     "Beata",
     "Celestyna",
@@ -156,7 +157,32 @@ inline constexpr std::array<std::string_view, 21> female_names{
     "Sabina",
     "Teresa",
     "Urszula",
+    "Wanda",
     "Zuzanna"};
+
+inline constexpr std::array<std::string_view, 22> male_surnames{
+    "Adamski",
+    "Bartecki",
+    "Cygan",
+    "Dopieralski",
+    "Engel",
+    "Firlej",
+    "Gonciarz",
+    "Hula",
+    "Iwanejko",
+    "Jaroszewski",
+    "Kordela",
+    "Luty",
+    "Marzec",
+    "Najdowski",
+    "Ostaszewski",
+    "Przybylski",
+    "Raszewski",
+    "Stoch",
+    "Tuwim",
+    "Ulam",
+    "Wirecki",
+    "Zawada"};
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
@@ -185,4 +211,5 @@ inline std::string random_name(const Gender gender = Gender::Unspecified) {
         return static_cast<std::string>(names[pseudorandom::random_uint64() % names.size()]);
     }
 }
+
 }  // namespace pseudorandom::personal_data
