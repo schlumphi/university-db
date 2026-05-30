@@ -207,6 +207,30 @@ inline constexpr std::array<std::string_view, 22> female_surnames{
     "Ulam",
     "Wirecka",
     "Zawada"};
+
+inline constexpr std::array<std::string_view, 22> street_names{
+    "Analogowa",
+    "Bajkowa",
+    "Cesarska",
+    "Daliowa",
+    "Ekologiczna",
+    "Franciszka Augusta",
+    "Gagarina",
+    "Huncwocka",
+    "Izydora",
+    "Jarzynowa",
+    "Koluszki",
+    "Lazurowa",
+    "Marzycielska",
+    "Nostradamusa",
+    "Opolska",
+    "Plac Trzech Krzyzy",
+    "Ratuszowa",
+    "Stalowej Woli",
+    "Torwar",
+    "U",
+    "W",
+    "Z"};
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
