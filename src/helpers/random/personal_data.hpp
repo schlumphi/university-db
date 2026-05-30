@@ -183,6 +183,30 @@ inline constexpr std::array<std::string_view, 22> male_surnames{
     "Ulam",
     "Wirecki",
     "Zawada"};
+
+inline constexpr std::array<std::string_view, 22> female_surnames{
+    "Adamska",
+    "Bartecka",
+    "Cygan",
+    "Dopieralska",
+    "Engel",
+    "Firlej",
+    "Gonciarz",
+    "Hula",
+    "Iwanejko",
+    "Jaroszewska",
+    "Kordela",
+    "Luty",
+    "Marzec",
+    "Najdowska",
+    "Ostaszewska",
+    "Przybylska",
+    "Raszewska",
+    "Stoch",
+    "Tuwim",
+    "Ulam",
+    "Wirecka",
+    "Zawada"};
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
