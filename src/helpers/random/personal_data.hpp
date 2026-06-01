@@ -253,7 +253,7 @@ inline std::string random_name(const Gender gender = Gender::Unspecified) {
     } else if (gender == Gender::Female) {
         return static_cast<std::string>(helpers::female_names[pseudorandom::random_uint64() % helpers::female_names.size()]);
     } else {
-        std::array<std::string_view, 42> names;
+        std::array<std::string_view, 44> names;
         std::copy(helpers::male_names.begin(), helpers::male_names.end(), names.begin());
         std::copy(helpers::female_names.begin(), helpers::female_names.end(), names.begin() + helpers::male_names.size());
         return static_cast<std::string>(names[pseudorandom::random_uint64() % names.size()]);
