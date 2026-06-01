@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "helpers/address.hpp"
 #include "helpers/gender.hpp"
 #include "helpers/pesel.hpp"
 #include "helpers/random/pseudorandom.hpp"
@@ -228,9 +229,52 @@ inline constexpr std::array<std::string_view, 22> street_names{
     "Ratuszowa",
     "Stalowej Woli",
     "Torwar",
-    "U",
-    "W",
-    "Z"};
+    "Ugory",
+    "Wysoka",
+    "Zacisze"};
+
+inline constexpr std::array<std::string_view, 22> cities{
+    "Augustow",
+    "Bydgoszcz",
+    "Chelm",
+    "Debica",
+    "Elblag",
+    "Frombork",
+    "Gdansk",
+    "Hel",
+    "Inowroclaw",
+    "Jaslo",
+    "Krakow",
+    "Lublin",
+    "Malbork",
+    "Nowy Sacz",
+    "Olsztyn",
+    "Poznan",
+    "Rzeszow",
+    "Sopot",
+    "Torun",
+    "Ustka",
+    "Warszawa",
+    "Zamosc"};
+
+inline PostalCode random_postal_code() {
+    return PostalCode{
+        std::to_string(pseudorandom::random_uint64() % 10ULL) +
+        std::to_string(pseudorandom::random_uint64() % 10ULL) +
+        "-" +
+        std::to_string(pseudorandom::random_uint64() % 10ULL) +
+        std::to_string(pseudorandom::random_uint64() % 10ULL) +
+        std::to_string(pseudorandom::random_uint64() % 10ULL)};
+}
+
+inline std::string random_apartment_number() {
+    auto number = pseudorandom::random_uint64() % 1000ULL;
+    if (number == 0ULL) {
+        return "";
+    } else {
+        return std::to_string(number);
+    }
+}
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
@@ -260,4 +304,11 @@ inline std::string random_name(const Gender gender = Gender::Unspecified) {
     }
 }
 
+inline Address random_address() {
+    return Address{
+        std::string{helpers::street_names.at(pseudorandom::random_uint64() % helpers::street_names.size())} + " " + std::to_string(pseudorandom::random_uint64() % 1000ULL + 1ULL),
+        helpers::random_apartment_number(),
+        helpers::random_postal_code(),
+        std::string{helpers::cities.at(pseudorandom::random_uint64() % helpers::cities.size())}};
+}
 }  // namespace pseudorandom::personal_data
