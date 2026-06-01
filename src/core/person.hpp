@@ -8,6 +8,12 @@
 
 class Person {
 public:
+    Person(const std::string& first_name,
+           const std::string& last_name,
+           const Address& address,
+           const Pesel& pesel,
+           const Gender gender);
+
     virtual ~Person() = default;
 
     bool operator==(const Person& other) const noexcept {
@@ -31,13 +37,9 @@ public:
 
     virtual std::vector<std::string> tokenize() noexcept;
 
-protected:
-    Person(const std::string& first_name,
-           const std::string& last_name,
-           const Address& address,
-           const Pesel& pesel,
-           const Gender gender);
+    static Person random_person();
 
+protected:
     const std::string m_first_name;
     const std::string m_last_name;
     const Address m_address;

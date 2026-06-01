@@ -19,6 +19,8 @@ public:
         const Pesel& pesel,
         const Gender gender) : Person(first_name, last_name, address, pesel, gender), m_index_num(0ULL) {}
 
+    Student(const Person& person) : Person(person), m_index_num{0ULL} {}
+
     uint64_t index_num() const noexcept { return m_index_num; }
 
     std::vector<std::string> tokenize() noexcept override {
@@ -27,6 +29,10 @@ public:
         tokens.push_back("");
 
         return tokens;
+    }
+
+    static Student random_student() {
+        return Student{Person::random_person()};
     }
 
 private:

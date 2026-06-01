@@ -11,6 +11,8 @@ public:
              const Pesel& pesel,
              const Gender gender) : Person(first_name, last_name, address, pesel, gender), m_salary{0ULL} {}
 
+    Employee(const Person& person) : Person(person), m_salary{0ULL} {}
+
     uint64_t salary() const noexcept { return m_salary; }
 
     std::vector<std::string> tokenize() noexcept override {
@@ -19,6 +21,10 @@ public:
         tokens.push_back(std::to_string(m_salary));
 
         return tokens;
+    }
+
+    static Employee random_employee() {
+        return Employee{Person::random_person()};
     }
 
 private:

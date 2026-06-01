@@ -6,6 +6,7 @@
 
 #include "helpers/bytes/tokenize.hpp"
 #include "helpers/predicates/string_checks.hpp"
+#include "helpers/random/personal_data.hpp"
 
 Person::Person(
     const std::string& first_name,
@@ -54,4 +55,15 @@ std::vector<std::string> Person::tokenize() noexcept {
     tokens[7] = parse_gender(m_gender);
 
     return tokens;
+}
+
+Person Person::random_person() {
+    const auto gender = pseudorandom::personal_data::random_gender();
+
+    return Person{
+        pseudorandom::personal_data::random_name(gender),
+        pseudorandom::personal_data::random_surname(gender),
+        pseudorandom::personal_data::random_address(),
+        pseudorandom::personal_data::random_pesel(gender),
+        gender};
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "core/employee.hpp"
 #include "helpers/random/personal_data.hpp"
 
 int main() {
@@ -9,6 +10,9 @@ int main() {
     const auto address = pseudorandom::personal_data::random_address();
     std::cout << address.street() << " " << address.apartment() << "\n";
     std::cout << address.postal_code().value() << " " << address.city() << "\n";
+
+    const auto employee = Employee::random_employee();
+    std::cout << employee.first_name() << "\n";
 
     return 0;
 }

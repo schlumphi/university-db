@@ -278,6 +278,15 @@ inline std::string random_apartment_number() {
 }  // namespace pseudorandom::personal_data::helpers
 
 namespace pseudorandom::personal_data {
+inline Gender random_gender() {
+    auto rand_num = pseudorandom::random_uint64() % 2ULL;
+    if (rand_num == 0ULL) {
+        return Gender::Male;
+    } else {
+        return Gender::Female;
+    }
+}
+
 // FIXME: dodac obsluge wszystkich zakresow peseli
 inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
     auto random_year = random_uint64() % 100ULL + 1900ULL;
@@ -301,6 +310,19 @@ inline std::string random_name(const Gender gender = Gender::Unspecified) {
         std::copy(helpers::male_names.begin(), helpers::male_names.end(), names.begin());
         std::copy(helpers::female_names.begin(), helpers::female_names.end(), names.begin() + helpers::male_names.size());
         return static_cast<std::string>(names[pseudorandom::random_uint64() % names.size()]);
+    }
+}
+
+inline std::string random_surname(const Gender gender = Gender::Unspecified) {
+    if (gender == Gender::Male) {
+        return static_cast<std::string>(helpers::male_surnames[pseudorandom::random_uint64() % helpers::male_names.size()]);
+    } else if (gender == Gender::Female) {
+        return static_cast<std::string>(helpers::female_surnames[pseudorandom::random_uint64() % helpers::female_names.size()]);
+    } else {
+        std::array<std::string_view, 44> surnames;
+        std::copy(helpers::male_surnames.begin(), helpers::male_surnames.end(), surnames.begin());
+        std::copy(helpers::female_surnames.begin(), helpers::female_surnames.end(), surnames.begin() + helpers::male_surnames.size());
+        return static_cast<std::string>(surnames[pseudorandom::random_uint64() % surnames.size()]);
     }
 }
 
