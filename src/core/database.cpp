@@ -146,6 +146,9 @@ std::string Database::display(const char sep) const noexcept {
     return db;
 }
 
+void Database::fill_with_random_data(const uint64_t records_amount) {
+}
+
 // std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
 //     std::list<Student> matches;
 //     for (const auto& student : m_state) {
