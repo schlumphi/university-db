@@ -116,15 +116,15 @@ TEST_F(DatabaseTest, AssignSalary) {
 //     EXPECT_THROW(db.delete_by_index(3), std::invalid_argument);
 // }
 
-// TEST_F(DatabaseTest, SortByName) {
-//     std::list<Student> expected{abacki, babacki, cabacki, dabacka, fabacki};
-//     db.sort_by_name(Database::SortOrder::Ascending);
-//     EXPECT_EQ(db.students(), expected);
+TEST_F(DatabaseTest, SortByName) {
+    std::list<const Person*> expected{abacki, babacki, cabacki, dabacka, fabacki, gabacki};
+    db.sort_by_name(Database::SortOrder::Ascending);
+    EXPECT_EQ(db.content(), expected);
 
-//     expected.reverse();
-//     db.sort_by_name(Database::SortOrder::Descending);
-//     EXPECT_EQ(db.students(), expected);
-// }
+    expected.reverse();
+    db.sort_by_name(Database::SortOrder::Descending);
+    EXPECT_EQ(db.content(), expected);
+}
 
 // TEST_F(DatabaseTest, SortByPesel) {
 //     std::list<Student> expected{dabacka, cabacki, babacki, abacki, fabacki};
