@@ -202,23 +202,23 @@ void Database::fill_with_random_data(const uint64_t records_amount) {
 //     return std::nullopt;
 // }
 
-// // ascending order -> from youngest to oldest
-// // descending order -> from oldest to youngest
-// void Database::sort_by_pesel(const SortOrder order) noexcept {
-//     if (order == SortOrder::Ascending) {
-//         m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() < rhs.pesel(); });
-//     } else {
-//         m_state.sort([](Student lhs, Student rhs) { return lhs.pesel() > rhs.pesel(); });
-//     }
-// }
+// ascending order -> from youngest to oldest
+// descending order -> from oldest to youngest
+void Database::sort_by_pesel(const SortOrder order) noexcept {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) { return lhs->pesel() < rhs->pesel(); });
+    } else {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) { return lhs->pesel() > rhs->pesel(); });
+    }
+}
 
-// void Database::sort_by_name(const SortOrder order) noexcept {
-//     if (order == SortOrder::Ascending) {
-//         m_state.sort([](Student lhs, Student rhs) { return (lhs.last_name() < rhs.last_name()); });
-//     } else {
-//         m_state.sort([](Student lhs, Student rhs) { return lhs.last_name() > rhs.last_name(); });
-//     }
-// }
+void Database::sort_by_name(const SortOrder order) noexcept {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) { return (lhs->last_name() < rhs->last_name()); });
+    } else {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) { return lhs->last_name() > rhs->last_name(); });
+    }
+}
 
 // void Database::delete_by_index(const uint64_t index) {
 //     for (const auto& student : m_state) {

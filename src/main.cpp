@@ -17,6 +17,7 @@ int main() {
 
     auto db = Database();
     db.fill_with_random_data(10);
+    db.sort_by_name();
     std::cout << db.display();
 
     return 0;
