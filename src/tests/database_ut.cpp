@@ -126,6 +126,16 @@ TEST_F(DatabaseTest, SortByName) {
     EXPECT_EQ(db.content(), expected);
 }
 
+TEST_F(DatabaseTest, SortBySalary) {
+    std::list<const Person*> expected{gabacki, abacki, babacki, cabacki, dabacka, fabacki};
+    db.sort_by_salary(Database::SortOrder::Descending);
+    EXPECT_EQ(db.content(), expected);
+
+    // expected = {gabacki, abacki, babacki, cabacki, dabacka, fabacki};
+    // db.sort_by_salary(Database::SortOrder::Descending);
+    // EXPECT_EQ(db.content(), expected);
+}
+
 // TEST_F(DatabaseTest, SortByPesel) {
 //     std::list<Student> expected{dabacka, cabacki, babacki, abacki, fabacki};
 //     db.sort_by_pesel(Database::SortOrder::Ascending);
