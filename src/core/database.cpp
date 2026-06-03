@@ -220,6 +220,14 @@ void Database::sort_by_name(const SortOrder order) noexcept {
     }
 }
 
+std::list<const Person*> Database::content() const noexcept {
+    auto state = std::list<const Person*>{};
+    for (const auto& person_ptr : m_state) {
+        state.push_back(person_ptr.get());
+    }
+    return state;
+}
+
 // void Database::delete_by_index(const uint64_t index) {
 //     for (const auto& student : m_state) {
 //         if (student.index_num() == index) {

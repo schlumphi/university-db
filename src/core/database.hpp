@@ -33,6 +33,9 @@ public:
     // std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
     void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
+
+    std::list<const Person*> content() const noexcept;
+
     // void delete_by_index(const uint64_t index);
     // void save(const std::string& filepath, const char sep = '|') const noexcept;
     // void load(const std::string& filepath, const char sep = '|');
