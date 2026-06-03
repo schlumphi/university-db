@@ -33,6 +33,7 @@ public:
     // std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;
     void sort_by_name(const SortOrder order = SortOrder::Ascending) noexcept;
+    void sort_by_salary(const SortOrder order = SortOrder::Ascending) noexcept;
 
     std::list<const Person*> content() const noexcept;
 

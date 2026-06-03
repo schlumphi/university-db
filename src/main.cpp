@@ -16,8 +16,8 @@ int main() {
     std::cout << employee.first_name() << "\n";
 
     auto db = Database();
-    db.fill_with_random_data(10);
-    db.sort_by_name();
+    db.fill_with_random_data(30);
+    db.sort_by_salary(Database::SortOrder::Descending);
     std::cout << db.display();
 
     return 0;

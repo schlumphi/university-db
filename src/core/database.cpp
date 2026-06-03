@@ -220,6 +220,38 @@ void Database::sort_by_name(const SortOrder order) noexcept {
     }
 }
 
+void Database::sort_by_salary(const SortOrder order) noexcept {
+    if (order == SortOrder::Ascending) {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) {
+            auto first_employee = dynamic_cast<Employee*>(lhs.get());
+            auto second_employee = dynamic_cast<Employee*>(rhs.get());
+            if (first_employee && second_employee) {
+                return first_employee->salary() < second_employee->salary();
+            } else if (first_employee) {
+                return false;
+            } else if (second_employee) {
+                return true;
+            } else {
+                return true;
+            }
+        });
+    } else {
+        m_state.sort([](std::unique_ptr<Person>& lhs, std::unique_ptr<Person>& rhs) {
+            auto first_employee = dynamic_cast<Employee*>(lhs.get());
+            auto second_employee = dynamic_cast<Employee*>(rhs.get());
+            if (first_employee && second_employee) {
+                return first_employee->salary() > second_employee->salary();
+            } else if (first_employee) {
+                return true;
+            } else if (second_employee) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+    }
+}
+
 std::list<const Person*> Database::content() const noexcept {
     auto state = std::list<const Person*>{};
     for (const auto& person_ptr : m_state) {
