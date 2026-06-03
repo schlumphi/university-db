@@ -89,6 +89,11 @@ TEST_F(DatabaseTest, Display) {
     EXPECT_EQ(db.display(), ref_db_display);
 }
 
+TEST_F(DatabaseTest, AssignSalary) {
+    EXPECT_EQ(db.assign_salary(Pesel("71030467716"), 7777), true);
+    EXPECT_EQ(gabacki->salary(), 7777);
+}
+
 // TEST_F(DatabaseTest, AddDuplicateStudent) {
 //     EXPECT_THROW(db.add(abacki), std::invalid_argument);
 // }
