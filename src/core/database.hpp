@@ -27,6 +27,8 @@ public:
     std::string display(const char sep = '|') const noexcept;
 
     void fill_with_random_data(const uint64_t records_amount);
+
+    bool assign_salary(const Pesel& pesel, const uint64_t salary) noexcept;
     // std::list<Student> search_by_last_name(const std::string& name) const noexcept;
     // std::optional<Student> search_by_pesel(const Pesel& pesel) const noexcept;
     // void sort_by_pesel(const SortOrder order = SortOrder::Ascending) noexcept;

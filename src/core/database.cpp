@@ -73,6 +73,19 @@ void Database::assign_starting_salary(Employee& employee) {
     employee.set_salary(salary);
 }
 
+bool Database::assign_salary(const Pesel& pesel, const uint64_t salary) noexcept {
+    auto* person = find_by_pesel(pesel);
+    if (person == nullptr) {
+        return false;
+    }
+
+    if (auto employee = dynamic_cast<Employee*>(person)) {
+        employee->set_salary(salary);
+        return true;
+    }
+    return false;
+}
+
 // const Person& Database::find_by_pesel(const Pesel& pesel) const noexcept {
 //     for (const auto& person_ptr : m_state) {
 //         if (person_ptr->pesel().value() == pesel.value()) {
