@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "core/database.hpp"
 #include "core/employee.hpp"
 #include "helpers/random/personal_data.hpp"
 
@@ -13,6 +14,10 @@ int main() {
 
     const auto employee = Employee::random_employee();
     std::cout << employee.first_name() << "\n";
+
+    auto db = Database();
+    db.fill_with_random_data(10);
+    std::cout << db.display();
 
     return 0;
 }

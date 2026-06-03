@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "helpers/bytes/tokenize.hpp"
+#include "helpers/random/personal_data.hpp"
 #include "helpers/random/pseudorandom.hpp"
 
 const Person* Database::find_by_pesel(const Pesel& pesel) const noexcept {
@@ -17,8 +18,8 @@ const Person* Database::find_by_pesel(const Pesel& pesel) const noexcept {
     return nullptr;
 }
 
-bool Database::exists(const std::unique_ptr<Person>& person) const noexcept {
-    if (find_by_pesel(person->pesel()) != nullptr) {
+bool Database::exists(const Person& person) const noexcept {
+    if (find_by_pesel(person.pesel()) != nullptr) {
         return true;
     } else {
         return false;
@@ -26,7 +27,7 @@ bool Database::exists(const std::unique_ptr<Person>& person) const noexcept {
 }
 
 void Database::add(std::unique_ptr<Person> person) {
-    if (exists(person)) {
+    if (exists(*person)) {
         throw std::runtime_error("person already exists in database");
     }
 
@@ -147,8 +148,26 @@ std::string Database::display(const char sep) const noexcept {
 }
 
 void Database::fill_with_random_data(const uint64_t records_amount) {
+    size_t i = 0;
+    while (i < records_amount) {
+        auto random_number = pseudorandom::random_uint64(0, 5);
+        if (random_number == 0ULL) {
+            auto employee = std::make_unique<Employee>(Employee::random_employee());
+            try {
+                add(std::move(employee));
+                ++i;
+            } catch (const std::runtime_error& error) {
+            }
+        } else {
+            auto student = std::make_unique<Student>(Student::random_student());
+            try {
+                add(std::move(student));
+                ++i;
+            } catch (const std::runtime_error& error) {
+            }
+        }
+    }
 }
-
 // std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
 //     std::list<Student> matches;
 //     for (const auto& student : m_state) {
