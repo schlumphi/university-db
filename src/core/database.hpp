@@ -52,6 +52,8 @@ public:
 private:
     Person* find_by_pesel(const Pesel& pesel) noexcept;
     void assign_starting_salary(Employee& employee);
+    void sort_by_salary_asc() noexcept;
+    void sort_by_salary_desc() noexcept;
     // void validate_loaded_header(const std::string& header, const char sep = '|') const;
     // bool is_index_taken(const uint64_t index_num) const noexcept;
     // uint64_t find_highest_index_num() const noexcept;
