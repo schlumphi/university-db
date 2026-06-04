@@ -230,7 +230,7 @@ void Database::sort_by_salary(const SortOrder order) noexcept {
             } else if (first_employee) {
                 return true;
             } else if (second_employee) {
-                return true;
+                return false;
             } else {
                 return false;
             }
@@ -242,11 +242,11 @@ void Database::sort_by_salary(const SortOrder order) noexcept {
             if (first_employee && second_employee) {
                 return first_employee->salary() > second_employee->salary();
             } else if (first_employee) {
-                return false;
+                return true;
             } else if (second_employee) {
                 return false;
             } else {
-                return true;
+                return false;
             }
         });
     }
