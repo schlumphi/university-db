@@ -69,7 +69,7 @@ uint64_t Database::generate_index_num() const noexcept {
 }
 
 void Database::assign_starting_salary(Employee& employee) {
-    auto salary = pseudorandom::random_uint64() % 5000ULL + 4500ULL;
+    auto salary = pseudorandom::random_uint64(4500ULL, 10000ULL);
     employee.set_salary(salary);
 }
 
@@ -160,6 +160,7 @@ std::string Database::display(const char sep) const noexcept {
     return db;
 }
 
+// FIXME:
 void Database::fill_with_random_data(const uint64_t records_amount) {
     size_t i = 0;
     while (i < records_amount) {

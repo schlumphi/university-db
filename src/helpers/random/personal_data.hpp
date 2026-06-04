@@ -26,9 +26,9 @@ struct PeselCiphers {
     uint64_t day_cipher_a;
     uint64_t day_cipher_b;
 
-    uint64_t random_nonce_a{random_uint64() % 10ULL};
-    uint64_t random_nonce_b{random_uint64() % 10ULL};
-    uint64_t random_nonce_c{random_uint64() % 10ULL};
+    uint64_t random_nonce_a{random_uint64(0ULL, 9ULL)};
+    uint64_t random_nonce_b{random_uint64(0ULL, 9ULL)};
+    uint64_t random_nonce_c{random_uint64(0ULL, 9ULL)};
 
     uint64_t gender_cipher;
     uint64_t checksum_cipher;
@@ -36,11 +36,11 @@ struct PeselCiphers {
 
 inline uint64_t random_nonce_for_gender(const Gender gender) {
     if (gender == Gender::Female) {
-        return ((random_uint64() % 100ULL) * 2ULL) % 10ULL;
+        return (random_uint64(0ULL, 99ULL) * 2ULL) % 10ULL;
     } else if (gender == Gender::Male) {
-        return ((random_uint64() % 100ULL) * 2ULL + 1ULL) % 10ULL;
+        return (random_uint64(0ULL, 99ULL) * 2ULL + 1ULL) % 10ULL;
     }
-    return random_uint64() % 10ULL;
+    return random_uint64(0ULL, 9ULL);
 }
 
 inline PeselCiphers create_pesel_ciphers(
@@ -102,14 +102,14 @@ inline uint64_t random_day_of_month(const uint64_t year, const uint64_t month) {
     case 8:
     case 10:
     case 12:
-        return random_uint64() % 31ULL + 1ULL;
+        return random_uint64(1ULL, 31ULL);
     case 2:
         if ((year % 4ULL == 0ULL && year % 100ULL != 0ULL) || (year % 400ULL == 0ULL)) {
-            return random_uint64() % 29ULL + 1ULL;
+            return random_uint64(1ULL, 29ULL);
         }
-        return random_uint64() % 28ULL + 1ULL;
+        return random_uint64(1ULL, 28ULL);
     default:
-        return random_uint64() % 30ULL + 1ULL;
+        return random_uint64(1ULL, 30ULL);
     }
 }
 
@@ -259,16 +259,16 @@ inline constexpr std::array<std::string_view, 22> cities{
 
 inline PostalCode random_postal_code() {
     return PostalCode{
-        std::to_string(pseudorandom::random_uint64() % 10ULL) +
-        std::to_string(pseudorandom::random_uint64() % 10ULL) +
+        std::to_string(pseudorandom::random_uint64(0ULL, 9ULL)) +
+        std::to_string(pseudorandom::random_uint64(0ULL, 9ULL)) +
         "-" +
-        std::to_string(pseudorandom::random_uint64() % 10ULL) +
-        std::to_string(pseudorandom::random_uint64() % 10ULL) +
-        std::to_string(pseudorandom::random_uint64() % 10ULL)};
+        std::to_string(pseudorandom::random_uint64(0ULL, 9ULL)) +
+        std::to_string(pseudorandom::random_uint64(0ULL, 9ULL)) +
+        std::to_string(pseudorandom::random_uint64(0ULL, 9ULL))};
 }
 
 inline std::string random_apartment_number() {
-    auto number = pseudorandom::random_uint64() % 1000ULL;
+    auto number = pseudorandom::random_uint64(0ULL, 999ULL);
     if (number == 0ULL) {
         return "";
     } else {
@@ -279,7 +279,7 @@ inline std::string random_apartment_number() {
 
 namespace pseudorandom::personal_data {
 inline Gender random_gender() {
-    auto rand_num = pseudorandom::random_uint64() % 2ULL;
+    auto rand_num = pseudorandom::random_uint64(0ULL, 1ULL);
     if (rand_num == 0ULL) {
         return Gender::Male;
     } else {
@@ -289,8 +289,8 @@ inline Gender random_gender() {
 
 // FIXME: dodac obsluge wszystkich zakresow peseli
 inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
-    auto random_year = random_uint64() % 100ULL + 1900ULL;
-    auto random_month = random_uint64() % 12ULL + 1ULL;
+    auto random_year = random_uint64(1900ULL, 1999ULL);
+    auto random_month = random_uint64(1ULL, 12ULL);
     auto random_day = helpers::random_day_of_month(random_year, random_month);
     auto birth_date = helpers::BirthDate{random_year, random_month, random_day};
 
@@ -302,35 +302,35 @@ inline Pesel random_pesel(const Gender gender = Gender::Unspecified) {
 
 inline std::string random_name(const Gender gender = Gender::Unspecified) {
     if (gender == Gender::Male) {
-        return static_cast<std::string>(helpers::male_names[pseudorandom::random_uint64() % helpers::male_names.size()]);
+        return static_cast<std::string>(helpers::male_names[pseudorandom::random_uint64(0ULL, helpers::male_names.size() - 1ULL)]);
     } else if (gender == Gender::Female) {
-        return static_cast<std::string>(helpers::female_names[pseudorandom::random_uint64() % helpers::female_names.size()]);
+        return static_cast<std::string>(helpers::female_names[pseudorandom::random_uint64(0ULL, helpers::female_names.size() - 1ULL)]);
     } else {
         std::array<std::string_view, 44> names;
         std::copy(helpers::male_names.begin(), helpers::male_names.end(), names.begin());
         std::copy(helpers::female_names.begin(), helpers::female_names.end(), names.begin() + helpers::male_names.size());
-        return static_cast<std::string>(names[pseudorandom::random_uint64() % names.size()]);
+        return static_cast<std::string>(names[pseudorandom::random_uint64(0ULL, names.size() - 1ULL)]);
     }
 }
 
 inline std::string random_surname(const Gender gender = Gender::Unspecified) {
     if (gender == Gender::Male) {
-        return static_cast<std::string>(helpers::male_surnames[pseudorandom::random_uint64() % helpers::male_names.size()]);
+        return static_cast<std::string>(helpers::male_surnames[pseudorandom::random_uint64(0ULL, helpers::male_names.size() - 1ULL)]);
     } else if (gender == Gender::Female) {
-        return static_cast<std::string>(helpers::female_surnames[pseudorandom::random_uint64() % helpers::female_names.size()]);
+        return static_cast<std::string>(helpers::female_surnames[pseudorandom::random_uint64(0ULL, helpers::female_names.size() - 1ULL)]);
     } else {
         std::array<std::string_view, 44> surnames;
         std::copy(helpers::male_surnames.begin(), helpers::male_surnames.end(), surnames.begin());
         std::copy(helpers::female_surnames.begin(), helpers::female_surnames.end(), surnames.begin() + helpers::male_surnames.size());
-        return static_cast<std::string>(surnames[pseudorandom::random_uint64() % surnames.size()]);
+        return static_cast<std::string>(surnames[pseudorandom::random_uint64(0ULL, surnames.size() - 1ULL)]);
     }
 }
 
 inline Address random_address() {
     return Address{
-        std::string{helpers::street_names.at(pseudorandom::random_uint64() % helpers::street_names.size())} + " " + std::to_string(pseudorandom::random_uint64() % 1000ULL + 1ULL),
+        std::string{helpers::street_names.at(pseudorandom::random_uint64(0ULL, helpers::street_names.size() - 1ULL))} + " " + std::to_string(pseudorandom::random_uint64(1ULL, 999ULL)),
         helpers::random_apartment_number(),
         helpers::random_postal_code(),
-        std::string{helpers::cities.at(pseudorandom::random_uint64() % helpers::cities.size())}};
+        std::string{helpers::cities.at(pseudorandom::random_uint64(0ULL, helpers::cities.size() - 1ULL))}};
 }
 }  // namespace pseudorandom::personal_data
