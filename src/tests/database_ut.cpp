@@ -146,12 +146,12 @@ TEST_F(DatabaseTest, SortBySalary) {
 //     EXPECT_EQ(db.students(), expected);
 // }
 
-// TEST_F(DatabaseTest, SearchByLastName) {
-//     const auto matches = db.search_by_last_name("Abacki");
-//     const std::list<Student> expected{abacki};
+TEST_F(DatabaseTest, SearchByLastName) {
+    const auto matches = db.search_by_last_name("Abacki");
+    const std::list<const Person*> expected{abacki};
 
-//     EXPECT_EQ(matches, expected);
-// }
+    EXPECT_EQ(matches, expected);
+}
 
 // TEST_F(DatabaseTest, SearchByPeselFound) {
 //     const auto match = db.search_by_pesel(Pesel{"55030101193"});
