@@ -182,16 +182,17 @@ void Database::fill_with_random_data(const uint64_t records_amount) {
         }
     }
 }
-// std::list<Student> Database::search_by_last_name(const std::string& name) const noexcept {
-//     std::list<Student> matches;
-//     for (const auto& student : m_state) {
-//         if (student.last_name() == name) {
-//             matches.push_back(student);
-//         }
-//     }
 
-//     return matches;
-// }
+std::list<const Person*> Database::search_by_last_name(const std::string& name) const noexcept {
+    std::list<const Person*> matches{};
+    for (const auto& person_ptr : m_state) {
+        if (person_ptr->last_name() == name) {
+            matches.push_back(person_ptr.get());
+        }
+    }
+
+    return matches;
+}
 
 // std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
 //     for (const auto& student : m_state) {
