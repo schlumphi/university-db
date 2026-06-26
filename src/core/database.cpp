@@ -86,50 +86,6 @@ bool Database::assign_salary(const Pesel& pesel, const uint64_t salary) noexcept
     return false;
 }
 
-// const Person& Database::find_by_pesel(const Pesel& pesel) const noexcept {
-//     for (const auto& person_ptr : m_state) {
-//         if (person_ptr->pesel().value() == pesel.value()) {
-//             return *person_ptr;
-//         }
-//     }
-
-// std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
-//     for (const auto& student : m_state) {
-//         if (student.pesel().value() == pesel.value()) {
-//             return student;
-//         }
-//     }
-
-//     return std::nullopt;
-// }
-// }
-
-// void Database::add(std::unique_ptr<Person> person) {
-//     if(dynamic_cast<Student>(person.get())) {
-
-//     }
-// }
-
-// void Database::add(Student& student) {
-//     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-//         throw std::invalid_argument("student already exists in database");
-//     }
-//     student.set_index_num(m_curr_index);
-//     m_state.emplace_back(student);
-//     ++m_curr_index;
-// }
-
-// void Database::add(Student& student, const uint64_t index_num) {
-//     if (std::find(m_state.begin(), m_state.end(), student) != m_state.end()) {
-//         throw std::invalid_argument("student already exists in database");
-//     }
-//     if (is_index_taken(index_num)) {
-//         throw std::invalid_argument("provided 'index_num' is already assigned to another student");
-//     }
-//     student.set_index_num(index_num);
-//     m_state.emplace_back(student);
-// }
-
 // bool Database::is_index_taken(const uint64_t index_num) const noexcept {
 //     const auto it = std::find_if(
 //         m_state.begin(), m_state.end(),
@@ -283,24 +239,14 @@ void Database::delete_by_index(const uint64_t index) {
     throw std::invalid_argument("could not find student with provided index");
 }
 
-// void Database::delete_by_index(const uint64_t index) {
-//     for (const auto& student : m_state) {
-//         if (student.index_num() == index) {
-//             m_state.remove(student);
-//             return;
-//         }
-//     }
-//     throw std::invalid_argument("could not find student with provided index");
-// }
+void Database::save(const std::string& filepath, const char sep) const noexcept {
+    const auto fp = std::filesystem::path(filepath);
 
-// void Database::save(const std::string& filepath, const char sep) const noexcept {
-//     const auto fp = std::filesystem::path(filepath);
+    std::ofstream db_file_handler(fp);
 
-//     std::ofstream db_file_handler(fp);
-
-//     db_file_handler << display(sep);
-//     db_file_handler.close();
-// }
+    db_file_handler << display(sep);
+    db_file_handler.close();
+}
 
 // void Database::load(const std::string& filepath, const char sep) {
 //     const auto fp = std::filesystem::path(filepath);
@@ -346,22 +292,6 @@ void Database::delete_by_index(const uint64_t index) {
 //     const auto read_index_num = static_cast<uint64_t>(std::stoi(std::string(tokens[6])));
 
 //     add(student, read_index_num);
-// }
-
-// uint64_t Database::find_highest_index_num() const noexcept {
-//     if (m_state.empty()) {
-//         return 0ULL;
-//     } else {
-//         return (std::max_element(
-//                     m_state.begin(), m_state.end(),
-//                     [](Student lhs, Student rhs) { return lhs.index_num() < rhs.index_num(); })
-//                     ->index_num());
-//     }
-// }
-
-// void Database::reset_current_index_number() noexcept {
-//     m_curr_index = find_highest_index_num();
-//     ++m_curr_index;
 // }
 
 // Student Database::deserialize(const std::vector<std::string_view>& tokens) {
