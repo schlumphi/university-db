@@ -94,10 +94,6 @@ TEST_F(DatabaseTest, AssignSalary) {
     EXPECT_EQ(gabacki->salary(), 7777);
 }
 
-// TEST_F(DatabaseTest, AddDuplicateStudent) {
-//     EXPECT_THROW(db.add(abacki), std::invalid_argument);
-// }
-
 // TEST_F(DatabaseTest, SaveAndLoad) {
 //     const auto filepath{"./db.txt"};
 //     db.save(filepath);
