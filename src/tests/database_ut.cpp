@@ -109,12 +109,16 @@ TEST_F(DatabaseTest, AssignSalary) {
 //     EXPECT_EQ(db.students(), db_from_file.students());
 // }
 
-// TEST_F(DatabaseTest, DeleteByIndex) {
-//     const std::list<Student> expected{abacki, babacki, dabacka, fabacki};
-//     db.delete_by_index(3);
-//     EXPECT_EQ(db.students(), expected);
-//     EXPECT_THROW(db.delete_by_index(3), std::invalid_argument);
-// }
+TEST_F(DatabaseTest, DeleteByIndex) {
+    const std::list<const Person*> expected{abacki, babacki, dabacka, fabacki, gabacki};
+
+    const auto person_ptr = db.search_by_pesel(cabacki->pesel()).value();
+    auto student_ptr = dynamic_cast<const Student*>(person_ptr);
+
+    db.delete_by_index(student_ptr->index_num());
+    EXPECT_EQ(db.content(), expected);
+    EXPECT_THROW(db.delete_by_index(3), std::invalid_argument);
+}
 
 TEST_F(DatabaseTest, SortByName) {
     std::list<const Person*> expected{abacki, babacki, cabacki, dabacka, fabacki, gabacki};
