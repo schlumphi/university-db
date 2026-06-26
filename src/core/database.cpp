@@ -270,6 +270,19 @@ std::list<const Person*> Database::content() const noexcept {
     return state;
 }
 
+void Database::delete_by_index(const uint64_t index) {
+    for (const auto& person_ptr : m_state) {
+        if (auto student = dynamic_cast<Student*>(person_ptr.get())) {
+            if (student->index_num() == index) {
+                m_state.remove(person_ptr);
+                return;
+            }
+        }
+    }
+
+    throw std::invalid_argument("could not find student with provided index");
+}
+
 // void Database::delete_by_index(const uint64_t index) {
 //     for (const auto& student : m_state) {
 //         if (student.index_num() == index) {

@@ -37,7 +37,7 @@ public:
 
     std::list<const Person*> content() const noexcept;
 
-    // void delete_by_index(const uint64_t index);
+    void delete_by_index(const uint64_t index);
     // void save(const std::string& filepath, const char sep = '|') const noexcept;
     // void load(const std::string& filepath, const char sep = '|');
 
