@@ -131,20 +131,20 @@ TEST_F(DatabaseTest, SortBySalary) {
     db.sort_by_salary(Database::SortOrder::Descending);
     EXPECT_EQ(db.content(), expected);
 
-    // expected = {gabacki, abacki, babacki, cabacki, dabacka, fabacki};
-    // db.sort_by_salary(Database::SortOrder::Descending);
-    // EXPECT_EQ(db.content(), expected);
+    expected = {gabacki, abacki, babacki, cabacki, dabacka, fabacki};
+    db.sort_by_salary(Database::SortOrder::Ascending);
+    EXPECT_EQ(db.content(), expected);
 }
 
-// TEST_F(DatabaseTest, SortByPesel) {
-//     std::list<Student> expected{dabacka, cabacki, babacki, abacki, fabacki};
-//     db.sort_by_pesel(Database::SortOrder::Ascending);
-//     EXPECT_EQ(db.students(), expected);
+TEST_F(DatabaseTest, SortByPesel) {
+    std::list<const Person*> expected{dabacka, cabacki, gabacki, babacki, abacki, fabacki};
+    db.sort_by_pesel(Database::SortOrder::Ascending);
+    EXPECT_EQ(db.content(), expected);
 
-//     expected.reverse();
-//     db.sort_by_pesel(Database::SortOrder::Descending);
-//     EXPECT_EQ(db.students(), expected);
-// }
+    expected.reverse();
+    db.sort_by_pesel(Database::SortOrder::Descending);
+    EXPECT_EQ(db.content(), expected);
+}
 
 TEST_F(DatabaseTest, SearchByLastName) {
     const auto matches = db.search_by_last_name("Abacki");

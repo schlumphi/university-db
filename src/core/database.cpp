@@ -194,16 +194,6 @@ std::list<const Person*> Database::search_by_last_name(const std::string& name) 
     return matches;
 }
 
-// std::optional<Student> Database::search_by_pesel(const Pesel& pesel) const noexcept {
-//     for (const auto& student : m_state) {
-//         if (student.pesel().value() == pesel.value()) {
-//             return student;
-//         }
-//     }
-
-//     return std::nullopt;
-// }
-
 std::optional<const Person*> Database::search_by_pesel(const Pesel& pesel) const noexcept {
     for (const auto& person_ptr : m_state) {
         if (person_ptr->pesel().value() == pesel.value()) {
