@@ -204,6 +204,16 @@ std::list<const Person*> Database::search_by_last_name(const std::string& name) 
 //     return std::nullopt;
 // }
 
+std::optional<const Person*> Database::search_by_pesel(const Pesel& pesel) const noexcept {
+    for (const auto& person_ptr : m_state) {
+        if (person_ptr->pesel().value() == pesel.value()) {
+            return person_ptr.get();
+        }
+    }
+
+    return std::nullopt;
+}
+
 // ascending order -> from youngest to oldest
 // descending order -> from oldest to youngest
 void Database::sort_by_pesel(const SortOrder order) noexcept {
