@@ -306,18 +306,29 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
 //         first_name, last_name, address, pesel, gender};
 // }
 
-// std::array<std::string, 10> Database::tokenize_student(const Student& student) noexcept {
-//     std::array<std::string, 10> tokens;
-//     tokens[0] = student.first_name();
-//     tokens[1] = student.last_name();
-//     tokens[2] = student.address().street();
-//     tokens[3] = student.address().apartment();
-//     tokens[4] = student.address().postal_code().value();
-//     tokens[5] = student.address().city();
-//     tokens[6] = std::to_string(student.index_num());
-//     tokens[7] = student.pesel().value();
-//     tokens[8] = parse_gender(student.gender());
-//     tokens[9] = "0";
+std::array<std::string, 10> Database::tokenize(const Person* person) noexcept {
+    std::array<std::string, 10> tokens;
+    tokens[0] = person->first_name();
+    tokens[1] = person->last_name();
+    tokens[2] = person->address().street();
+    tokens[3] = person->address().apartment();
+    tokens[4] = person->address().postal_code().value();
+    tokens[5] = person->address().city();
+    const auto student_ptr = dynamic_cast<const Student*>(person);
+    if (student_ptr) {
+        tokens[6] = std::to_string(student_ptr->index_num());
+    } else {
+        tokens[6] = "";
+    }
+    tokens[7] = person->pesel().value();
+    tokens[8] = parse_gender(person->gender());
 
-//     return tokens;
-// }
+    const auto employee_ptr = dynamic_cast<const Employee*>(person);
+    if (employee_ptr) {
+        tokens[9] = std::to_string(employee_ptr->salary());
+    } else {
+        tokens[9] = "";
+    }
+
+    return tokens;
+}
