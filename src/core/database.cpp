@@ -86,18 +86,6 @@ bool Database::assign_salary(const Pesel& pesel, const uint64_t salary) noexcept
     return false;
 }
 
-// bool Database::is_index_taken(const uint64_t index_num) const noexcept {
-//     const auto it = std::find_if(
-//         m_state.begin(), m_state.end(),
-//         [index_num](Student student) { return student.index_num() == index_num; });
-
-//     if (it != m_state.end()) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
-
 std::string Database::display(const char sep) const noexcept {
     std::string db{""};
     for (const auto& col : columns) {
@@ -294,17 +282,28 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
 //     add(student, read_index_num);
 // }
 
-// Student Database::deserialize(const std::vector<std::string_view>& tokens) {
-//     const auto first_name = std::string(tokens[0]);
-//     const auto last_name = std::string(tokens[1]);
-//     const auto address = Address{
-//         std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
-//     const auto pesel = Pesel{std::string(tokens[7])};
-//     const auto gender = parse_gender(std::string(tokens[8]));
+std::unique_ptr<Person> Database::deserialize(const std::vector<std::string_view>& tokens) {
+    const auto first_name = std::string(tokens[0]);
+    const auto last_name = std::string(tokens[1]);
+    const auto address = Address{
+        std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
+    const auto pesel = Pesel{std::string(tokens[7])};
+    const auto gender = parse_gender(std::string(tokens[8]));
 
-//     return Student{
-//         first_name, last_name, address, pesel, gender};
-// }
+    const auto index_num_raw = std::string(tokens[6]);
+    const auto salary_raw = std::string(tokens[9]);
+    if (const uint64_t index_num = std::stoull(index_num_raw); salary_raw.empty()) {
+        auto student = std::make_unique<Student>(first_name, last_name, address, pesel, gender);
+        student->set_index_num(index_num);
+        return student;
+    } else if (const uint64_t salary = std::stoull(salary_raw); index_num_raw.empty()) {
+        auto employee = std::make_unique<Employee>(first_name, last_name, address, pesel, gender);
+        employee->set_salary(salary);
+        return employee;
+    } else {
+        throw std::runtime_error("cannot deserialize provided tokens to student nor employee");
+    }
+}
 
 std::array<std::string, 10> Database::tokenize(const Person* person) noexcept {
     std::array<std::string, 10> tokens;
