@@ -35,6 +35,25 @@ void Database::add(std::unique_ptr<Person> person) {
         student->set_index_num(generate_index_num());
     } else if (auto employee = dynamic_cast<Employee*>(person.get())) {
         assign_starting_salary(*employee);
+    } else {
+        throw std::runtime_error("expected person to be student or employee");
+    }
+
+    m_state.push_back(std::move(person));
+}
+
+void Database::add_direct(std::unique_ptr<Person> person) {
+    if (exists(*person)) {
+        throw std::runtime_error("person already exists in database");
+    }
+
+    if (auto student = dynamic_cast<Student*>(person.get())) {
+        if (is_index_taken(student->index_num())) {
+            throw std::runtime_error("provided index num is occupied by another student in database");
+        }
+    } else if (dynamic_cast<Employee*>(person.get())) {
+    } else {
+        throw std::runtime_error("expected person to be student or employee");
     }
 
     m_state.push_back(std::move(person));
@@ -265,14 +284,14 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
 //     db_file_handler.close();
 // }
 
-// void Database::validate_loaded_header(const std::string& header, const char sep) const {
-//     const auto header_tokens = bytes::tokenize(header, sep);
-//     if (!std::equal(
-//             header_tokens.begin(), header_tokens.end(), columns.begin(), columns.end(),
-//             [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
-//         throw std::runtime_error("the header from the loaded database is incorrect");
-//     }
-// }
+void Database::validate_loaded_header(const std::string& header, const char sep) const {
+    const auto header_tokens = bytes::tokenize(header, sep);
+    if (!std::equal(
+            header_tokens.begin(), header_tokens.end(), columns.begin(), columns.end(),
+            [](std::string_view lhs, std::string_view rhs) { return lhs == rhs; })) {
+        throw std::runtime_error("the header from the loaded database is incorrect");
+    }
+}
 
 // void Database::load_student_record(const std::string& student_record_line, const char sep) {
 //     const auto tokens = bytes::tokenize(student_record_line, sep);
