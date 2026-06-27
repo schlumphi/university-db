@@ -101,13 +101,25 @@ TEST_F(DatabaseTest, SaveAndLoad) {
     Database db_from_file;
     db_from_file.load(filepath);
 
-    std::cout << db_from_file.display() << "\n";
-
     EXPECT_EQ(db.display(), db_from_file.display());
-    // EXPECT_TRUE(
-    //     std::equal(
-    //         db.content().begin(), db.content().end(), db_from_file.content().begin(),
-    //         [](const Person* lhs, const Person* rhs) { return (*lhs == *rhs); }));
+
+    auto a = db.content();
+    auto b = db_from_file.content();
+
+    ASSERT_EQ(a.size(), b.size());
+
+    auto it1 = a.begin();
+    auto it2 = b.begin();
+
+    while (it1 != a.end()) {
+        ASSERT_NE(*it1, nullptr);
+        ASSERT_NE(*it2, nullptr);
+
+        EXPECT_TRUE(**it1 == **it2);
+
+        ++it1;
+        ++it2;
+    }
 }
 
 TEST_F(DatabaseTest, DeleteByIndex) {
