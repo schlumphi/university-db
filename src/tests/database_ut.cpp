@@ -94,16 +94,16 @@ TEST_F(DatabaseTest, AssignSalary) {
     EXPECT_EQ(gabacki->salary(), 7777);
 }
 
-// TEST_F(DatabaseTest, SaveAndLoad) {
-//     const auto filepath{"./db.txt"};
-//     db.save(filepath);
+TEST_F(DatabaseTest, SaveAndLoad) {
+    const auto filepath{"./db.txt"};
+    db.save(filepath);
 
-//     Database db_from_file;
-//     db_from_file.load(filepath);
+    Database db_from_file;
+    db_from_file.load(filepath);
 
-//     EXPECT_EQ(db.display(), db_from_file.display());
-//     EXPECT_EQ(db.students(), db_from_file.students());
-// }
+    EXPECT_EQ(db.display(), db_from_file.display());
+    EXPECT_EQ(db.content(), db_from_file.content());
+}
 
 TEST_F(DatabaseTest, DeleteByIndex) {
     const std::list<const Person*> expected{abacki, babacki, dabacka, fabacki, gabacki};

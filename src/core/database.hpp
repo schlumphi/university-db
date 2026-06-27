@@ -39,9 +39,7 @@ public:
 
     void delete_by_index(const uint64_t index);
     void save(const std::string& filepath, const char sep = '|') const noexcept;
-    // void load(const std::string& filepath, const char sep = '|');
-
-    // const std::list<Student>& students() const noexcept { return m_state; }
+    void load(const std::string& filepath, const char sep = '|');
 
     static std::array<std::string, 10> tokenize(const Person* person) noexcept;
     static std::unique_ptr<Person> deserialize(const std::vector<std::string_view>& tokens);
@@ -56,10 +54,7 @@ private:
     void sort_by_salary_desc() noexcept;
     void validate_loaded_header(const std::string& header, const char sep = '|') const;
     void add_direct(std::unique_ptr<Person> person);
-    // void load_student_record(const std::string& student_record_line, const char sep = '|');
-
-    // void add(Student& student, const uint64_t index_num);
+    void load_record(const std::string& record_line, const char sep = '|');
 
     std::list<std::unique_ptr<Person>> m_state;
-    // uint64_t m_curr_index = 1ULL;
 };

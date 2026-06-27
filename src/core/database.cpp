@@ -255,34 +255,33 @@ void Database::save(const std::string& filepath, const char sep) const noexcept 
     db_file_handler.close();
 }
 
-// void Database::load(const std::string& filepath, const char sep) {
-//     const auto fp = std::filesystem::path(filepath);
-//     if (!std::filesystem::exists(fp)) {
-//         throw std::invalid_argument("provided filepath to database file does not exist");
-//     }
+void Database::load(const std::string& filepath, const char sep) {
+    const auto fp = std::filesystem::path(filepath);
+    if (!std::filesystem::exists(fp)) {
+        throw std::invalid_argument("provided filepath to database file does not exist");
+    }
 
-//     std::ifstream db_file_handler(fp);
-//     std::string read_line{""};
+    std::ifstream db_file_handler(fp);
+    std::string read_line{""};
 
-//     std::getline(db_file_handler, read_line, '\n');
-//     validate_loaded_header(read_line, sep);
+    std::getline(db_file_handler, read_line, '\n');
+    validate_loaded_header(read_line, sep);
 
-//     auto backup_state = std::list<Student>{};
-//     m_state.splice(backup_state.begin(), m_state);
+    auto backup_state = std::list<std::unique_ptr<Person>>{};
+    m_state.splice(backup_state.begin(), m_state);
 
-//     while (std::getline(db_file_handler, read_line, '\n')) {
-//         try {
-//             load_student_record(read_line);
-//         } catch (std::invalid_argument const& error) {
-//             m_state.clear();
-//             backup_state.splice(m_state.begin(), backup_state);
-//             throw std::runtime_error(error.what());
-//         }
-//     }
+    while (std::getline(db_file_handler, read_line, '\n')) {
+        try {
+            load_record(read_line);
+        } catch (std::invalid_argument const& error) {
+            m_state.clear();
+            backup_state.splice(m_state.begin(), backup_state);
+            throw std::runtime_error(error.what());
+        }
+    }
 
-//     reset_current_index_number();
-//     db_file_handler.close();
-// }
+    db_file_handler.close();
+}
 
 void Database::validate_loaded_header(const std::string& header, const char sep) const {
     const auto header_tokens = bytes::tokenize(header, sep);
@@ -293,13 +292,12 @@ void Database::validate_loaded_header(const std::string& header, const char sep)
     }
 }
 
-// void Database::load_student_record(const std::string& student_record_line, const char sep) {
-//     const auto tokens = bytes::tokenize(student_record_line, sep);
-//     auto student = deserialize(tokens);
-//     const auto read_index_num = static_cast<uint64_t>(std::stoi(std::string(tokens[6])));
+void Database::load_record(const std::string& record_line, const char sep) {
+    const auto tokens = bytes::tokenize(record_line, sep);
+    auto person = deserialize(tokens);
 
-//     add(student, read_index_num);
-// }
+    add_direct(std::move(person));
+}
 
 std::unique_ptr<Person> Database::deserialize(const std::vector<std::string_view>& tokens) {
     const auto first_name = std::string(tokens[0]);
