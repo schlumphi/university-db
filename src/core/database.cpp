@@ -304,16 +304,19 @@ std::unique_ptr<Person> Database::deserialize(const std::vector<std::string_view
     const auto last_name = std::string(tokens[1]);
     const auto address = Address{
         std::string(tokens[2]), std::string(tokens[3]), PostalCode{std::string(tokens[4])}, std::string(tokens[5])};
-    const auto pesel = Pesel{std::string(tokens[7])};
-    const auto gender = parse_gender(std::string(tokens[8]));
+    const auto pesel = Pesel{std::string(tokens[6])};
+    const auto gender = parse_gender(std::string(tokens[7]));
 
-    const auto index_num_raw = std::string(tokens[6]);
+    const auto index_num_raw = std::string(tokens[8]);
     const auto salary_raw = std::string(tokens[9]);
-    if (const uint64_t index_num = std::stoull(index_num_raw); salary_raw.empty()) {
+    // FIXME: stoull conversion!
+    if (!index_num_raw.empty() && salary_raw.empty()) {
+        const uint64_t index_num = std::stoull(index_num_raw);
         auto student = std::make_unique<Student>(first_name, last_name, address, pesel, gender);
         student->set_index_num(index_num);
         return student;
-    } else if (const uint64_t salary = std::stoull(salary_raw); index_num_raw.empty()) {
+    } else if (!salary_raw.empty() && index_num_raw.empty()) {
+        const uint64_t salary = std::stoull(salary_raw);
         auto employee = std::make_unique<Employee>(first_name, last_name, address, pesel, gender);
         employee->set_salary(salary);
         return employee;
@@ -330,14 +333,15 @@ std::array<std::string, 10> Database::tokenize(const Person* person) noexcept {
     tokens[3] = person->address().apartment();
     tokens[4] = person->address().postal_code().value();
     tokens[5] = person->address().city();
+    tokens[6] = person->pesel().value();
+    tokens[7] = parse_gender(person->gender());
+
     const auto student_ptr = dynamic_cast<const Student*>(person);
     if (student_ptr) {
-        tokens[6] = std::to_string(student_ptr->index_num());
+        tokens[8] = std::to_string(student_ptr->index_num());
     } else {
-        tokens[6] = "";
+        tokens[8] = "";
     }
-    tokens[7] = person->pesel().value();
-    tokens[8] = parse_gender(person->gender());
 
     const auto employee_ptr = dynamic_cast<const Employee*>(person);
     if (employee_ptr) {
